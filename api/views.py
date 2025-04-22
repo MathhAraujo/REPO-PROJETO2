@@ -35,3 +35,6 @@ def postUser(request):
     
 def home_view(request):
     return render(request, 'home.html')
+
+def desempenho_view(request):
+    return render(request, 'desempenho.html')

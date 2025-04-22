@@ -34,7 +34,7 @@ urlpatterns = [
     path("api/", include("api.urls"), name="api_urls"),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('aluno/', TemplateView.as_view(template_name='aluno.html'), name='area_aluno'),
-
+    path('desempenho/', views.desempenho_view, name='pagina_desempenho')
 ]
 
 
