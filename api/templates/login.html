@@ -1,0 +1,61 @@
+<!-- templates/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    body {
+      background: #7cc26d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .login-container {
+      background: white;
+      padding: 40px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      text-align: center;
+    }
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      background: #f1f1f1;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #55a94f;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .login-container p {
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: gray;
+    }
+    .login-container a {
+      color: #55a94f;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <form class="login-container" action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="username" required>
+    <input type="password" name="password" placeholder="password" required>
+    <button type="submit">LOGIN</button>
+    <p>Not registered? <a href="#">Create an account</a></p>
+  </form>
+</body>
+</html>
