@@ -32,4 +32,12 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('admin/', admin.site.urls),
     path("api/", include("api.urls"), name="api_urls"),
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('aluno/', TemplateView.as_view(template_name='aluno.html'), name='area_aluno'),
+
 ]
+
+
+
+
+   

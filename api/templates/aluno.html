@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Área do Aluno</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #ddd;
+            font-family: Arial, sans-serif;
+        }
+        .aluno-container {
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+        }
+        .voltar {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: #7a7272;
+            color: black;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .aluno-info {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .avatar {
+            width: 250px;
+            height: 250px;
+            background-color: #7a7272;
+            border-radius: 50%;
+        }
+        .detalhes {
+            font-size: 1.2rem;
+        }
+        .detalhes h2 {
+            margin: 0 0 1rem 0;
+        }
+        .detalhes ul {
+            list-style: none;
+            padding: 0;
+        }
+        .detalhes li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="voltar">&lt;</a>
+    <div class="aluno-container">
+        <div class="aluno-info">
+            <div class="avatar"></div>
+            <div class="detalhes">
+                <h2>NOME</h2>
+                <ul>
+                    <li>Cadastro</li>
+                    <li>Curso</li>
+                    <li>Desempenho</li>
+                    <li>Oportunidades</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

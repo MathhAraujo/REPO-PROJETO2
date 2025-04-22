@@ -89,12 +89,16 @@
       <img src="/static/logo.png" alt="Solidaire Logo">
       <strong>solidaire</strong>
     </div>
-    <div class="nav-buttons">
+    <div class="filters" style="margin-top: 10px;">
       <button class="active">New</button>
       <button>Price ascending</button>
       <button>Price descending</button>
-      <button>Rating</button>
-    </div>
+  
+      <a href="{% url 'area_aluno' %}" style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">
+          Área do Aluno
+      </a>
+  </div>
+  
     <div class="user-info">
       <span class="user-avatar"></span>
       <div>Usuário<br><small>Aluno</small></div>
