@@ -12,10 +12,21 @@ import json
 @api_view(["GET"])
 def get_users(request):
     if request.method != "GET":
-        return Response(status.HTTP_400_BAD_REQUEST)
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
 
     users = User.objects.all()
 
     serializer = UserSerializer(users, many=True)
            
     return Response(serializer.data, status.HTTP_200_OK)
+
+@api_view(["POST"])
+def postUser(request):
+    if request.method != "POST":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+    serializer = UserSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(status.HTTP_201_CREATED)
