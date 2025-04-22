@@ -7,6 +7,7 @@ from .models import User
 from .serializers import UserSerializer
 import json
 
+
 # Create your views here.
 
 @api_view(["GET"])
@@ -30,3 +31,7 @@ def postUser(request):
     if serializer.is_valid():
         serializer.save()
         return Response(status.HTTP_201_CREATED)
+    
+    
+def home_view(request):
+    return render(request, 'home.html')
