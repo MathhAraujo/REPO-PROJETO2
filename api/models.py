@@ -26,6 +26,9 @@ class Teacher(User):
     teacherSubject = models.CharField(max_length=100)
     teacherSchedule = models.JSONField(null=True)
 
+class Sponsor(User):
+    sponsorDescription = models.TextField()
+
 class missedClass():
     date = models.DateField(auto_now_add=True, editable=False)
 
