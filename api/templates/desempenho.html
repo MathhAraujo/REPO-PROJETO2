@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Desempenho</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .user-info {
+            text-align: right;
+            font-size: 0.9rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .content {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 2rem;
+        }
+
+        .grafico {
+            width: 40%;
+        }
+
+        .barra-container {
+            display: flex;
+            align-items: flex-end;
+            height: 200px;
+            gap: 10px;
+        }
+
+        .barra {
+            width: 30px;
+            background-color: #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            font-size: 0.7rem;
+        }
+
+        .legenda {
+            text-align: center;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .tabela-container {
+            display: flex;
+            gap: 2rem;
+            background-color: #eee;
+            padding: 1rem;
+            border-radius: 20px;
+        }
+
+        .tabela {
+            background-color: #ccc;
+            border-radius: 10px;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .tabela h3 {
+            margin-top: 0;
+        }
+
+        .duvidas {
+            text-align: right;
+            padding: 2rem;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo"> <!-- substitua por sua logo -->
+            <span>solidaire</span>
+        </div>
+        <div class="user-info">
+            <div>Usuário</div>
+            <div style="color: gray;">Aluno</div>
+        </div>
+    </header>
+
+    <h1>Desempenho</h1>
+
+    <div class="content">
+        <!-- Gráfico -->
+        <div class="grafico">
+            <div class="barra-container">
+                <div class="barra" style="height: 80px;">1</div>
+                <div class="barra" style="height: 100px;">2</div>
+                <div class="barra" style="height: 150px;">3</div>
+                <div class="barra" style="height: 130px;">4</div>
+                <div class="barra" style="height: 110px;">5</div>
+                <div class="barra" style="height: 100px;">6</div>
+            </div>
+            <div class="legenda">
+                <span>Matéria 1</span> • 
+                <span>2</span> • 
+                <span>3</span> • 
+                <span>4</span> • 
+                <span>5</span> • 
+                <span>6</span>
+            </div>
+        </div>
+
+        <!-- Tabelas -->
+        <div class="tabela-container">
+            <div class="tabela">
+                <h3>acadêmico:</h3>
+                <p>Matéria 1 - muito bom</p>
+                <p>Matéria 2 - ruim</p>
+                <p>Matéria 3 - bom</p>
+                <p>Matéria 4 - satisfatório</p>
+                <p>Matéria 5 - ok</p>
+                <p>Matéria 6 - bom</p>
+            </div>
+            <div class="tabela">
+                <h3>faltas:</h3>
+                <p>Matéria 1 - 10</p>
+                <p>Matéria 2 - 0</p>
+                <p>Matéria 3 - 1</p>
+                <p>Matéria 4 - 4</p>
+                <p>Matéria 5 - 3</p>
+                <p>Matéria 6 - 0</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="duvidas">Duvidas</div>
+
+</body>
+</html>
