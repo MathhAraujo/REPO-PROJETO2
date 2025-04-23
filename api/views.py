@@ -3,30 +3,52 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import User
-from .serializers import UserSerializer
+from .models import *
+from .serializers import *
 import json
 
 
 # Create your views here.
 
 @api_view(["GET"])
-def get_users(request):
+def getAllStudents(request):
     if request.method != "GET":
         return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    users = User.objects.all()
+    students = Student.objects.all()
 
-    serializer = UserSerializer(users, many=True)
+    serializer = StudentSerializer(students, many=True)
+           
+    return Response(serializer.data, status.HTTP_200_OK)
+
+@api_view(["GET"])
+def getAllTeachers(request):
+    if request.method != "GET":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    teachers = Teacher.objects.all()
+
+    serializer = TeacherSerializer(teachers, many=True)
            
     return Response(serializer.data, status.HTTP_200_OK)
 
 @api_view(["POST"])
-def postUser(request):
+def createStudent(request):
     if request.method != "POST":
         return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
     
-    serializer = UserSerializer(data=request.data)
+    serializer = StudentSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(status.HTTP_201_CREATED)
+    
+@api_view(["POST"])
+def createTeacher(request):
+    if request.method != "POST":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+    serializer = TeacherSerializer(data=request.data)
 
     if serializer.is_valid():
         serializer.save()
