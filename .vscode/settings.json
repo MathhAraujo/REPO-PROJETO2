@@ -1,4 +1,0 @@
-{
-    "appService.defaultWebAppToDeploy": "/subscriptions/9f7ec53b-6803-4c41-9bf9-c1f693435154/resourceGroups/appsvc_linux_brazilsouth/providers/Microsoft.Web/sites/solidare-g11-solution",
-    "appService.deploySubpath": "."
-}
