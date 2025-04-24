@@ -43,7 +43,7 @@
             position: relative;
             padding-bottom: 0.5rem;
         }
-        
+
         h1::after {
             content: '';
             width: 60px;
@@ -53,7 +53,6 @@
             margin: 0.5rem auto 0 auto;
             border-radius: 3px;
         }
-        
 
         .content {
             display: flex;
@@ -65,6 +64,7 @@
 
         .grafico {
             width: 40%;
+            position: relative;
         }
 
         .barra-container {
@@ -117,69 +117,32 @@
             font-size: 1.5rem;
             font-weight: bold;
             padding: 0.5rem 1rem;
+            background-color: #2ecc71;
+            color: white;
             border: none;
             border-radius: 10px;
-            background-color: #4CAF50;
-            color: white;
             cursor: pointer;
         }
 
-        .presenca {
-            margin: 2rem;
+        .calendario-section {
+            padding: 2rem;
+            text-align: center;
         }
 
-        .presenca-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .presenca h2 {
-            margin: 0;
-        }
-
-        .grade {
+        #calendario {
+            margin: 1rem auto;
             display: grid;
-            grid-template-columns: repeat(7, 45px);
+            grid-template-columns: repeat(7, 40px);
             gap: 10px;
             justify-content: center;
         }
 
-        .dia {
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            color: white;
-            font-weight: bold;
-        }
-
-        .verde {
-            background-color: #4CAF50;
-        }
-
-        .vermelho {
-            background-color: #f44336;
-        }
-
-        .branco {
-            background-color: #ffffff;
-            color: black;
-            border: 1px solid #ccc;
-        }
-
         select {
-            padding: 0.5rem;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            padding: 0.4rem;
             font-size: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
@@ -200,28 +163,26 @@
 
     <div class="content">
         <!-- Gráfico -->
-        <div class="grafico" style="position: relative;">
-            <!-- Linha vertical com legenda -->
+        <div class="grafico">
             <div style="position: absolute; left: -40px; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center;">
                 <div style="writing-mode: vertical-rl; transform: rotate(180deg); font-size: 0.8rem; margin-bottom: 10px;">Medidor de Presença</div>
                 <div style="width: 2px; background-color: #000; flex-grow: 1;"></div>
             </div>
-        
             <div class="barra-container">
-                <div class="barra" style="height: 80px;">1</div>
-                <div class="barra" style="height: 100px;">2</div>
-                <div class="barra" style="height: 150px;">3</div>
-                <div class="barra" style="height: 130px;">4</div>
-                <div class="barra" style="height: 110px;">5</div>
-                <div class="barra" style="height: 100px;">6</div>
+                <div class="barra" style="height: 80px; background-color: #2ecc71;">1</div>
+                <div class="barra" style="height: 100px; background-color: #e74c3c;">2</div>
+                <div class="barra" style="height: 150px; background-color: #3498db;">3</div>
+                <div class="barra" style="height: 130px; background-color: #f1c40f;">4</div>
+                <div class="barra" style="height: 110px; background-color: #9b59b6;">5</div>
+                <div class="barra" style="height: 100px; background-color: #1abc9c;">6</div>
             </div>
             <div class="legenda">
-                <span>Matéria 1</span> • 
-                <span>2</span> • 
-                <span>3</span> • 
-                <span>4</span> • 
-                <span>5</span> • 
-                <span>6</span>
+                <span style="color: #2ecc71;">Matéria 1</span> • 
+                <span style="color: #e74c3c;">2</span> • 
+                <span style="color: #3498db;">3</span> • 
+                <span style="color: #f1c40f;">4</span> • 
+                <span style="color: #9b59b6;">5</span> • 
+                <span style="color: #1abc9c;">6</span>
             </div>
         </div>
 
@@ -248,64 +209,154 @@
         </div>
     </div>
 
+    <!-- Seletor de mês e calendário -->
+    <div class="calendario-section">
+        <label for="mes">Mês:</label>
+        <select id="mes" onchange="atualizarCalendario()">
+            <option value="janeiro">Janeiro</option>
+            <option value="fevereiro">Fevereiro</option>
+            <option value="marco">Março</option>
+            <option value="abril">Abril</option>
+            <option value="maio">Maio</option>
+            <option value="junho">Junho</option>
+            <option value="julho">Julho</option>
+            <option value="agosto">Agosto</option>
+            <option value="setembro">Setembro</option>
+            <option value="outubro">Outubro</option>
+            <option value="novembro">Novembro</option>
+            <option value="dezembro">Dezembro</option>
+        </select>
 
-    <div class="presenca">
-        <div class="presenca-header">
-            <h2>Presença</h2>
-            <select>
-                <option>Janeiro</option>
-                <option>Fevereiro</option>
-                <option>Março</option>
-                <option>Abril</option>
-                <option>Maio</option>
-                <option>Junho</option>
-                <option>Julho</option>
-                <option>Agosto</option>
-                <option>Setembro</option>
-                <option>Outubro</option>
-                <option>Novembro</option>
-                <option>Dezembro</option>
-            </select>
+        <div id="calendario"></div>
+    </div>
+
+    <!-- Botão de dúvidas -->
+    <div class="duvidas">
+        <button>?</button>
+    </div>
+
+    <!-- Script do calendário -->
+    !-- Gráfico -->
+            <div style="position: absolute; left: -40px; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center;">
+                <div style="writing-mode: vertical-rl; transform: rotate(180deg); font-size: 0.8rem; margin-bottom: 10px;">Medidor de Presença</div>
+                <div style="width: 2px; background-color: #000; flex-grow: 1;"></div>
+            </div>
+            <div class="barra-container">
+                <div class="barra" style="height: 80px; background-color: #2ecc71;">10</div>
+                <div class="barra" style="height: 200px; background-color: #e74c3c;">0</div>
+                <div class="barra" style="height: 180px; background-color: #3498db;">1</div>
+                <div class="barra" style="height: 120px; background-color: #f1c40f;">4</div>
+                <div class="barra" style="height: 140px; background-color: #9b59b6;">3</div>
+                <div class="barra" style="height: 200px; background-color: #1abc9c;">0</div>
+            </div>
+            <div class="legenda">
+                <span style="color: #2ecc71;">Matéria 1</span> • 
+                <span style="color: #e74c3c;">Matéria 2</span> • 
+                <span style="color: #3498db;">Matéria 3</span> • 
+                <span style="color: #f1c40f;">Matéria 4</span> • 
+                <span style="color: #9b59b6;">Matéria 5</span> • 
+                <span style="color: #1abc9c;">Matéria 6</span>
+            </div>
         </div>
-        <div class="grade">
-            <button class="dia verde">1</button>
-            <button class="dia verde">2</button>
-            <button class="dia verde">3</button>
-            <button class="dia verde">4</button>
-            <button class="dia vermelho">5</button>
-            <button class="dia vermelho">6</button>
-            <button class="dia vermelho">7</button>
-            <button class="dia vermelho">8</button>
-            <button class="dia verde">9</button>
-            <button class="dia verde">10</button>
-            <button class="dia branco">11</button>
-            <button class="dia vermelho">12</button>
-            <button class="dia vermelho">13</button>
-            <button class="dia vermelho">14</button>
-            <button class="dia verde">15</button>
-            <button class="dia verde">16</button>
-            <button class="dia branco">17</button>
-            <button class="dia branco">18</button>
-            <button class="dia branco">19</button>
-            <button class="dia branco">20</button>
-            <button class="dia branco">21</button>
-            <button class="dia branco">22</button>
-            <button class="dia branco">23</button>
-            <button class="dia branco">24</button>
-            <button class="dia branco">25</button>
-            <button class="dia branco">26</button>
-            <button class="dia branco">27</button>
-            <button class="dia branco">28</button>
-            <button class="dia branco">29</button>
-            <button class="dia branco">30</button>
 
+        <div class="tabela-container">
+            <div class="tabela">
+                <h3>acadêmico:</h3>
+                <p>Matéria 1 - muito bom</p>
+                <p>Matéria 2 - ruim</p>
+                <p>Matéria 3 - bom</p>
+                <p>Matéria 4 - satisfatório</p>
+                <p>Matéria 5 - ok</p>
+                <p>Matéria 6 - bom</p>
+            </div>
+            <div class="tabela">
+                <h3>faltas:</h3>
+                <p>Matéria 1 - 10</p>
+                <p>Matéria 2 - 0</p>
+                <p>Matéria 3 - 1</p>
+                <p>Matéria 4 - 4</p>
+                <p>Matéria 5 - 3</p>
+                <p>Matéria 6 - 0</p>
+            </div>
         </div>
     </div>
 
+    <div class="calendario-section">
+        <label for="mes">Mês:</label>
+        <select id="mes" onchange="atualizarCalendario()">
+            <option value="janeiro">Janeiro</option>
+            <option value="fevereiro">Fevereiro</option>
+            <option value="marco">Março</option>
+            <option value="abril">Abril</option>
+            <option value="maio">Maio</option>
+            <option value="junho">Junho</option>
+            <option value="julho">Julho</option>
+            <option value="agosto">Agosto</option>
+            <option value="setembro">Setembro</option>
+            <option value="outubro">Outubro</option>
+            <option value="novembro">Novembro</option>
+            <option value="dezembro">Dezembro</option>
+        </select>
+
+        <div id="calendario"></div>
+    </div>
 
     <div class="duvidas">
-        <button>Duvidas</button>
+        <button>?</button>
     </div>
+
+    <script>
+        const dadosPresenca = {
+            janeiro: [1, 2, 3, 5, 6],
+            fevereiro: [2, 4, 6, 7],
+            marco: [1, 2, 8, 10]
+        };
+
+        function atualizarCalendario() {
+            const mesSelecionado = document.getElementById("mes").value;
+            const calendario = document.getElementById("calendario");
+            const diasPresenca = dadosPresenca[mesSelecionado] || [];
+
+            calendario.innerHTML = "";
+
+            for (let dia = 1; dia <= 30; dia++) {
+                const botao = document.createElement("button");
+                botao.innerText = dia;
+                botao.style.borderRadius = "10px";
+                botao.style.height = "40px";
+                botao.style.width = "40px";
+                botao.style.border = "none";
+                botao.style.fontWeight = "bold";
+                botao.style.color = "#fff";
+                botao.style.cursor = "pointer";
+
+                let tipo = "indefinido";
+                if (diasPresenca.includes(dia)) {
+                    botao.style.backgroundColor = "#2ecc71";
+                    tipo = "presenca";
+                } else if (dadosPresenca[mesSelecionado]) {
+                    botao.style.backgroundColor = "#e74c3c";
+                    tipo = "falta";
+                } else {
+                    botao.style.backgroundColor = "#bdc3c7";
+                }
+
+                if (tipo === "falta") {
+                    botao.addEventListener("click", function () {
+                        if (botao.innerText === "!") {
+                            botao.innerText = dia;
+                        } else {
+                            botao.innerText = "!";
+                        }
+                    });
+                }
+
+                calendario.appendChild(botao);
+            }
+        }
+
+        window.onload = atualizarCalendario;
+    </script>
 
 </body>
 </html>
