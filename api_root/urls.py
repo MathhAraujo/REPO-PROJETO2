@@ -24,20 +24,9 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 
 urlpatterns = [
-<<<<<<< Updated upstream
     path('admin/', admin.site.urls),
     path("v1/", include("api.urls"), name="api_urls"),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
-=======
-
-    path("api/", include("api.urls"), name="api_urls"),
-    path('admin/', admin.site.urls),
-    path('', home_view, name='home'),
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
-    path('aluno/', TemplateView.as_view(template_name='aluno.html'), name='area_aluno'),
-    path('desempenho/', views.desempenho_view, name='pagina_desempenho')
->>>>>>> Stashed changes
 ]
 
 

@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-c=nm(aw65-r@a8f)m&887kakbzfhwd99&0ekf#@-jejryr@b2o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["solidare-g11-solution-h0e9caakasfnc9da.brazilsouth-01.azurewebsites.net"]
+ALLOWED_HOSTS = [
+    "solidare-g11-solution-h0e9caakasfnc9da.brazilsouth-01.azurewebsites.net",
+    "127.0.0.1"
+]
 
 
 # Application definition
