@@ -6,9 +6,9 @@ Um parágrafo da descrição do projeto vai aqui
 
 ````
 Gabriel Victalino Mancebo
-Leonardo Gutzeit
-Matheus Araújo
 Guilherme Rapela
+Leonardo Gutzeit
+Matheus Araujo
 Letícia Pontes
 Pedro Luna
 ````
