@@ -14,7 +14,8 @@ urlpatterns = [
     path('createSponsor/', views.createSponsor, name="post_new_sponsor"),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('aluno/', TemplateView.as_view(template_name='aluno.html'), name='area_aluno'),
-    path('desempenho/', views.desempenho_view, name='pagina_desempenho')
+    path('desempenho/', views.desempenho_view, name='pagina_desempenho'),
+    path('cadastro/', views.cadastro_view, name='pagina_cadastro'),
 ]
 
 
