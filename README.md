@@ -21,15 +21,20 @@ Pedro Luna
 
 ### Google Sites
 ```
+https://drive.google.com/drive/folders/1dr9XuTnuvi8otNbPzxC603waJk9xkDS2
 ```
 ### Backlog
 ```
+https://miro.com/app/board/uXjVIITJkVI=/
+
 ```
 ### Deployment - Azure
 ```
+
 ```
 ### Screencast
 ```
+
 ```
 ### Relatório de Programação em Duplas
 ```
@@ -46,5 +51,14 @@ docs.google.com/document/d/1m4rUZ2fuCfAdOGgCCCHXMg3pNVY_wt_QAS1mDgsb18s/edit?tab
 - Como administrador gostaria de criar novos usuários como alunos, professores e patrocinadores, e alterar as informações dos alunos.
 
 ### Issue/Bug Tracker
+
+### feitos do Miro(ciencia da computação)
+
+-- Soluções simulares:
+```
+https://miro.com/app/board/uXjVIW45aGk=/
+```
+
+
 
 </details>
