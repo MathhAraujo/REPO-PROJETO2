@@ -40,15 +40,23 @@ https://miro.com/app/board/uXjVIITJkVI=/
 ```
 docs.google.com/document/d/1m4rUZ2fuCfAdOGgCCCHXMg3pNVY_wt_QAS1mDgsb18s/edit?tab=t.0
 ```
+## Histórias
+```
+https://docs.google.com/document/d/15BGn9IhJNXdXndK_rH_m846a0L8SBbLWyqlDAfl-Ziw/edit?tab=t.0
+```
 
-## ✅ Entregas
+# ✅ Entregas
 <details>
 <summary><strong> Status Report 1 </strong></summary>
 
-### 📜 Histórias Implementadas
+## 📜 Histórias Implementadas
 
 - Como aluno gostaria de poder contestar as faltas e desempenho.
 - Como administrador gostaria de criar novos usuários como alunos, professores e patrocinadores, e alterar as informações dos alunos.
+
+### Sobre as histórias:
+
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
 ### Issue/Bug Tracker
 
