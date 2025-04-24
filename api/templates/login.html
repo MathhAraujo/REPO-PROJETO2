@@ -1,6 +1,5 @@
-<!-- templates/login.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,10 +51,10 @@
 <body>
   <form class="login-container" action="{% url 'login' %}" method="post">
     {% csrf_token %}
-    <input type="text" name="username" placeholder="username" required>
-    <input type="password" name="password" placeholder="password" required>
-    <button type="submit">LOGIN</button>
-    <p>Not registered? <a href="#">Create an account</a></p>
+    <input type="text" name="usuario" placeholder="Usuário" required>
+    <input type="password" name="senha" placeholder="Senha" required>
+    <button type="submit">Entrar</button>
+    <p>Não tem cadastro? <a href="{% url 'pagina_cadastro' %}">Crie uma conta</a></p>
   </form>
 </body>
 </html>

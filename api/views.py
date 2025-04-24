@@ -82,3 +82,6 @@ def home_view(request):
 
 def desempenho_view(request):
     return render(request, 'desempenho.html')
+
+def cadastro_view(request):
+    return render(request, 'cadastro.html')
