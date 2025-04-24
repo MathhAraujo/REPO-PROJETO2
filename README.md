@@ -83,7 +83,11 @@ Nós usamos [SemVer](http://semver.org/) para controle de versão. Para as vers�
 ## 📄 relatório de programação em duplas
 
 O processo de programação em dulas e seu funcionamento no G11 - 
-veja o arquivo docs.google.com/document/d/1m4rUZ2fuCfAdOGgCCCHXMg3pNVY_wt_QAS1mDgsb18s/edit?tab=t.0) para detalhes.
+veja o arquivo
+´´´´
+docs.google.com/document/d/1m4rUZ2fuCfAdOGgCCCHXMg3pNVY_wt_QAS1mDgsb18s/edit?tab=t.0)
+´´´´
+para detalhes.
 
 ## screencast
 
