@@ -36,7 +36,24 @@
         h1 {
             text-align: center;
             margin-top: 2rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 0.5rem;
         }
+        
+        h1::after {
+            content: '';
+            width: 60px;
+            height: 3px;
+            background-color: #3498db;
+            display: block;
+            margin: 0.5rem auto 0 auto;
+            border-radius: 3px;
+        }
+        
 
         .content {
             display: flex;
@@ -94,8 +111,75 @@
         .duvidas {
             text-align: right;
             padding: 2rem;
-            font-size: 2rem;
+        }
+
+        .duvidas button {
+            font-size: 1.5rem;
             font-weight: bold;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .presenca {
+            margin: 2rem;
+        }
+
+        .presenca-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .presenca h2 {
+            margin: 0;
+        }
+
+        .grade {
+            display: grid;
+            grid-template-columns: repeat(7, 45px);
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .dia {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+
+        .verde {
+            background-color: #4CAF50;
+        }
+
+        .vermelho {
+            background-color: #f44336;
+        }
+
+        .branco {
+            background-color: #ffffff;
+            color: black;
+            border: 1px solid #ccc;
+        }
+
+        select {
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -103,7 +187,7 @@
 
     <header>
         <div class="logo">
-            <img src="logo.png" alt="Logo"> <!-- substitua por sua logo -->
+            <img src="logo.png" alt="Logo">
             <span>solidaire</span>
         </div>
         <div class="user-info">
@@ -116,7 +200,13 @@
 
     <div class="content">
         <!-- Gráfico -->
-        <div class="grafico">
+        <div class="grafico" style="position: relative;">
+            <!-- Linha vertical com legenda -->
+            <div style="position: absolute; left: -40px; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center;">
+                <div style="writing-mode: vertical-rl; transform: rotate(180deg); font-size: 0.8rem; margin-bottom: 10px;">Medidor de Presença</div>
+                <div style="width: 2px; background-color: #000; flex-grow: 1;"></div>
+            </div>
+        
             <div class="barra-container">
                 <div class="barra" style="height: 80px;">1</div>
                 <div class="barra" style="height: 100px;">2</div>
@@ -158,7 +248,64 @@
         </div>
     </div>
 
-    <div class="duvidas">Duvidas</div>
+
+    <div class="presenca">
+        <div class="presenca-header">
+            <h2>Presença</h2>
+            <select>
+                <option>Janeiro</option>
+                <option>Fevereiro</option>
+                <option>Março</option>
+                <option>Abril</option>
+                <option>Maio</option>
+                <option>Junho</option>
+                <option>Julho</option>
+                <option>Agosto</option>
+                <option>Setembro</option>
+                <option>Outubro</option>
+                <option>Novembro</option>
+                <option>Dezembro</option>
+            </select>
+        </div>
+        <div class="grade">
+            <button class="dia verde">1</button>
+            <button class="dia verde">2</button>
+            <button class="dia verde">3</button>
+            <button class="dia verde">4</button>
+            <button class="dia vermelho">5</button>
+            <button class="dia vermelho">6</button>
+            <button class="dia vermelho">7</button>
+            <button class="dia vermelho">8</button>
+            <button class="dia verde">9</button>
+            <button class="dia verde">10</button>
+            <button class="dia branco">11</button>
+            <button class="dia vermelho">12</button>
+            <button class="dia vermelho">13</button>
+            <button class="dia vermelho">14</button>
+            <button class="dia verde">15</button>
+            <button class="dia verde">16</button>
+            <button class="dia branco">17</button>
+            <button class="dia branco">18</button>
+            <button class="dia branco">19</button>
+            <button class="dia branco">20</button>
+            <button class="dia branco">21</button>
+            <button class="dia branco">22</button>
+            <button class="dia branco">23</button>
+            <button class="dia branco">24</button>
+            <button class="dia branco">25</button>
+            <button class="dia branco">26</button>
+            <button class="dia branco">27</button>
+            <button class="dia branco">28</button>
+            <button class="dia branco">29</button>
+            <button class="dia branco">30</button>
+
+        </div>
+    </div>
+
+
+    <div class="duvidas">
+        <button>Duvidas</button>
+    </div>
 
 </body>
 </html>
