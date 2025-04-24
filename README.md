@@ -1,6 +1,7 @@
 # EduCare - Sabiatéca
 
-Um parágrafo da descrição do projeto vai aqui
+>É um projeto criado por estudantes de Design e Ciências da Computação do CESAR, em parceria com o Instituto Solidare. O projeto visa desenvolver uma solução que atenda às necessidades atuais da instituição, sendo também adaptável às suas futuras fases.
+Nosso objetivo visa oferecer ao cliente uma solução eficiente, que promova uma melhor organização e monitoramento das informações, além de garantir maior segurança nos dados dos estudantes, baseada no estudo das dificuldades apontadas pelo cliente
 
 ## 👥 Equipe
 
