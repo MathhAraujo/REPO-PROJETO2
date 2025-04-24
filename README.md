@@ -19,11 +19,22 @@ Pedro Luna
 
 ## 🌐 Links
 
-### [Google Sites](link)
-### [Backlog](link)
-### [Deployment](link)
-### [Screencast ](link)
-### [Relatório de Programação em Duplas](docs.google.com/document/d/1m4rUZ2fuCfAdOGgCCCHXMg3pNVY_wt_QAS1mDgsb18s/edit?tab=t.0)
+### Google Sites
+```
+```
+### Backlog
+```
+```
+### Deployment - Azure
+```
+```
+### Screencast
+```
+```
+### Relatório de Programação em Duplas
+```
+docs.google.com/document/d/1m4rUZ2fuCfAdOGgCCCHXMg3pNVY_wt_QAS1mDgsb18s/edit?tab=t.0
+```
 
 ## ✅ Entregas
 <details>
