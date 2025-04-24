@@ -31,7 +31,7 @@ https://miro.com/app/board/uXjVIITJkVI=/
 ```
 ### Deployment - Azure
 ```
-
+https://solidare-g11-solution-h0e9caakasfnc9da.brazilsouth-01.azurewebsites.net/
 ```
 ### Screencast
 ```
