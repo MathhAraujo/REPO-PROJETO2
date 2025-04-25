@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-c=nm(aw65-r@a8f)m&887kakbzfhwd99&0ekf#@-jejryr@b2o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "solidare-g11-solution-h0e9caakasfnc9da.brazilsouth-01.azurewebsites.net",
@@ -123,7 +123,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -142,3 +142,12 @@ CORS_ALLOW_ORIGINS = [
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
+
+
+
+import os
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
