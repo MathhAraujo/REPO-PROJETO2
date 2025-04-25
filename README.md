@@ -57,7 +57,7 @@ https://docs.google.com/document/d/15BGn9IhJNXdXndK_rH_m846a0L8SBbLWyqlDAfl-Ziw/
 
 ### Sobre as histórias:
 
->_Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur._
+>_Especialmente no desenvolvimento ágil de software, histórias (ou user stories, em inglês) são descrições breves e simples de uma funcionalidade do sistema, escritas da perspectiva do usuário final._
 
 ### Issue/Bug Tracker
 
