@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -86,14 +87,24 @@
 <body>
   <header>
     <div class="logo">
-      <img src="/static/logo.png" alt="Solidaire Logo">
-      <strong>solidaire</strong>
+      <img src="{% static 'imagens/sabia.png' %}" alt="Sabiá">
+      <strong> e solidare</strong>
     </div>
     <div class="filters" style="margin-top: 10px;">
-      <button class="active">New</button>
-      <button>Price ascending</button>
-      <button>Price descending</button>
-  
+      
+      <a  style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">
+        home
+    </a>
+    <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
+    <a  style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">
+      nós
+  </a>
+  <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
+
+ <a  style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">
+          veja mais
+      </a>
+      <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
       <a href="{% url 'area_aluno' %}" style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">
           Área do Aluno
       </a>
