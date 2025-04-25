@@ -1,4 +1,3 @@
-import uuid
 from django.db import models
 
 # Create your models here.
@@ -29,7 +28,7 @@ class Teacher(User):
 class Sponsor(User):
     sponsorDescription = models.TextField()
 
-class missedClass():
+class MissedClass():
     date = models.DateField(auto_now_add=True, editable=False)
 
     def __str__(self):

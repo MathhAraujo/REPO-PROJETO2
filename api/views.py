@@ -76,6 +76,10 @@ def createSponsor(request):
         serializer.save()
         return Response(status.HTTP_201_CREATED)
     
+@api_view(["PUT"])
+def addMissedClass(request):
+    if request.method != "PUT":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
     
 def home_view(request):
     return render(request, 'home.html')
