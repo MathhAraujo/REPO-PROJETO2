@@ -20,3 +20,8 @@ class SponsorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sponsor
         fields = "__all__"
+
+class MissedClassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MissedClass
+        fields= "__all__"

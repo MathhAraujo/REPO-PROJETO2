@@ -17,7 +17,3 @@ urlpatterns = [
     path('desempenho/', views.desempenho_view, name='pagina_desempenho'),
     path('cadastro/', views.cadastro_view, name='pagina_cadastro'),
 ]
-
-
-
-
