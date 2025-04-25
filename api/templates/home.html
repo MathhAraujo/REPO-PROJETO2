@@ -72,15 +72,43 @@
     .card-button {
       width: 100%;
       aspect-ratio: 2/3;
-      background-color: #ddd;
+      background-size: cover;
+      background-position: center;
       border: none;
       border-radius: 16px;
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
       transition: transform 0.2s;
     }
 
     .card-button:hover {
-      transform: scale(1.03);
+      transform: scale(1.05);
+    }
+
+    .card-button .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5); /* Overlay semi-transparente */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card-button:hover .overlay {
+      opacity: 1;
+    }
+
+    .card-button .text {
+      color: white;
+      font-size: 1.5em;
+      text-align: center;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -91,25 +119,14 @@
       <strong> e solidare</strong>
     </div>
     <div class="filters" style="margin-top: 10px;">
-      
-      <a  style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">
-        home
-    </a>
-    <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
-    <a  style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">
-      nós
-  </a>
-  <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
-
- <a  style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">
-          veja mais
-      </a>
+      <a style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">home</a>
       <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
-      <a href="{% url 'area_aluno' %}" style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">
-          Área do Aluno
-      </a>
-  </div>
-  
+      <a style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">nós</a>
+      <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
+      <a style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">veja mais</a>
+      <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
+      <a href="{% url 'area_aluno' %}" style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">Área do Aluno</a>
+    </div>
     <div class="user-info">
       <span class="user-avatar"></span>
       <div>Usuário<br><small>Aluno</small></div>
@@ -117,15 +134,26 @@
   </header>
 
   <div class="content">
-    <button class="card-button"></button>
-    <button class="card-button"></button>
-    <button class="card-button"></button>
-    <button class="card-button"></button>
-    <button class="card-button"></button>
-    <button class="card-button"></button>
-    <button class="card-button"></button>
-    <button class="card-button"></button>
-    <button class="card-button"></button>
+    <button class="card-button" style="background-image: url('{% static 'imagens/card1.jpg' %}');">
+      <div class="overlay">
+        <div class="text">Ajude uma Causa</div>
+      </div>
+    </button>
+    <button class="card-button" style="background-image: url('{% static 'imagens/card2.jpg' %}');">
+      <div class="overlay">
+        <div class="text">Projeto de Estudo</div>
+      </div>
+    </button>
+    <button class="card-button" style="background-image: url('{% static 'imagens/card3.jpg' %}');">
+      <div class="overlay">
+        <div class="text">História de Sucesso</div>
+      </div>
+    </button>
+    <button class="card-button" style="background-image: url('{% static 'imagens/card4.jpg' %}');">
+      <div class="overlay">
+        <div class="text">Solidariedade em Ação</div>
+      </div>
+    </button>
   </div>
 </body>
 </html>
