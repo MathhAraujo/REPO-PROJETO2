@@ -21,7 +21,7 @@ class SponsorSerializer(serializers.ModelSerializer):
         model = Sponsor
         fields = "__all__"
 
-class MissedClassSerializer(serializers.ModelSerializer):
+class CourseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MissedClass
-        fields= "__all__"
+        model = Course
+        fields = "__all__"
