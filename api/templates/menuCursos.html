@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu de Cursos - EduCare</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+      overflow-x: hidden;
+    }
+    header, footer {
+      background-color: #222;
+      color: #fff;
+      padding: 15px 20px;
+      text-align: center;
+    }
+    header img {
+      height: 40px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .container {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .curso-box {
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 30px;
+      position: relative;
+    }
+    .imagem {
+      width: 300px;
+      height: 180px;
+      background-color: #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .resumo {
+      flex: 1;
+    }
+    .resumo p {
+      font-size: 1.2rem;
+      margin: 0 0 10px;
+    }
+    .drive-button {
+      background-color: #e0e0e0;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .drive-button:hover {
+      background-color: #d0d0d0;
+    }
+    .descricao {
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 10px;
+      display: none;
+    }
+    .expand-btn {
+      background: none;
+      border: none;
+      color: #0066cc;
+      cursor: pointer;
+      padding: 0;
+      font-size: 0.95rem;
+      text-decoration: underline;
+    }
+  </style>
+  <script>
+    function toggleDescricao(id) {
+      const desc = document.getElementById(id);
+      if (desc.style.display === 'block') {
+        desc.style.display = 'none';
+      } else {
+        desc.style.display = 'block';
+      }
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <img src="logo.png" alt="Logo EduCare">
+      <h1>Portal de Cursos - EduCare</h1>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Curso 1 -->
+    <div class="curso-box">
+      <div class="imagem">imagem</div>
+      <div class="resumo">
+        <p>Resumo do Curso 1</p>
+        <button class="drive-button" onclick="window.location.href='/curso/1/'">Acessar Curso</button>
+        <button class="expand-btn" onclick="toggleDescricao('desc1')">Ver mais</button>
+        <div class="descricao" id="desc1">
+          Descrição detalhada do Curso 1. Explica os objetivos, conteúdos e diferenciais deste curso de forma mais ampla.
+        </div>
+      </div>
+    </div>
+
+    <!-- Curso 2 -->
+    <div class="curso-box">
+      <div class="imagem">imagem</div>
+      <div class="resumo">
+        <p>Resumo do Curso 2</p>
+        <button class="drive-button" onclick="window.location.href='/curso/2/'">Acessar Curso</button>
+        <button class="expand-btn" onclick="toggleDescricao('desc2')">Ver mais</button>
+        <div class="descricao" id="desc2">
+          Descrição detalhada do Curso 2. Informações sobre a duração, público-alvo e certificações oferecidas neste curso.
+        </div>
+      </div>
+    </div>
+
+    <!-- Curso 3 -->
+    <div class="curso-box">
+      <div class="imagem">imagem</div>
+      <div class="resumo">
+        <p>Resumo do Curso 3</p>
+        <button class="drive-button" onclick="window.location.href='/curso/3/'">Acessar Curso</button>
+        <button class="expand-btn" onclick="toggleDescricao('desc3')">Ver mais</button>
+        <div class="descricao" id="desc3">
+          Descrição detalhada do Curso 3. Conhecimentos que o aluno adquirirá ao concluir este curso, além de projetos práticos.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 EduCare. Todos os direitos reservados.</p>
+  </footer>
+</body>
+</html>
