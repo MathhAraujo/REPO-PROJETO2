@@ -19,7 +19,7 @@ class Admin(User):
 class Student(User):
     studentAge = models.PositiveIntegerField(default=0)
     classesMissedCount = models.IntegerField(default=0)
-    classesMissed = models.TextField(default="", blank=True)
+    classesMissed = models.TextField(default="", blank=True) #
 
 class Teacher(User):
     teacherSubject = models.CharField(max_length=100)
@@ -32,6 +32,7 @@ class Course(models.Model):
     courseTitle = models.CharField(max_length=100)
     courseImage = models.ImageField(default="fallback.jpeg", blank=True)
     couseDescription = models.TextField()
+    courseTests = models.TextField(blank = True)
 
     def __str__(self):
         return f"Title: {self.courseTitle} | Image: {self.courseImage} | Description: {self.couseDescription}"
