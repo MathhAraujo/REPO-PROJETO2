@@ -17,4 +17,6 @@ urlpatterns = [
     path('desempenho/', views.desempenho_view, name='pagina_desempenho'),
     path('cadastro/', views.cadastro_view, name='pagina_cadastro'),
     path('menuCursos/', views.menucursos_view, name='pagina_menucursos'),
+    path('cursos/', views.cursos_view, name='pagina_cursos'),
+
 ]

@@ -114,3 +114,7 @@ def cadastro_view(request):
 
 def menucursos_view(request):
     return render(request, 'menuCursos.html')
+
+def cursos_view(request):
+    return render(request, 'curso.html')
+

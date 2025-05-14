@@ -121,10 +121,10 @@
       <div class="imagem">imagem</div>
       <div class="resumo">
         <p>Resumo do Curso 1</p>
-        <button class="drive-button" onclick="window.location.href='/curso/1/'">Acessar Curso</button>
+        <a href="{% url 'pagina_cursos' %}" class="drive-button">Acessar Curso</a>
         <button class="expand-btn" onclick="toggleDescricao('desc1')">Ver mais</button>
         <div class="descricao" id="desc1">
-          Descrição detalhada do Curso 1. Explica os objetivos, conteúdos e diferenciais deste curso de forma mais ampla.
+          Descrição detalhada do Curso 1...
         </div>
       </div>
     </div>
