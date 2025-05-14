@@ -111,3 +111,6 @@ def desempenho_view(request):
 
 def cadastro_view(request):
     return render(request, 'cadastro.html')
+
+def menucursos_view(request):
+    return render(request, 'menuCursos.html')

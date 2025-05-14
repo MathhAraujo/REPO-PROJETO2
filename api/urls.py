@@ -16,4 +16,5 @@ urlpatterns = [
     path('aluno/', TemplateView.as_view(template_name='aluno.html'), name='area_aluno'),
     path('desempenho/', views.desempenho_view, name='pagina_desempenho'),
     path('cadastro/', views.cadastro_view, name='pagina_cadastro'),
+    path('menuCursos/', views.menucursos_view, name='pagina_menucursos'),
 ]
