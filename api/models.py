@@ -19,17 +19,20 @@ class Admin(User):
 class Student(User):
     studentAge = models.PositiveIntegerField(default=0)
     classesMissedCount = models.IntegerField(default=0)
-    classesMissed = models.JSONField(null=True)
+    classesMissed = models.TextField(default="", blank=True) #
 
 class Teacher(User):
     teacherSubject = models.CharField(max_length=100)
-    teacherSchedule = models.JSONField(null=True)
+    teacherSchedule = models.TextField(null=True)
 
 class Sponsor(User):
     sponsorDescription = models.TextField()
 
-class MissedClass():
-    date = models.DateField(auto_now_add=True, editable=False)
+class Course(models.Model):
+    courseTitle = models.CharField(max_length=100)
+    courseImage = models.ImageField(default="fallback.jpeg", blank=True)
+    couseDescription = models.TextField()
+    courseTests = models.TextField(blank = True)
 
     def __str__(self):
-        return f"{self.date}"
+        return f"Title: {self.courseTitle} | Image: {self.courseImage} | Description: {self.couseDescription}"
