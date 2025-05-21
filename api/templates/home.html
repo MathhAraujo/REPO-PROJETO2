@@ -34,18 +34,13 @@
       margin-right: 10px;
     }
 
-    .nav-buttons button {
-      margin-right: 10px;
+    .filters a {
+      background: #ccc;
       padding: 6px 12px;
-      border: none;
-      border-radius: 4px;
-      background-color: #eee;
-      cursor: pointer;
-    }
-
-    .nav-buttons button.active {
-      background-color: #111;
-      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      color: black;
+      margin-right: 10px;
     }
 
     .user-info {
@@ -60,6 +55,19 @@
       background-color: #ccc;
       border-radius: 50%;
       margin-right: 8px;
+    }
+
+    .logout-form {
+      margin-top: 10px;
+    }
+
+    .logout-form button {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
     }
 
     .content {
@@ -92,7 +100,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5); /* Overlay semi-transparente */
+      background: rgba(0, 0, 0, 0.5);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -118,18 +126,23 @@
       <img src="{% static 'imagens/sabia.png' %}" alt="Sabiá">
       <strong> e solidare</strong>
     </div>
-    <div class="filters" style="margin-top: 10px;">
-      <a style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">home</a>
-      <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
-      <a style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">nós</a>
-      <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
-      <a style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">veja mais</a>
-      <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
-      <a href="{% url 'area_aluno' %}" style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">Área do Aluno</a>
+    <div class="filters">
+      <a>home</a>
+      <a>nós</a>
+      <a>veja mais</a>
+      <a href="{% url 'area_aluno' %}">Área do Aluno</a>
     </div>
     <div class="user-info">
       <span class="user-avatar"></span>
-      <div>Usuário<br><small>Aluno</small></div>
+      {% if request.user.is_authenticated %}
+        <div>{{ request.user.username }}<br><small>Logado</small></div>
+        <form method="post" action="{% url 'logout' %}" class="logout-form">
+          {% csrf_token %}
+          <button type="submit">Sair</button>
+        </form>
+      {% else %}
+        <div>Visitante<br><small><a href="{% url 'login' %}">Entrar</a></small></div>
+      {% endif %}
     </div>
   </header>
 

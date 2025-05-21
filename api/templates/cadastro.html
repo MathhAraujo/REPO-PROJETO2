@@ -38,11 +38,20 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .erro {
+            color: red;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
     <div class="form-container">
         <h1>Cadastro de Aluno</h1>
+
+        {% if erro %}
+            <p class="erro">{{ erro }}</p>
+        {% endif %}
+
         <form method="post">
             {% csrf_token %}
             <label for="nome">Nome:</label>
@@ -70,4 +79,3 @@
     </div>
 </body>
 </html>
-

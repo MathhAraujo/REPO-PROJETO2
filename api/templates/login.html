@@ -46,13 +46,20 @@
       color: #55a94f;
       text-decoration: none;
     }
+    .erro {
+      color: red;
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
-  <form class="login-container" action="{% url 'login' %}" method="post">
+  <form class="login-container" method="post">
     {% csrf_token %}
-    <input type="text" name="usuario" placeholder="Usuário" required>
-    <input type="password" name="senha" placeholder="Senha" required>
+    {% if erro %}
+      <p class="erro">{{ erro }}</p>
+    {% endif %}
+    <input type="text" name="username" placeholder="Usuário" required>
+    <input type="password" name="password" placeholder="Senha" required>
     <button type="submit">Entrar</button>
     <p>Não tem cadastro? <a href="{% url 'pagina_cadastro' %}">Crie uma conta</a></p>
   </form>
