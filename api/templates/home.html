@@ -1,172 +1,517 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home - Solidaire</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      overflow-y: auto;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformando Sonhos - Plataforma Personalizada</title>
+    <style>
+        /* Estilos CSS permanecem em grande parte os mesmos da versão anterior.
+           A classe .user-menu-trigger.logged-in svg já foi definida. */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #E0F2F1;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden; 
+        }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      background-color: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 25px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: calc(100% - 50px);
+            z-index: 1010; 
+            height: 50px;
+        }
 
-    .logo {
-      display: flex;
-      align-items: center;
-    }
+        .logo-container { display: flex; align-items: center; }
+        .logo-container svg { height: 38px; width: auto; }
 
-    .logo img {
-      height: 40px;
-      margin-right: 10px;
-    }
+        .header-navigation-menu { 
+            flex-grow: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
+        .header-menu-button { 
+            background-color: #f0f0f0; 
+            border: 1px solid #e0e0e0; 
+            height: 32px; 
+            margin: 0 10px; 
+            border-radius: 5px; 
+            cursor: pointer;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 0.9em; 
+            color: #aaa; 
+            padding: 0 15px; 
+            text-decoration: none; 
+            min-width: 100px; 
+        }
+        .header-menu-button:hover { 
+            background-color: #e5e5e5; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            transform: translateY(-1px); 
+        }
+        .header-menu-button:active { 
+            background-color: #d5d5d5; 
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); 
+            transform: translateY(0px); 
+        }
+        .header-menu-button.cursos-button {
+            background-color: #00796b; 
+            color: white;
+            padding: 0 25px; 
+            width: auto; 
+            font-weight: 600; 
+            font-size: 0.95em;
+            border: none; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header-menu-button.cursos-button:hover {
+            background-color: #005a4f; 
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+        }
+        .header-menu-button.cursos-button:active {
+            background-color: #004d40;
+            transform: translateY(0px);
+        }
 
-    .filters a {
-      background: #ccc;
-      padding: 6px 12px;
-      border-radius: 6px;
-      text-decoration: none;
-      color: black;
-      margin-right: 10px;
-    }
+        .user-menu-trigger {
+            cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: background-color 0.2s ease;
+        }
+        .user-menu-trigger:hover { background-color: #f0f0f0; }
+        .user-menu-trigger svg { 
+            width: 28px; 
+            height: 28px; 
+            fill: #555; 
+            transition: fill 0.3s ease;
+        }
+        .user-menu-trigger.logged-in svg { /* Aplicado pelo Django agora */
+            fill: #00796b; 
+        }
 
-    .user-info {
-      text-align: right;
-      font-size: 0.9em;
-    }
 
-    .user-avatar {
-      display: inline-block;
-      width: 30px;
-      height: 30px;
-      background-color: #ccc;
-      border-radius: 50%;
-      margin-right: 8px;
-    }
+        .user-side-menu {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+            background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15);
+            padding-top: 70px; box-sizing: border-box;
+            transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+            z-index: 1005; display: flex; flex-direction: column;
+        }
+        .user-side-menu.open { right: 0; }
+        .user-side-menu a { /* Simplificado, pois o botão de simulação foi removido */
+            display: block; padding: 14px 20px; color: #333; text-decoration: none;
+            border-bottom: 1px solid #f0f0f0; font-size: 1em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .user-side-menu a:hover { background-color: #f7f7f7; color: #00796b; }
+        /* Removido .menu-item-like-button e .menu-separator se não forem mais usados por outros botões */
+        /* Se você tiver outros botões que não são links, pode manter .menu-item-like-button */
+        .user-side-menu .django-note {
+            padding: 10px 20px; font-size: 0.8em; color: #777; background-color: #f9f9f9;
+            border-top: 1px solid #eee; margin-top: auto; 
+        }
 
-    .logout-form {
-      margin-top: 10px;
-    }
+        .overlay-menu {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.4); z-index: 1000; 
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s;
+        }
+        .overlay-menu.open { opacity: 1; visibility: visible; transition-delay: 0s; }
 
-    .logout-form button {
-      background: #e74c3c;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
+        .page-container {
+            display: flex; margin-top: calc(50px + 20px); padding: 20px; gap: 20px;
+        }
 
-    .content {
-      padding: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 20px;
-    }
+        .sidebar {
+            width: 260px; flex-shrink: 0; background-color: #f4f4f4;
+            padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            height: calc(100vh - (50px + 20px + 20px + 20px)); overflow-y: auto;
+        }
+        .sidebar h2 {
+            margin-top: 0; font-size: 1.4em; color: #333;
+            border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 15px;
+        }
+        .sidebar ul { list-style-type: none; padding: 0; margin: 0; }
+        .sidebar ul li { margin-bottom: 8px; }
+        .sidebar ul li a.sidebar-aviso-link {
+            text-decoration: none; color: #333; font-size: 0.95em;
+            padding: 9px 12px; display: block; border-radius: 4px;
+            transition: color 0.2s ease, background-color 0.2s ease, font-weight 0.2s ease;
+        }
+        .sidebar ul li a.sidebar-aviso-link:hover { color: #004D40; background-color: #e7e7e7; }
+        .sidebar ul li a.sidebar-aviso-link.ativo {
+            background-color: #00796b; color: white; font-weight: bold;
+        }
 
-    .card-button {
-      width: 100%;
-      aspect-ratio: 2/3;
-      background-size: cover;
-      background-position: center;
-      border: none;
-      border-radius: 16px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s;
-    }
+        .main-content {
+            flex-grow: 1; background-color: #4DB6AC; padding: 25px;
+            border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative; min-height: 400px;
+        }
+        
+        #welcomeMessageContainer {
+            text-align: center; 
+            padding: 15px 20px; 
+            background-color: #fff; 
+            border-radius: 8px; 
+            margin-bottom: 25px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            border-left: 5px solid #00796b;
+        }
+        #welcomeMessageContainer h2 {
+            color: #00796b; 
+            margin: 0 0 5px 0;
+            font-size: 1.6em;
+        }
+        #welcomeMessageContainer p {
+            margin: 0; 
+            color: #555;
+            font-size: 1em;
+        }
 
-    .card-button:hover {
-      transform: scale(1.05);
-    }
+        #nenhum-aviso-selecionado {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 300px; text-align: center; color: #fff;
+            background-color: rgba(0,0,0,0.1); border-radius: 8px;
+        }
+        #nenhum-aviso-selecionado p { font-size: 1.2em; margin:0; }
+        #nenhum-aviso-selecionado .icon { font-size: 3em; margin-bottom: 15px; }
 
-    .card-button .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
+        .caixa-aviso-detalhe {
+            background-color: #ffffff; padding: 35px; border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            opacity: 0; transform: translateY(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            visibility: hidden; position: absolute;
+            top: 25px; left: 25px; right: 25px;
+            margin-bottom: 25px;
+        }
+        .caixa-aviso-detalhe.ativa {
+            opacity: 1; transform: translateY(0); visibility: visible;
+            position: relative; top: auto; left: auto; right: auto;
+        }
+        .caixa-aviso-detalhe h3 {
+            margin-top: 0; font-size: 2em;
+            color: #00695C; margin-bottom: 25px;
+        }
 
-    .card-button:hover .overlay {
-      opacity: 1;
-    }
+        .aviso-imagem-container {
+            position: relative; margin-bottom: 20px; 
+            border-radius: 8px; overflow: hidden;
+        }
+        .aviso-imagem-clicavel {
+            width: 100%; height: auto; max-height: 450px; object-fit: cover;
+            border-radius: 8px; display: block; cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .aviso-imagem-clicavel:hover { transform: scale(1.02); }
 
-    .card-button .text {
-      color: white;
-      font-size: 1.5em;
-      text-align: center;
-      font-weight: bold;
-    }
-  </style>
+        .aviso-texto-sobreposto {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 50, 40, 0.70);
+            color: white; padding: 30px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            opacity: 0; visibility: hidden; border-radius: 8px;
+            transform: scale(0.95);
+            transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                        visibility 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                        transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        .aviso-texto-sobreposto.visivel { opacity: 1; visibility: visible; transform: scale(1); }
+        .aviso-texto-sobreposto h4 { margin-top: 0; margin-bottom: 15px; font-size: 1.5em; font-weight: bold; }
+        .aviso-texto-sobreposto p { margin-top: 0; margin-bottom: 10px; font-size: 1.1em; line-height: 1.5; }
+        .aviso-texto-sobreposto p:last-child { margin-bottom: 0; }
+        .aviso-texto-sobreposto a { color: #ADD8E6; text-decoration: underline; } 
+        .aviso-texto-sobreposto a:hover { color: #87CEEB; }
+
+        @media (max-width: 992px) { 
+            .header-navigation-menu { display: none; } 
+        }
+        @media (max-width: 768px) {
+            header { padding: 8px 15px; width: calc(100% - 30px); height: 45px; }
+            .logo-container svg { height: 30px; }
+            .user-menu-trigger svg {width: 24px; height: 24px;}
+
+            .page-container { flex-direction: column; margin-top: calc(45px + 15px); padding: 15px; }
+            .sidebar { width: 100%; margin-bottom: 20px; height: auto; box-sizing: border-box; }
+            .main-content { padding: 20px; }
+            .caixa-aviso-detalhe.ativa {top: 20px; left: 20px; right: 20px; padding: 25px; }
+            #welcomeMessageContainer { margin-bottom: 20px; padding: 10px 15px; }
+            #welcomeMessageContainer h2 { font-size: 1.4em; }
+            #welcomeMessageContainer p { font-size: 0.9em; }
+            .caixa-aviso-detalhe h3 { font-size: 1.6em; }
+            .aviso-texto-sobreposto { padding: 20px; }
+            .aviso-texto-sobreposto h4 { font-size: 1.3em; }
+            .aviso-texto-sobreposto p { font-size: 1em;}
+            .user-side-menu { width: 250px; right: -270px; } 
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <img src="{% static 'imagens/sabia.png' %}" alt="Sabiá">
-      <strong> e solidare</strong>
-    </div>
-    <div class="filters">
-      <a>home</a>
-      <a>nós</a>
-      <a>veja mais</a>
-      <a href="{% url 'area_aluno' %}">Área do Aluno</a>
-    </div>
-    <div class="user-info">
-      <span class="user-avatar"></span>
-      {% if request.user.is_authenticated %}
-        <div>{{ request.user.username }}<br><small>Logado</small></div>
-        <form method="post" action="{% url 'logout' %}" class="logout-form">
-          {% csrf_token %}
-          <button type="submit">Sair</button>
-        </form>
-      {% else %}
-        <div>Visitante<br><small><a href="{% url 'login' %}">Entrar</a></small></div>
-      {% endif %}
-    </div>
-  </header>
+    <header>
+        <div class="logo-container">
+            <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><path d="M5 5 H15 V10 H20 V5 H30 V15 H25 V20 H30 V30 H20 V25 H15 V30 H5 V20 H10 V15 H5 Z" fill="#257FF9"/><g transform="translate(38, 2)"><circle cx="10" cy="10" r="3" fill="#F06141"/><path d="M2 15 Q10 12 18 15" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0 20 Q10 16 20 20" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M-2 25 Q10 20 22 25" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/></g><text x="70" y="27" font-family="Segoe UI, sans-serif" font-size="14px" fill="#555">Plataforma</text></svg>
+        </div>
+        <nav class="header-navigation-menu">
+            <a href="{% url 'pagina_cursos' %}" class="header-menu-button cursos-button">Nossos Cursos</a>
+        </nav>
+        <div class="user-menu-trigger {% if user.is_authenticated %}logged-in{% endif %}" id="userMenuTriggerBtn" title="Menu do Usuário">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 11.5c-5 0-9 2.5-9 4v.5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.5c0-1.5-4-4-9-4Z"/></svg>
+        </div>
+    </header>
 
-  <div class="content">
-    <button class="card-button" style="background-image: url('{% static 'imagens/card1.jpg' %}');">
-      <div class="overlay">
-        <div class="text">Ajude uma Causa</div>
-      </div>
-    </button>
-    <button class="card-button" style="background-image: url('{% static 'imagens/card2.jpg' %}');">
-      <div class="overlay">
-        <div class="text">Projeto de Estudo</div>
-      </div>
-    </button>
-    <button class="card-button" style="background-image: url('{% static 'imagens/card3.jpg' %}');">
-      <div class="overlay">
-        <div class="text">História de Sucesso</div>
-      </div>
-    </button>
-    <button class="card-button" style="background-image: url('{% static 'imagens/card4.jpg' %}');">
-      <div class="overlay">
-        <div class="text">Solidariedade em Ação</div>
-      </div>
-    </button>
-  </div>
+    <div id="userSideMenu" class="user-side-menu">
+        {% if user.is_authenticated %}
+            <a href="#">Meu Perfil</a> <a href="#">Área Acadêmica</a> <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <form method="post" action="{% url 'logout' %}" style="margin:0;"> {% csrf_token %}
+                <button type="submit" class="menu-item-like-button" style="color: #d9534f; font-weight:bold;">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
+        {% endif %}
+        </div>
+    <div id="overlayMenu" class="overlay-menu"></div>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <h2>Avisos</h2>
+            <ul>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-1">Comunicado Urgente</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-2">Novas Funcionalidades</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-3">Agenda de Eventos</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-4">Feedback da Comunidade</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-5">Políticas Atualizadas</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-6">Programa de Mentoria</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-7">Manutenção Programada</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-8">Vagas Abertas</a></li>
+                {% if user.is_authenticated %}
+                <li id="sidebar-link-painel-usuario"><a href="#" class="sidebar-aviso-link" data-target="painel-usuario">Meu Painel</a></li>
+                {% endif %}
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            {% if user.is_authenticated %}
+            <div id="welcomeMessageContainer">
+                <h2>Bem-vindo(a) de volta, {{ user.first_name|default:user.username }}!</h2>
+                <p>É ótimo ter você aqui. Confira seus avisos e novidades abaixo.</p>
+            </div>
+            {% endif %}
+
+            <div id="nenhum-aviso-selecionado" 
+                 style="display: {% if not user.is_authenticated or not algum_aviso_inicial_ativo %}flex{% else %}none{% endif %};">
+                 <span class="icon">🔔</span><p>Selecione um aviso na barra lateral para ver os detalhes.</p>
+            </div>
+
+            <section id="aviso-detalhe-1" class="caixa-aviso-detalhe">
+                <h3>Comunicado Urgente sobre Prazos</h3>
+                <div class="aviso-imagem-container">
+                    <img src="https://via.placeholder.com/800x450/FF7F50/FFFFFF?text=Prazos+Atualizados" alt="Imagem do Comunicado Urgente" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-1">
+                    <div id="texto-sobreposto-1" class="aviso-texto-sobreposto"><h4>Detalhes do Comunicado</h4><p>Informamos uma atualização crítica nos prazos para submissão de projetos. Novas diretrizes estão disponíveis. Agradecemos a atenção!</p></div>
+                </div>
+            </section>
+            <section id="aviso-detalhe-2" class="caixa-aviso-detalhe"> </section>
+            <section id="aviso-detalhe-3" class="caixa-aviso-detalhe"> </section>
+            <section id="aviso-detalhe-4" class="caixa-aviso-detalhe"> </section>
+            <section id="aviso-detalhe-5" class="caixa-aviso-detalhe"> </section>
+            <section id="aviso-detalhe-6" class="caixa-aviso-detalhe"> </section>
+            <section id="aviso-detalhe-7" class="caixa-aviso-detalhe"> </section>
+            <section id="aviso-detalhe-8" class="caixa-aviso-detalhe"> </section>
+
+            {% if user.is_authenticated %}
+            <section id="painel-usuario" class="caixa-aviso-detalhe">
+                <h3>Meu Painel Rápido</h3>
+                <div class="aviso-imagem-container">
+                    <img src="https://via.placeholder.com/800x400/778899/FFFFFF?text=Bem-vindo+ao+Seu+Painel" 
+                         alt="Painel do Usuário" 
+                         class="aviso-imagem-clicavel" 
+                         data-text-overlay-target="texto-painel-usuario">
+                    <div id="texto-painel-usuario" class="aviso-texto-sobreposto">
+                        <h4>Acesso Rápido e Personalizado</h4>
+                        <p>Este é o seu espaço! Aqui você pode gerenciar seus cursos, acompanhar seu progresso e atualizar suas informações.</p>
+                        <p style="margin-top: 15px;">
+                            <a href="{% url 'pagina_cursos' %}">Ver Meus Cursos</a> | 
+                            <a href="#">Configurações da Conta</a> </p>
+                    </div>
+                </div>
+                <p>Recursos úteis e atalhos aparecerão aqui para facilitar sua navegação e atividades na plataforma.</p>
+            </section>
+            {% endif %}
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Elementos e Variáveis Globais para UI ---
+            const sidebarLinks = Array.from(document.querySelectorAll('.sidebar-aviso-link'));
+            const avisoDetalheSections = document.querySelectorAll('.caixa-aviso-detalhe');
+            const defaultMessageContainer = document.getElementById('nenhum-aviso-selecionado');
+            const mainContent = document.querySelector('.main-content');
+            let scrollTimeout; 
+
+            const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
+            const userSideMenu = document.getElementById('userSideMenu');
+            const overlayMenu = document.getElementById('overlayMenu');
+            
+            // Removido: isUserLoggedIn, toggleLoginStateBtn e lógica de simulação de login
+            // O estado de login agora é determinado pelo template Django.
+
+            // --- Event Listeners do Menu de Usuário (apenas abrir/fechar) ---
+            if (userMenuTriggerBtn) { 
+                userMenuTriggerBtn.addEventListener('click', function() {
+                    userSideMenu.classList.toggle('open');
+                    overlayMenu.classList.toggle('open');
+                });
+            }
+            if (overlayMenu) {
+                overlayMenu.addEventListener('click', function() {
+                    userSideMenu.classList.remove('open');
+                    overlayMenu.classList.remove('open');
+                });
+            }
+            
+            // Fechar menu ao clicar em um link dentro dele (para links de navegação real)
+            const userMenuLinks = userSideMenu.querySelectorAll('a');
+            userMenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    // Se for um link que realmente navega (não um # simples para ações JS)
+                    if (this.getAttribute('href') && this.getAttribute('href') !== '#') {
+                        userSideMenu.classList.remove('open');
+                        overlayMenu.classList.remove('open');
+                    }
+                    // Se for o botão de logout (que é um form submit), o menu também deve fechar.
+                    // O próprio submit do formulário de logout já fará o reload da página.
+                });
+            });
+
+
+            // --- Lógica dos Avisos (permanece similar) ---
+            function setActiveAviso(targetId) {
+                if (defaultMessageContainer) {
+                    // Só esconde a mensagem padrão se um aviso válido for ativado
+                    const targetElementExists = document.getElementById(targetId);
+                    if (targetElementExists) {
+                        defaultMessageContainer.style.display = 'none';
+                    } else {
+                         defaultMessageContainer.style.display = 'flex'; // Garante que fique visível se target não existir
+                    }
+                }
+
+                avisoDetalheSections.forEach(section => {
+                    section.classList.remove('ativa');
+                    const textOverlay = section.querySelector('.aviso-texto-sobreposto.visivel');
+                    if (textOverlay) {
+                        textOverlay.classList.remove('visivel');
+                    }
+                });
+
+                sidebarLinks.forEach(sl => sl.classList.remove('ativo'));
+
+                const targetElement = document.getElementById(targetId);
+                // Filtra apenas os links da sidebar que estão atualmente visíveis (controlados pelo Django agora)
+                const currentVisibleSidebarLinks = sidebarLinks.filter(link => {
+                    // Verifica se o elemento pai (li) não está com display: none
+                    const parentLi = link.closest('li');
+                    return parentLi && getComputedStyle(parentLi).display !== 'none';
+                });
+                const targetLink = currentVisibleSidebarLinks.find(link => link.dataset.target === targetId);
+
+                if (targetElement && targetLink) {
+                    targetElement.classList.add('ativa');
+                    targetLink.classList.add('ativo');
+                    mainContent.scrollTop = 0;
+                } else if (targetElement) { 
+                    targetElement.classList.add('ativa'); 
+                    mainContent.scrollTop = 0;
+                } else if (defaultMessageContainer) { 
+                    defaultMessageContainer.style.display = 'flex';
+                }
+            }
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); 
+                    setActiveAviso(this.dataset.target);
+                });
+            });
+
+            const clickableImages = document.querySelectorAll('.aviso-imagem-clicavel');
+            clickableImages.forEach(image => {
+                image.addEventListener('click', function() {
+                    const textOverlayTargetId = this.dataset.textOverlayTarget;
+                    const textOverlayElement = document.getElementById(textOverlayTargetId);
+                    if (textOverlayElement) {
+                        textOverlayElement.classList.toggle('visivel');
+                    }
+                });
+            });
+
+            // Mudança Automática de Aviso com Scroll
+            avisoDetalheSections.forEach(section => {
+                section.addEventListener('wheel', function(event) {
+                    const isActiveAndNoScroll = this.classList.contains('ativa') && (this.scrollHeight <= this.clientHeight);
+                    const textOverlay = this.querySelector('.aviso-texto-sobreposto.visivel');
+
+                    if (isActiveAndNoScroll && !textOverlay) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = setTimeout(() => {
+                            const currentVisibleSidebarLinks = sidebarLinks.filter(link => {
+                                const parentLi = link.closest('li');
+                                return parentLi && getComputedStyle(parentLi).display !== 'none';
+                            });
+                            const currentActiveLink = currentVisibleSidebarLinks.find(link => link.classList.contains('ativo'));
+                            
+                            if (!currentActiveLink) return;
+
+                            const currentIndex = currentVisibleSidebarLinks.indexOf(currentActiveLink);
+                            let navigated = false;
+
+                            if (event.deltaY > 0) { 
+                                if (currentIndex < currentVisibleSidebarLinks.length - 1) {
+                                    setActiveAviso(currentVisibleSidebarLinks[currentIndex + 1].dataset.target);
+                                    navigated = true;
+                                }
+                            } else if (event.deltaY < 0) { 
+                                if (currentIndex > 0) {
+                                    setActiveAviso(currentVisibleSidebarLinks[currentIndex - 1].dataset.target);
+                                    navigated = true;
+                                }
+                            }
+                            if (navigated) {
+                                event.preventDefault(); 
+                            }
+                        }, 100); 
+                    }
+                }, { passive: false }); 
+            });
+
+        
+            const firstVisibleSidebarLink = sidebarLinks.find(link => {
+                const parentLi = link.closest('li');
+                return parentLi && getComputedStyle(parentLi).display !== 'none';
+            });
+            if (firstVisibleSidebarLink) {
+           
+            }
+
+
+        });
+    </script>
 </body>
 </html>

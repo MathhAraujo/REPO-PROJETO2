@@ -8,6 +8,11 @@ from .serializers import *
 import json
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.core.validators import validate_email 
+from django.core.exceptions import ValidationError as DjangoValidationError 
+
 
 User = get_user_model()
 
@@ -113,25 +118,82 @@ def home_view(request):
 def desempenho_view(request):
     return render(request, 'desempenho.html')
 
+
 def cadastro_view(request):
+
+
+
+    form_data = {} 
+
+    erro_para_template = None 
+
     if request.method == 'POST':
-        nome = request.POST['nome']
-        email = request.POST['email']
-        senha = request.POST['senha']
-        confirmarsenha = request.POST['confirmarsenha']
-        curso = request.POST['curso']  
+        nome = request.POST.get('nome', '').strip()
+        email = request.POST.get('email', '').strip().lower()
+        senha = request.POST.get('senha', '') 
+        confirmarsenha = request.POST.get('confirmarsenha', '')
+        tipo_usuario = request.POST.get('tipo_usuario', '') 
 
-        if senha != confirmarsenha:
-            return render(request, 'cadastro.html', {'erro': 'As senhas não coincidem.'})
-        
-        if User.objects.filter(username=nome).exists():
-            return render(request, 'cadastro.html', {'erro': 'Usuário já existe.'})
-        
-        user = User.objects.create_user(username=nome, email=email, password=senha)
-        login(request, user)
-        return redirect('home')
+        form_data = request.POST 
 
-    return render(request, 'cadastro.html')
+        if not all([nome, email, senha, confirmarsenha, tipo_usuario]):
+            erro_para_template = 'Todos os campos são obrigatórios.'
+
+        elif not erro_para_template:
+            try:
+                validate_email(email)
+            except DjangoValidationError:
+                erro_para_template = 'O formato do email é inválido.'
+
+        elif not erro_para_template and senha != confirmarsenha:
+            erro_para_template = 'As senhas não coincidem.'
+        elif not erro_para_template and len(senha) < 8: 
+            erro_para_template = 'A senha deve ter pelo menos 8 caracteres.'
+
+        elif not erro_para_template and tipo_usuario not in ['aluno', 'professor']:
+            erro_para_template = 'Por favor, selecione um tipo de usuário válido (Aluno ou Professor).'
+
+        elif not erro_para_template:
+            if User.objects.filter(username=email).exists():
+                erro_para_template = 'Este email já está cadastrado como nome de usuário.'
+            elif User.objects.filter(email=email).exists(): 
+                erro_para_template = 'Este email já está cadastrado.'
+        
+        if erro_para_template:
+            messages.error(request, erro_para_template) 
+
+            return render(request, 'cadastro.html', {'erro': erro_para_template, 'form_data': form_data})
+        else:
+
+            try:
+  
+                partes_nome = nome.split(' ', 1)
+                first_name = partes_nome[0]
+                last_name = partes_nome[1] if len(partes_nome) > 1 else ''
+
+                user = User.objects.create_user(
+                    username=email,
+                    email=email,
+                    password=senha,
+                    first_name=first_name,
+                    last_name=last_name
+                )
+                
+
+                print(f"Ação necessária: Salvar tipo '{tipo_usuario}' para o usuário '{user.username}' no seu model Profile/CustomUser.")
+
+                login(request, user) 
+                messages.success(request, f'Bem-vindo(a), {user.first_name or user.username}! Seu cadastro foi realizado com sucesso e você já está logado.')
+                return redirect('home') 
+
+            except Exception as e:
+              
+                print(f"Erro ao criar usuário: {e}") 
+                erro_para_template = 'Ocorreu um erro inesperado ao tentar criar sua conta. Por favor, tente novamente.'
+                messages.error(request, erro_para_template)
+                return render(request, 'cadastro.html', {'erro': erro_para_template, 'form_data': form_data})
+
+    return render(request, 'cadastro.html', {'form_data': form_data if request.method == 'POST' else {}})
 
 
 def login_view(request):
