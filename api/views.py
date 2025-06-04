@@ -1,73 +1,67 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse 
-from rest_framework.decorators import api_view 
+# Bibliotecas padrão
+import json
+
+# Django - Core
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.contrib import messages
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError as DjangoValidationError
+
+# Django - Autenticação
+from django.contrib.auth import login, authenticate, logout, get_user_model, update_session_auth_hash
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.forms import AuthenticationForm
+
+# Django REST Framework
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Student, Teacher, Sponsor, Course 
-from .serializers import StudentSerializer, TeacherSerializer, SponsorSerializer, CourseSerializer 
-import json 
 
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import AuthenticationForm 
-from django.contrib.auth import get_user_model 
-from django.contrib import messages
-from django.core.validators import validate_email 
-from django.core.exceptions import ValidationError as DjangoValidationError
-from django.contrib.auth.decorators import login_required 
+# Modelos e Serializers
+from .models import User, Student, Teacher, Sponsor, Course, Profile, Materia, DesempenhoMateria
+from .serializers import StudentSerializer, TeacherSerializer, SponsorSerializer, CourseSerializer
 
-from .forms import EditarDadosPessoaisForm 
-from django.contrib.auth import get_user_model
+# Forms
+from .forms import EditarDadosPessoaisForm, DesempenhoMateriaFormSet
 
+User = get_user_model()
 
-User = get_user_model() 
-
-
+# API Views
 @api_view(["GET"])
 def getAllStudents(request):
-    if request.method != "GET":
-        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
     students = Student.objects.all()
     serializer = StudentSerializer(students, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
 @api_view(["GET"])
 def getAllTeachers(request):
-    if request.method != "GET":
-        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
     teachers = Teacher.objects.all()
     serializer = TeacherSerializer(teachers, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
 @api_view(["GET"])
 def getAllSponsors(request):
-    if request.method != "GET":
-        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
-    sponsor = Sponsor.objects.all()
-    serializer = SponsorSerializer(sponsor, many=True)
+    sponsors = Sponsor.objects.all()
+    serializer = SponsorSerializer(sponsors, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
 @api_view(["GET"])
 def getAllCourses(request):
-    if request.method != "GET":
-        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
-    course = Course.objects.all()
-    serializer = CourseSerializer(course, many=True)
+    courses = Course.objects.all()
+    serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
 @api_view(["POST"])
 def createStudent(request): 
-    if request.method != "POST":
-        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
     serializer = StudentSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(status.HTTP_201_CREATED)
-    return Response(serializer.errors, status.HTTP_400_BAD_REQUEST) # Retornar erros de validação
+    return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 def createTeacher(request): 
-    if request.method != "POST":
-        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
     serializer = TeacherSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -76,39 +70,29 @@ def createTeacher(request):
 
 @api_view(["POST"])
 def createSponsor(request):
-    if request.method != "POST":
-        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
     serializer = SponsorSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(status.HTTP_201_CREATED)
     return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-    
+
 @api_view(["POST"])
 def createCourse(request):
-    if request.method != "POST":
-        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
     serializer = CourseSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(status.HTTP_201_CREATED)
     return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-@api_view(["PUT"]) 
+@api_view(["PUT"])
 def addMissedClass(request):
-    if request.method != "PUT":
-        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
-
     return Response({"message": "Função addMissedClass não implementada"}, status.HTTP_501_NOT_IMPLEMENTED)
 
-
-
+# Views públicas
 def home_view(request):
- 
-    return render(request, 'home.html') 
+    return render(request, 'home.html')
 
 def desempenho_view(request):
-  
     return render(request, 'desempenho.html')
 
 def pagina_cursos_view(request): 
@@ -116,9 +100,9 @@ def pagina_cursos_view(request):
     return render(request, 'menuCursos.html', {'cursos': cursos})
 
 def curso_detalhe_view(request, curso_id): 
+    return render(request, 'curso.html')
 
-    return render(request, 'curso.html') 
-
+# Cadastro e autenticação
 def cadastro_view(request):
     if request.user.is_authenticated:
         messages.info(request, "Você já está logado.")
@@ -133,292 +117,165 @@ def cadastro_view(request):
         senha = request.POST.get('senha', '') 
         confirmarsenha = request.POST.get('confirmarsenha', '')
         tipo_usuario = request.POST.get('tipo_usuario', '') 
-
         form_data = request.POST 
 
         if not all([nome, email, senha, confirmarsenha, tipo_usuario]):
             erro_para_template = 'Todos os campos são obrigatórios.'
-        elif not erro_para_template:
+        elif senha != confirmarsenha:
+            erro_para_template = 'As senhas não coincidem.'
+        elif len(senha) < 8:
+            erro_para_template = 'A senha deve ter pelo menos 8 caracteres.'
+        elif tipo_usuario not in ['aluno', 'professor']:
+            erro_para_template = 'Tipo de usuário inválido.'
+        else:
             try:
                 validate_email(email)
+                if User.objects.filter(username=email).exists() or User.objects.filter(email=email).exists():
+                    erro_para_template = 'Email já cadastrado.'
             except DjangoValidationError:
-                erro_para_template = 'O formato do email é inválido.'
-        elif not erro_para_template and senha != confirmarsenha:
-            erro_para_template = 'As senhas não coincidem.'
-        elif not erro_para_template and len(senha) < 8: 
-            erro_para_template = 'A senha deve ter pelo menos 8 caracteres.'
-        elif not erro_para_template and tipo_usuario not in ['aluno', 'professor']:
-            # Adicione outros tipos válidos se houver (ex: 'admin', 'sponsor')
-            erro_para_template = 'Por favor, selecione um tipo de usuário válido.'
-        elif not erro_para_template:
-            if User.objects.filter(username=email).exists():
-                erro_para_template = 'Este email já está cadastrado como nome de usuário.'
-            elif User.objects.filter(email=email).exists(): 
-                erro_para_template = 'Este email já está cadastrado.'
-        
+                erro_para_template = 'Email inválido.'
+
         if erro_para_template:
             messages.error(request, erro_para_template) 
             return render(request, 'cadastro.html', {'erro': erro_para_template, 'form_data': form_data})
-        else:
-            try:
-                partes_nome = nome.split(' ', 1)
-                first_name = partes_nome[0]
-                last_name = partes_nome[1] if len(partes_nome) > 1 else ''
 
-                user = User.objects.create_user(
-                    username=email, 
-                    email=email,
-                    password=senha,
-                    first_name=first_name,
-                    last_name=last_name
-                )
-                
-          
-                if hasattr(user, 'profile'):
-                    user.profile.tipo_usuario = tipo_usuario
-                    user.profile.save()
-                else:
+        try:
+            first_name, *rest = nome.split(' ', 1)
+            last_name = rest[0] if rest else ''
+            user = User.objects.create_user(username=email, email=email, password=senha, first_name=first_name, last_name=last_name)
+            Profile.objects.create(user=user, tipo_usuario=tipo_usuario)
+            messages.success(request, 'Cadastro realizado com sucesso! Faça o login.')
+            return redirect('login')
+        except Exception as e:
+            messages.error(request, f'Erro ao criar usuário: {e}')
+            return render(request, 'cadastro.html', {'erro': 'Erro ao criar conta.', 'form_data': form_data})
 
-                    Profile.objects.create(user=user, tipo_usuario=tipo_usuario)
-                
-           
-
-                messages.success(request, 'Cadastro realizado com sucesso! Por favor, faça o login.')
-                return redirect('login') # Nome da sua URL de login
-
-            except Exception as e:
-                print(f"Erro ao criar usuário ou perfil: {e}") 
-                erro_para_template = 'Ocorreu um erro ao criar sua conta. Tente novamente.'
-                messages.error(request, erro_para_template)
-                return render(request, 'cadastro.html', {'erro': erro_para_template, 'form_data': form_data})
-
-    return render(request, 'cadastro.html', {'form_data': form_data if request.method == 'POST' else {}})
-
+    return render(request, 'cadastro.html', {'form_data': form_data})
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home') 
+        return redirect('home')
 
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST) 
         if form.is_valid():
-            username = form.cleaned_data.get('username') 
-            password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password) 
-            if user is not None:
+            user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+            if user:
                 login(request, user)
-                messages.success(request, f"Bem-vindo(a) de volta, {user.first_name or user.username}!")
-                next_url = request.GET.get('next') 
-                if next_url:
-                    return redirect(next_url)
-                return redirect('home') 
-            else:
-                messages.error(request, "Email (nome de usuário) ou senha inválidos.")
-        else:
-            messages.error(request, "Verifique os dados inseridos.")
+                messages.success(request, f"Bem-vindo(a) {user.first_name or user.username}!")
+                return redirect(request.GET.get('next') or 'home')
+            messages.error(request, "Credenciais inválidas.")
     else:
         form = AuthenticationForm()
-    
-
-    return render(request, 'login.html', {'form': form}) 
-
+    return render(request, 'login.html', {'form': form})
 
 @login_required
 def logout_view(request):
-
     logout(request)
     messages.success(request, "Você foi desconectado com sucesso.")
-    return redirect('home') 
+    return redirect('home')
 
-
-@login_required
-def area_aluno_view(request):
-    return render(request, 'aluno.html') 
-
-@login_required
-def area_professor_view(request):
-  
-    return render(request, 'professor.html') 
-
-
-
+# Áreas privadas
 @login_required
 def area_aluno_view(request):
     profile = getattr(request.user, 'profile', None)
     if not profile or profile.tipo_usuario != 'aluno':
-        messages.error(request, "Acesso não autorizado à área do aluno.")
+        messages.error(request, "Acesso não autorizado.")
         return redirect('home')
-    # Adicione contexto específico para alunos se necessário
-    return render(request, 'aluno.html') # Crie este template
+    return render(request, 'aluno.html')
 
 @login_required
 def area_professor_view(request):
     profile = getattr(request.user, 'profile', None)
     if not profile or profile.tipo_usuario != 'professor':
-        messages.error(request, "Acesso não autorizado à área do professor.")
-        return redirect('home') 
+        messages.error(request, "Acesso não autorizado.")
+        return redirect('home')
+    alunos_users = User.objects.filter(profile__tipo_usuario='aluno').select_related('profile')
+    return render(request, 'professor.html', {'alunos': alunos_users})
 
-    return render(request, 'professor.html')
-
-
-
+# Dados pessoais
 @login_required
 def dados_pessoais_view(request):
     user = request.user
     if request.method == 'POST':
         form = EditarDadosPessoaisForm(request.POST, user=user)
         if form.is_valid():
-            email_alterado = False
-            senha_alterada = False
+            email = form.cleaned_data.get('email').lower()
+            nova_senha = form.cleaned_data.get('nova_senha1')
 
-            novo_email = form.cleaned_data.get('email').lower()
-            if novo_email and novo_email != user.email.lower():
-              
-                if hasattr(user, 'username') and user.username == user.email:
-                    user.username = novo_email
-                user.email = novo_email
-                email_alterado = True
-            
-      
-            nova_senha1 = form.cleaned_data.get('nova_senha1')
-            if nova_senha1:
-                user.set_password(nova_senha1)
-                senha_alterada = True
-            
-            if email_alterado or senha_alterada:
-                user.save()
-                if senha_alterada:
+            if email and email != user.email:
+                user.email = email
+                if user.username == user.email:
+                    user.username = email
 
-                    update_session_auth_hash(request, user)
-                messages.success(request, 'Seus dados foram atualizados com sucesso!')
-            else:
-                messages.info(request, 'Nenhuma alteração foi detectada nos seus dados.')
-            
-            return redirect('meus_dados_pessoais') 
-        else:
-            messages.error(request, 'Por favor, corrija os erros abaixo.')
-          
-            
+            if nova_senha:
+                user.set_password(nova_senha)
+
+            user.save()
+            if nova_senha:
+                update_session_auth_hash(request, user)
+
+            messages.success(request, 'Dados atualizados com sucesso.')
+            return redirect('meus_dados_pessoais')
+        messages.error(request, 'Corrija os erros abaixo.')
     else:
         form = EditarDadosPessoaisForm(user=user, initial={'email': user.email})
 
-    context = {
-        'form': form,
-        
-    }
-    return render(request, 'dados_pessoais.html', context)
+    return render(request, 'dados_pessoais.html', {'form': form})
 
-
+# Presença
 @login_required 
 def presenca_eventos_view(request):
-   
-    context = {}
-    return render(request, 'presencaEventos.html', context)
+    return render(request, 'presencaEventos.html')
 
-
-
-
-
-
-
-
-
-
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib import messages
-from django.contrib.auth import get_user_model
-from .models import Profile, Student, Teacher, Course, Materia, DesempenhoMateria #
-from .forms import DesempenhoMateriaFormSet 
-import json
-
-User = get_user_model()
-
+# Professor - desempenho e calendário
 def professor_required(function):
-    actual_decorator = user_passes_test(
+    return user_passes_test(
         lambda u: u.is_authenticated and hasattr(u, 'profile') and u.profile.tipo_usuario == 'professor',
-        login_url='pagina_login' # Ou para uma página de "acesso negado"
-    )
-    return actual_decorator(function)
-
-
-
-@login_required
-@professor_required # Garante que só professores acessem
-def area_professor_view(request):
-    # Lista todos os usuários que têm perfil de aluno
-    alunos_users = User.objects.filter(profile__tipo_usuario='aluno').select_related('profile')
-    context = {
-        'alunos': alunos_users
-    }
-    return render(request, 'professor.html', context)
+        login_url='pagina_login'
+    )(function)
 
 @login_required
 @professor_required
 def editar_desempenho_aluno_view(request, aluno_id):
     aluno = get_object_or_404(User, pk=aluno_id, profile__tipo_usuario='aluno')
-
-    for materia in materias:
+    for materia in Materia.objects.all():
         DesempenhoMateria.objects.get_or_create(aluno=aluno, materia=materia)
 
     if request.method == 'POST':
         formset = DesempenhoMateriaFormSet(request.POST, queryset=DesempenhoMateria.objects.filter(aluno=aluno))
         if formset.is_valid():
             formset.save()
-            messages.success(request, f"Desempenho de {aluno.get_full_name() or aluno.username} atualizado com sucesso!")
-            return redirect('area_professor') 
+            messages.success(request, f"Desempenho de {aluno.get_full_name()} atualizado!")
+            return redirect('area_professor')
     else:
         formset = DesempenhoMateriaFormSet(queryset=DesempenhoMateria.objects.filter(aluno=aluno))
 
-    context = {
-        'aluno': aluno,
-        'desempenho_formset': formset
-    }
-    return render(request, 'editar_desempenho_aluno.html', context)
+    return render(request, 'editar_desempenho_aluno.html', {'aluno': aluno, 'desempenho_formset': formset})
 
 @login_required
 @professor_required
 def editar_calendario_aluno_view(request, aluno_id):
     aluno = get_object_or_404(User, pk=aluno_id, profile__tipo_usuario='aluno')
-    aluno_profile = aluno.profile # Assumindo que o Profile existe (criado por signal ou no cadastro)
+    profile = aluno.profile
 
     if request.method == 'POST':
-        dados_calendario_str = request.POST.get('dados_calendario')
-        mes_selecionado_post = request.POST.get('mes_selecionado_frontend') # Se você enviar o mês via POST
-
-        if dados_calendario_str:
+        dados = request.POST.get('dados_calendario')
+        if dados:
             try:
-                novos_dados_calendario = json.loads(dados_calendario_str)
-                # Atualiza o campo JSON no perfil do aluno
-                aluno_profile.dados_calendario_json = json.dumps(novos_dados_calendario)
-                aluno_profile.save()
-                messages.success(request, f"Calendário de {aluno.get_full_name() or aluno.username} atualizado!")
-                # Redireciona para a mesma página para ver as mudanças (ou para area_professor)
-                return redirect('editar_calendario_aluno', aluno_id=aluno_id) 
-            except json.JSONDecodeError:
-                messages.error(request, "Erro ao processar os dados do calendário.")
+                profile.dados_calendario_json = json.dumps(json.loads(dados))
+                profile.save()
+                messages.success(request, "Calendário atualizado!")
+                return redirect('editar_calendario_aluno', aluno_id=aluno_id)
             except Exception as e:
-                messages.error(request, f"Erro ao salvar calendário: {e}")
-        else:
-            messages.warning(request, "Nenhum dado de calendário recebido para salvar.")
+                messages.error(request, f"Erro: {e}")
 
-    # Para o GET request ou se o POST falhou e re-renderiza
     try:
-        dados_presenca_aluno = json.loads(aluno_profile.dados_calendario_json or '{}')
+        dados_presenca = json.loads(profile.dados_calendario_json or '{}')
     except json.JSONDecodeError:
-        dados_presenca_aluno = {}
-        
-    # Passa o mês atual ou o primeiro mês como padrão para o select do calendário
-    # O JavaScript no template também pode lidar com a seleção inicial do mês.
-    # nomes_meses = ["janeiro", ..., "dezembro"]
-    # mes_default_para_template = nomes_meses[datetime.date.today().month - 1]
-    
-    context = {
-        'aluno': aluno,
-        'dados_presenca_aluno_json': json.dumps(dados_presenca_aluno), # Passa como string JSON para o JS
-        # 'mes_selecionado_backend': mes_default_para_template # Opcional
-    }
-    return render(request, 'editar_calendario_aluno.html', context)
+        dados_presenca = {}
 
+    return render(request, 'editar_calendario_aluno.html', {
+        'aluno': aluno,
+        'dados_presenca_aluno_json': json.dumps(dados_presenca)
+    })
