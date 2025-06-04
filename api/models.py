@@ -72,12 +72,26 @@ class Profile(models.Model):
     tipo_usuario = models.CharField(
         max_length=15,
         choices=TIPO_USUARIO_CHOICES,
-        blank=True,
+        blank=True, 
         null=True
     )
-
+    dados_calendario_json = models.TextField(blank=True, null=True, default='{}') 
+    
     def __str__(self):
-        return f'{self.user.username} - Perfil ({self.get_tipo_usuario_display()})'
+        return f'{self.user.username} Profile ({self.get_tipo_usuario_display()})'
+
+    @property
+    def calendario(self):
+        if self.dados_calendario_json:
+            try:
+                return json.loads(self.dados_calendario_json)
+            except json.JSONDecodeError:
+                return {} 
+        return {}
+
+    @calendario.setter
+    def calendario(self, value):
+        self.dados_calendario_json = json.dumps(value)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

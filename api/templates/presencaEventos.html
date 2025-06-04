@@ -3,207 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presença e Eventos - Plataforma de Sonhos</title>
+    <title>Minha Presença e Eventos - Plataforma de Sonhos</title>
     {% load static %}
     <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color:rgb(50, 75, 112); 
-            color: #333;
-            line-height: 1.6;
-            overflow-x: hidden; 
-        }
+        /* Seus estilos CSS completos aqui */
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color:rgb(50, 75, 112); color: #333; line-height: 1.6; overflow-x: hidden; }
 
-        /* --- HEADER E MENU LATERAL (Copiar estilos da home.html) --- */
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 25px; background-color: #ffffff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: fixed;
-            top: 0; left: 0; width: calc(100% - 50px);
-            z-index: 1010; height: 50px;
-        }
-        .logo-container { display: flex; align-items: center; }
-        .logo-container svg { height: 38px; width: auto; }
-        .header-navigation-menu { 
-            flex-grow: 1; display: flex; justify-content: center; align-items: center;
-        }
-        .header-menu-button.cursos-button {
-            background-color: #00796b; color: white; padding: 0 25px; 
-            width: auto; font-weight: 600; font-size: 0.95em;
-            border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            height: 32px; margin: 0 10px; border-radius: 5px; cursor: pointer;
-            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-            display: flex; align-items: center; justify-content: center; 
-            text-decoration: none; 
-        }
-        .header-menu-button.cursos-button:hover {
-            background-color: #005a4f; box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-            transform: translateY(-1px);
-        }
-        .user-menu-trigger {
-            cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; transition: background-color 0.2s ease;
-        }
-        .user-menu-trigger:hover { background-color: #f0f0f0; }
-        .user-menu-trigger svg { 
-            width: 28px; height: 28px; fill: #555; transition: fill 0.3s ease;
-        }
-        .user-menu-trigger.logged-in svg { fill: #00796b; }
-
-        .user-side-menu {
-            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
-            background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15);
-            padding-top: 70px; box-sizing: border-box;
-            transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
-            z-index: 1005; display: flex; flex-direction: column;
-        }
-        .user-side-menu.open { right: 0; }
-        .user-side-menu a {
-            display: block; padding: 14px 20px; color: #333; text-decoration: none;
-            border-bottom: 1px solid #f0f0f0; font-size: 1em;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        .user-side-menu a:hover { background-color: #f7f7f7; color: #00796b; }
-        #logoutForm { margin: 0; padding: 0; width: 100%; border-bottom: 1px solid #f0f0f0; }
-        .user-side-menu .logout-button {
-            display: block; width: 100%; padding: 14px 20px; color: white;
-            background-color: #d9534f; border: none; font-size: 1em;
-            text-align: left; cursor: pointer; font-weight: bold; 
-            transition: background-color 0.2s ease, color 0.2s ease;
-            box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            line-height: normal; 
-        }
-        .user-side-menu .logout-button:hover { background-color: #c9302c; color: white; }
-        .overlay-menu {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.4); z-index: 1000; 
-            opacity: 0; visibility: hidden;
-            transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s;
-        }
-        .overlay-menu.open { opacity: 1; visibility: visible; transition-delay: 0s; }
-         /* --- FIM HEADER E MENU STYLES --- */
-
-        .page-container-main {
-            width: 100%;
-            max-width: 900px; 
-            margin: 0 auto;
-            padding: calc(50px + 2rem) 1rem 2rem 1rem; 
-            box-sizing: border-box;
-        }
-        .page-title {
-            text-align: center;
-            margin-bottom: 2.5rem;
-            font-size: 2.2em;
-            font-weight: 600;
-            color: #00695C;
-            position: relative;
-            padding-bottom: 0.5rem;
-        }
-        .page-title::after {
-            content: ''; width: 80px; height: 4px;
-            background-color: #00796b; display: block;
-            margin: 0.5rem auto 0 auto; border-radius: 2px;
-        }
-        .back-button-container { margin-bottom: 1.5rem; }
-        .back-button {
-            color: #00796b; text-decoration: none; font-weight: 500; font-size: 1em;
-            display: inline-flex; align-items: center; padding: 8px 12px;
-            border-radius: 5px; transition: background-color 0.2s ease;
-        }
-        .back-button:hover { background-color: #e0e0e0; }
-        .back-button svg { width: 20px; height: 20px; margin-right: 0.5em; stroke: #00796b; }
-
-        /* Estilos para o Calendário */
-        .calendario-container {
-            background-color: #fff;
-            padding: 1.5rem 2rem;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.07);
-            text-align: center;
-        }
-        .calendario-container label {
-            font-weight: 600;
-            margin-right: 0.5rem;
-            color: #555;
-        }
-        .calendario-container select#mes {
-            padding: 0.6rem 1rem;
-            font-size: 1em;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-bottom: 1.5rem;
-            background-color: #fff;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        .calendario-container select#mes:focus {
-            outline: none;
-            border-color: #00796b;
-            box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.15);
-        }
-
-        #calendarioDisplay { /* Renomeado de #calendario para evitar conflito se houver ID global */
-            margin: 1rem auto;
-            display: grid;
-            grid-template-columns: repeat(7, 1fr); /* Colunas responsivas */
-            gap: 8px; /* Espaçamento entre dias */
-            max-width: 400px; /* Largura máxima para o grid do calendário */
-        }
-        .dia-calendario { /* Classe para os botões de dia */
-            height: 45px;
-            width: 100%; /* Ocupa o espaço da coluna do grid */
-            border: 1px solid #eee;
-            border-radius: 5px;
-            font-weight: bold;
-            color: #333;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-        }
-        .dia-calendario:hover {
-            transform: scale(1.05);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .dia-presenca { background-color: #a5d6a7; color: #1b5e20; } /* Verde claro para presença */
-        .dia-presenca:hover { background-color: #81c784; }
-        .dia-falta { background-color: #ef9a9a; color: #c62828; } /* Vermelho claro para falta */
-        .dia-falta:hover { background-color: #e57373; }
-        .dia-indefinido { background-color: #e0e0e0; color: #757575; } /* Cinza para indefinido */
-        .dia-indefinido:hover { background-color: #bdbdbd; }
-
-        .dia-calendario.marcado-falta {
-            /* Estilo para quando o usuário clica para marcar/desmarcar falta */
-            background-color: #ffcdd2 !important; /* Rosa mais forte */
-            color: #b71c1c !important;
-            border: 2px dashed #c62828;
-        }
-        .dia-calendario .marcador-justificativa {
-            font-size: 1.5em; /* Tamanho do '!' */
-            line-height: 1;
-        }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 8px 25px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; width: calc(100% - 50px); z-index: 1010; height: 50px; }
         
-        .legenda-calendario {
-            margin-top: 1.5rem;
-            font-size: 0.9em;
-            color: #555;
-        }
+        .logo-container { display: flex; align-items: center; }
+        
+        .logo-container svg { height: 38px; width: auto; }
+        
+        .header-navigation-menu { flex-grow: 1; display: flex; justify-content: center; align-items: center; }
+        
+        .header-menu-button.cursos-button { background-color: #00796b; color: white; padding: 0 25px; width: auto; font-weight: 600; font-size: 0.95em; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); height: 32px; margin: 0 10px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+        
+        .header-menu-button.cursos-button:hover { background-color: #005a4f; box-shadow: 0 3px 6px rgba(0,0,0,0.15); transform: translateY(-1px); }
+        
+        .user-menu-trigger { cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.2s ease; }
+        
+        .user-menu-trigger:hover { background-color: #f0f0f0; }
+        
+        .user-menu-trigger svg { width: 28px; height: 28px; fill: #555; transition: fill 0.3s ease; }
+        
+        .user-menu-trigger.logged-in svg { fill: #00796b; }
+        
+        .user-side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15); padding-top: 70px; box-sizing: border-box; transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1); z-index: 1005; display: flex; flex-direction: column; }
+        
+        .user-side-menu.open { right: 0; }
+        
+        .user-side-menu a { display: block; padding: 14px 20px; color: #333; text-decoration: none; border-bottom: 1px solid #f0f0f0; font-size: 1em; transition: background-color 0.2s ease, color 0.2s ease; }
+        
+        .user-side-menu a:hover { background-color: #f7f7f7; color: #00796b; }
+        
+        #logoutForm { margin: 0; padding: 0; width: 100%; border-bottom: 1px solid #f0f0f0; }
+        
+        .user-side-menu .logout-button { display: block; width: 100%; padding: 14px 20px; color: white; background-color: #d9534f; border: none; font-size: 1em; text-align: left; cursor: pointer; font-weight: bold; transition: background-color 0.2s ease, color 0.2s ease; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: normal; }
+        
+        .user-side-menu .logout-button:hover { background-color: #c9302c; color: white; }
+        
+        .overlay-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s; }
+        
+        .overlay-menu.open { opacity: 1; visibility: visible; transition-delay: 0s; }
+        
+        .page-container-main { width: 100%; max-width: 900px; margin: 0 auto; padding: calc(50px + 2rem) 1rem 2rem 1rem; box-sizing: border-box; }
+        
+        .page-title { text-align: center; margin-bottom: 2.5rem; font-size: 2.2em; font-weight: 600; color: #f0f2f5; position: relative; padding-bottom: 0.5rem; }
+        
+        .page-title::after { content: ''; width: 80px; height: 4px; background-color: #88d1c7; display: block; margin: 0.5rem auto 0 auto; border-radius: 2px; }
+        
+        .back-button-container { margin-bottom: 1.5rem; }
+        
+        .back-button { color: #f0f2f5; background-color: rgba(255,255,255,0.1); text-decoration: none; font-weight: 500; font-size: 1em; display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 5px; transition: background-color 0.2s ease; }
+        
+        .back-button:hover { background-color: rgba(255,255,255,0.2); }
+        
+        .back-button svg { width: 20px; height: 20px; margin-right: 0.5em; stroke: #f0f2f5; }
+        
+        .calendario-container { background-color: #fff; padding: 1.5rem 2rem; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); text-align: center; }
+        
+        .calendario-container label { font-weight: 600; margin-right: 0.5rem; color: #555; }
+        
+        .calendario-container select#mes { padding: 0.6rem 1rem; font-size: 1em; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 1.5rem; background-color: #fff; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+        
+        .calendario-container select#mes:focus { outline: none; border-color: #00796b; box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.15); }
+        
+        #calendarioDisplay { margin: 1rem auto; display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; max-width: 400px; }
+        
+        .dia-calendario { height: 45px; width: 100%; border: 1px solid #eee; border-radius: 5px; font-weight: bold; color: #333; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease; }
+        
+        .dia-calendario:hover { transform: scale(1.05); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        
+        .dia-presenca { background-color: #a5d6a7; color: #1b5e20; } 
+        
+        .dia-presenca:hover { background-color: #81c784; }
+        
+        .dia-falta { background-color: #ef9a9a; color: #c62828; } 
+        
+        .dia-falta:hover { background-color: #e57373; }
+        
+        .dia-indefinido { background-color: #e0e0e0; color: #757575; } 
+        
+        .dia-indefinido:hover { background-color: #bdbdbd; }
+        
+        .dia-calendario.marcado-falta { background-color: #ffcdd2 !important; color: #b71c1c !important; border: 2px dashed #c62828; }
+        
+        .dia-calendario .marcador-justificativa { font-size: 1.5em; line-height: 1; }
+        
+        .legenda-calendario { margin-top: 1.5rem; font-size: 0.9em; color: #555; }
+        
         .legenda-calendario span { margin: 0 10px; }
+        
         .legenda-calendario .cor-presenca { color: #2e7d32; font-weight: bold; }
+        
         .legenda-calendario .cor-falta { color: #c62828; font-weight: bold; }
+        
+        .submit-button-container { text-align: center; margin-top: 2.5rem; }
+        
+        button[type="submit"].save-button { padding: 0.8rem 2.5rem; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1.0em; font-weight: bold; transition: background-color 0.2s ease, transform 0.1s ease; }
+        
+        button[type="submit"].save-button:hover { background-color: #005a4f; transform: translateY(-1px); }
 
 
-        @media (max-width: 768px) {
-             #calendarioDisplay {
-                grid-template-columns: repeat(7, 1fr); /* Mantém 7 colunas, mas o tamanho se ajusta */
-                gap: 5px;
-            }
-            .dia-calendario { height: 40px; font-size: 0.9em; }
-        }
-        @media (max-width: 992px) { 
-            .header-navigation-menu { display: none; } 
-        }
+        @media (max-width: 768px) { #calendarioDisplay { gap: 5px; } .dia-calendario { height: 40px; font-size: 0.9em; } }
+        @media (max-width: 992px) { .header-navigation-menu { display: none; } }
     </style>
 </head>
 <body>
@@ -222,13 +126,12 @@
     <div id="userSideMenu" class="user-side-menu">
         {% if user.is_authenticated %}
             {% if user.profile.tipo_usuario == 'professor' %}
-                <a href="{% url 'area_professor' %}">Meu Perfil (Professor)</a>
+                <a href="{% url 'area_professor' %}">Meu Painel (Professor)</a>
             {% elif user.profile.tipo_usuario == 'aluno' %}
-                <a href="{% url 'area_aluno' %}">Meu Perfil (Aluno)</a>
+                <a href="{% url 'area_aluno' %}">Minha Área (Aluno)</a>
             {% else %}
                 <a href="#">Meu Perfil</a>
             {% endif %}
-            <a href="#">Área Acadêmica</a>
             <a href="{% url 'pagina_cursos' %}">Cursos</a> 
             <form method="post" action="{% url 'logout' %}" id="logoutForm">
                 {% csrf_token %}
@@ -244,57 +147,60 @@
 
     <div class="page-container-main">
         <div class="back-button-container">
-             <a href="{% url 'area_aluno' %}" class="back-button"> <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                Voltar
+            <a href="{% url 'area_aluno' %}" class="back-button"> 
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Voltar para Minha Área
             </a>
         </div>
-        <h1 class="page-title">Presença e Eventos</h1>
+        <h1 class="page-title">Minha Presença e Eventos</h1>
 
         <div class="calendario-container">
-            <label for="mes">Selecionar Mês:</label>
-            <select id="mes" onchange="atualizarCalendario()">
-                <option value="janeiro">Janeiro</option>
-                <option value="fevereiro">Fevereiro</option>
-                <option value="marco">Março</option>
-                <option value="abril">Abril</option>
-                <option value="maio" selected>Maio</option> <option value="junho">Junho</option>
-                <option value="julho">Julho</option>
-                <option value="agosto">Agosto</option>
-                <option value="setembro">Setembro</option>
-                <option value="outubro">Outubro</option>
-                <option value="novembro">Novembro</option>
-                <option value="dezembro">Dezembro</option>
-            </select>
+             {% if messages %}
+                <ul class="messages-container" style="max-width: 400px; margin: 0 auto 1.5rem auto;">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
 
-            <div id="calendarioDisplay">
+            <form method="POST" action="{% url 'salvar_justificativas_aluno' %}">
+                {% csrf_token %}
+                <label for="mes">Selecionar Mês:</label>
+                <select id="mes" name="mes_selecionado" onchange="atualizarCalendario()">
+                    </select>
+                <input type="hidden" name="dados_calendario_justificado" id="dados_calendario_justificado_input">
+
+                <div id="calendarioDisplay">
+                    </div>
+                <div class="legenda-calendario">
+                    <span class="cor-presenca">■ Presença</span>
+                    <span class="cor-falta">■ Falta</span>
+                    <span>(Clique em uma falta para marcar/desmarcar justificativa '!')</span>
                 </div>
-            <div class="legenda-calendario">
-                <span class="cor-presenca">■ Presença</span>
-                <span class="cor-falta">■ Falta</span>
-                <span>(Clique em uma falta para marcar/desmarcar justificativa '!')</span>
-            </div>
+                <div class="submit-button-container" style="margin-top:1.5rem;">
+                    <button type="submit" class="save-button" style="background-color:#00796b; font-size:1em; padding: 0.7rem 1.5rem;">
+                        Salvar Minhas Justificativas
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script>
-        // Script para o Menu Lateral de Usuário
-        document.addEventListener('DOMContentLoaded', function() {
-            const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
-            const userSideMenu = document.getElementById('userSideMenu');
-            const overlayMenu = document.getElementById('overlayMenu');
-            
-            if (userMenuTriggerBtn) { 
-                userMenuTriggerBtn.addEventListener('click', function() {
-                    userSideMenu.classList.toggle('open');
-                    overlayMenu.classList.toggle('open');
-                });
-            }
-            if (overlayMenu) {
-                overlayMenu.addEventListener('click', function() {
-                    userSideMenu.classList.remove('open');
-                    overlayMenu.classList.remove('open');
-                });
-            }
+    document.addEventListener('DOMContentLoaded', function() {
+        const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
+        const userSideMenu = document.getElementById('userSideMenu');
+        const overlayMenu = document.getElementById('overlayMenu');
+        
+        if (userMenuTriggerBtn && userSideMenu && overlayMenu) {
+            userMenuTriggerBtn.addEventListener('click', function() {
+                userSideMenu.classList.toggle('open');
+                overlayMenu.classList.toggle('open');
+            });
+            overlayMenu.addEventListener('click', function() {
+                userSideMenu.classList.remove('open');
+                overlayMenu.classList.remove('open');
+            });
             const userMenuLinks = userSideMenu.querySelectorAll('a, .logout-button');
             userMenuLinks.forEach(link => {
                 link.addEventListener('click', function(event) {
@@ -305,86 +211,137 @@
                     overlayMenu.classList.remove('open');
                 });
             });
+        }
 
-            // Script do Calendário (adaptado do seu original)
-            const dadosPresenca = {
-                // Estes dados viriam do backend Django no futuro
-                janeiro: [1, 2, 3, 5, 6, 10, 12, 15, 20, 22, 23, 28, 29],
-                fevereiro: [2, 4, 6, 7, 11, 13, 18, 19, 25, 26],
-                marco: [1, 2, 8, 10, 15, 17, 22, 23, 29, 30],
-                abril: [3, 5, 7, 10, 12, 17, 19, 24, 26],
-                maio: [1, 3, 6, 8, 10, 13, 15, 17, 20, 22, 24, 27, 29, 31], // Adicionei mais dados para Maio
-                junho: [1, 4, 6, 8, 11, 13, 15, 18, 20, 22, 25, 27, 29]
-                // Adicione os outros meses conforme necessário
-            };
+        const mesSelect = document.getElementById("mes"); 
+        const calendarioDiv = document.getElementById("calendarioDisplay");
+        // Input hidden para o formulário de salvar justificativas
+        const dadosCalendarioJustificadoInput = document.getElementById("dados_calendario_justificado_input");
+        
+        if (!mesSelect || !calendarioDiv) {
+            console.warn("Elementos do calendário do aluno não encontrados.");
+            return;
+        }
 
-            // Mapeamento de meses para número de dias (simplificado, não considera ano bissexto)
-            const diasNoMes = {
-                janeiro: 31, fevereiro: 28, marco: 31, abril: 30, maio: 31, junho: 30,
-                julho: 31, agosto: 31, setembro: 30, outubro: 31, novembro: 30, dezembro: 31
-            };
-
-            function atualizarCalendario() {
-                const mesSelecionado = document.getElementById("mes").value;
-                const calendarioDiv = document.getElementById("calendarioDisplay");
-                const diasDePresencaNesteMes = dadosPresenca[mesSelecionado] || [];
-                const totalDias = diasNoMes[mesSelecionado] || 30; // Padrão 30 se não encontrado
-
-                calendarioDiv.innerHTML = ""; // Limpa o calendário anterior
-
-                for (let dia = 1; dia <= totalDias; dia++) {
-                    const botaoDia = document.createElement("button");
-                    botaoDia.innerText = dia;
-                    botaoDia.classList.add('dia-calendario'); // Adiciona classe base
-
-                    let tipo = "indefinido"; // Assume indefinido se o mês não estiver em dadosPresenca
-
-                    if (dadosPresenca.hasOwnProperty(mesSelecionado)) { // Verifica se temos dados para o mês
-                        if (diasDePresencaNesteMes.includes(dia)) {
-                            botaoDia.classList.add('dia-presenca');
-                            tipo = "presenca";
-                        } else {
-                            botaoDia.classList.add('dia-falta');
-                            tipo = "falta";
-                        }
-                    } else {
-                         botaoDia.classList.add('dia-indefinido');
-                    }
-                    
-
-                    if (tipo === "falta") {
-                        botaoDia.addEventListener("click", function () {
-                            // Alterna entre o número do dia e '!'
-                            // E também alterna uma classe para o estilo de 'justificativa marcada'
-                            if (this.querySelector('.marcador-justificativa')) {
-                                this.innerHTML = dia; // Volta para o número
-                                this.classList.remove('marcado-falta');
-                            } else {
-                                this.innerHTML = `<span class="marcador-justificativa">!</span>`; // Mostra '!'
-                                this.classList.add('marcado-falta');
-                            }
-                            // Aqui você pode adicionar lógica para enviar a justificativa ao backend
-                        });
-                    } else if (tipo === "presenca") {
-                        // Pode adicionar um title ou outra informação se desejar
-                        botaoDia.title = "Presença registrada";
-                    }
-
-
-                    calendarioDiv.appendChild(botaoDia);
-                }
+        let dadosCalendarioAluno = {};
+        try {
+            const jsonData = '{{ dados_calendario_do_aluno_json|default:"{}"|escapejs }}';
+            dadosCalendarioAluno = JSON.parse(jsonData);
+            if (typeof dadosCalendarioAluno !== 'object' || dadosCalendarioAluno === null) {
+                dadosCalendarioAluno = {};
             }
+        } catch (e) {
+            console.error("Erro ao carregar dados do calendário do aluno:", e);
+            dadosCalendarioAluno = {};
+        }
 
-         
-            if (document.getElementById("mes") && document.getElementById("calendarioDisplay")) {
-              
-                const dataAtual = new Date();
-                const nomesMeses = ["janeiro", "fevereiro", "marco", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
-             
-                
-                atualizarCalendario();
-            }
+        const diasNoMes = {
+            janeiro: 31, fevereiro: 28, marco: 31, abril: 30, maio: 31, junho: 30,
+            julho: 31, agosto: 31, setembro: 30, outubro: 31, novembro: 30, dezembro: 31
+        };
+        const nomesMeses = ["janeiro", "fevereiro", "marco", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+
+        nomesMeses.forEach((nomeMes) => {
+            const option = document.createElement('option');
+            option.value = nomeMes;
+            option.textContent = nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1);
+            mesSelect.appendChild(option);
         });
+        
+        const dataAtual = new Date();
+        // Tenta usar um mês pré-selecionado passado pelo backend, se houver
+        const mesInicial = '{{ mes_selecionado_pelo_backend|default_if_none:"" }}' || nomesMeses[dataAtual.getMonth()];
+        mesSelect.value = mesInicial in diasNoMes ? mesInicial : "janeiro";
+
+        function prepararDadosParaSalvar() {
+            if (dadosCalendarioJustificadoInput && mesSelect) {
+                dadosCalendarioJustificadoInput.value = JSON.stringify(dadosCalendarioAluno);
+                // O campo 'mes_selecionado' no form já é preenchido pelo select#mes
+            }
+        }
+
+        function atualizarCalendario() {
+            if (!mesSelect || !calendarioDiv) return; 
+
+            const mesSelecionado = mesSelect.value;
+            const totalDias = diasNoMes[mesSelecionado] || 30; 
+            
+            if (!dadosCalendarioAluno[mesSelecionado] || typeof dadosCalendarioAluno[mesSelecionado] !== 'object') {
+                dadosCalendarioAluno[mesSelecionado] = {};
+            }
+            const dadosDoMes = dadosCalendarioAluno[mesSelecionado];
+
+            calendarioDiv.innerHTML = ""; 
+
+            for (let dia = 1; dia <= totalDias; dia++) {
+                const diaStr = String(dia);
+                const botaoDia = document.createElement("button");
+                botaoDia.innerText = dia;
+                botaoDia.classList.add('dia-calendario'); 
+                botaoDia.type = "button"; 
+
+                let statusDia = "indefinido";
+                let motivoJustificativa = ""; // Não usado ativamente aqui, mas a estrutura pode conter
+                let justificadoPor = "";
+
+                const diaData = dadosDoMes[diaStr];
+                if (diaData && typeof diaData === 'object') { 
+                    statusDia = diaData.status || "indefinido";
+                    // motivoJustificativa = diaData.motivo || ""; // Aluno não edita motivo, apenas vê
+                    // justificadoPor = diaData.por || ""; 
+                } else if (typeof diaData === 'string') { 
+                    statusDia = diaData;
+                }
+                
+                botaoDia.classList.remove('dia-presenca', 'dia-falta', 'dia-indefinido', 'marcado-falta');
+                if (statusDia === "presente") {
+                    botaoDia.classList.add('dia-presenca');
+                    botaoDia.title = "Presença registrada";
+                } else if (statusDia === "falta") {
+                    botaoDia.classList.add('dia-falta');
+                    botaoDia.title = "Falta registrada - Clique para justificar";
+                } else if (statusDia === "falta_justificada") {
+                    botaoDia.innerHTML = `<span class="marcador-justificativa">!</span>`;
+                    botaoDia.classList.add('marcado-falta'); 
+                    botaoDia.classList.add('dia-falta'); 
+                    botaoDia.title = "Falta justificada - Clique para remover justificativa";
+                } else { 
+                    botaoDia.classList.add('dia-indefinido');
+                }
+                
+                if (statusDia === "falta" || statusDia === "falta_justificada") {
+                    botaoDia.addEventListener("click", function () {
+                        let statusAtualNoClique = "falta"; // Assume que era falta se não for objeto
+                        const diaAtualData = dadosCalendarioAluno[mesSelecionado]?.[diaStr];
+
+                        if (diaAtualData && typeof diaAtualData === 'object') {
+                            statusAtualNoClique = diaAtualData.status;
+                        } else if (typeof diaAtualData === 'string') {
+                            statusAtualNoClique = diaAtualData;
+                        }
+                        
+                        if (statusAtualNoClique === "falta_justificada") {
+                            // Aluno remove a justificativa, volta para falta simples
+                            dadosCalendarioAluno[mesSelecionado][diaStr] = "falta";
+                        } else { // Era 'falta' (ou qualquer outra coisa que não 'falta_justificada'), então justifica
+                            // O aluno ao justificar, não pedimos motivo neste fluxo simples,
+                            // apenas marcamos como justificada. O professor pode ver o motivo se inserido por ele.
+                            dadosCalendarioAluno[mesSelecionado][diaStr] = { status: "falta_justificada", motivo: "Justificado pelo aluno", por: "aluno"};
+                        }
+                        prepararDadosParaSalvar(); // Atualiza o input hidden
+                        atualizarCalendario(); 
+                    });
+                }
+                calendarioDiv.appendChild(botaoDia);
+            }
+            prepararDadosParaSalvar(); // Garante que o input hidden está atualizado no carregamento/mudança de mês
+        }
+        
+        if (mesSelect) { // Garante que o select existe antes de adicionar listener
+            mesSelect.addEventListener('change', atualizarCalendario);
+        }
+        atualizarCalendario(); // Renderização inicial
+    });
     </script>
 </body>
 </html>

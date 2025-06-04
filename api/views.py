@@ -224,9 +224,30 @@ def dados_pessoais_view(request):
     return render(request, 'dados_pessoais.html', {'form': form})
 
 # Presença
-@login_required 
+@login_required # Garante que apenas o aluno logado veja seu calendário
 def presenca_eventos_view(request):
-    return render(request, 'presencaEventos.html')
+    user = request.user
+    dados_json_para_template = "{}" # Default: calendário vazio
+
+    if hasattr(user, 'profile') and user.profile.dados_calendario_json:
+        try:
+
+            dados_dict = json.loads(user.profile.dados_calendario_json)
+            dados_json_para_template = json.dumps(dados_dict) 
+        except (json.JSONDecodeError, TypeError):
+            messages.warning(request, "Seus dados de calendário parecem estar corrompidos ou não foram definidos. Exibindo calendário padrão.")
+
+        except AttributeError:
+
+            messages.error(request, "Seu perfil não tem dados de calendário configurados.")
+    elif hasattr(user, 'profile'):
+        messages.info(request, "Seu calendário de presença ainda não tem marcações.")
+    else:
+        messages.error(request, "Perfil de usuário não encontrado para carregar o calendário.")
+    context = {
+        'dados_calendario_do_aluno_json': dados_json_para_template
+    }
+    return render(request, 'presencaEventos.html', context)
 
 # Professor - desempenho e calendário
 def professor_required(function):
@@ -253,29 +274,84 @@ def editar_desempenho_aluno_view(request, aluno_id):
 
     return render(request, 'editar_desempenho_aluno.html', {'aluno': aluno, 'desempenho_formset': formset})
 
+
+
+
 @login_required
 @professor_required
 def editar_calendario_aluno_view(request, aluno_id):
-    aluno = get_object_or_404(User, pk=aluno_id, profile__tipo_usuario='aluno')
-    profile = aluno.profile
+    aluno = get_object_or_404(User, pk=aluno_id)
+    
+    profile = getattr(aluno, 'profile', None)
+    if not profile or profile.tipo_usuario != 'aluno':
+        messages.error(request, "Usuário inválido ou não é um aluno.")
+        return redirect('area_professor') # Nome da sua URL da área do professor
 
     if request.method == 'POST':
-        dados = request.POST.get('dados_calendario')
-        if dados:
+        dados_json_recebidos = request.POST.get('dados_calendario')
+
+        if dados_json_recebidos:
             try:
-                profile.dados_calendario_json = json.dumps(json.loads(dados))
+                novos_dados_calendario_dict = json.loads(dados_json_recebidos)
+                profile.dados_calendario_json = json.dumps(novos_dados_calendario_dict)
                 profile.save()
-                messages.success(request, "Calendário atualizado!")
-                return redirect('editar_calendario_aluno', aluno_id=aluno_id)
+                
+               
+                nome_display_aluno = aluno.get_full_name().strip()
+                if not nome_display_aluno:
+                    nome_display_aluno = aluno.username
+                
+                messages.success(request, f"Calendário de {nome_display_aluno} atualizado com sucesso!")
+                return redirect('editar_calendario_aluno', aluno_id=aluno.id)
+            except json.JSONDecodeError:
+                messages.error(request, "Erro: Formato de dados do calendário inválido recebido.")
             except Exception as e:
-                messages.error(request, f"Erro: {e}")
+                messages.error(request, f"Erro inesperado ao salvar o calendário: {e}")
+                print(f"Erro ao salvar calendário para {aluno.username}: {e}")
+        else:
+            messages.warning(request, "Nenhum dado de calendário foi recebido para salvar.")
 
+    dados_para_template_dict = {}
     try:
-        dados_presenca = json.loads(profile.dados_calendario_json or '{}')
+        if profile.dados_calendario_json:
+            dados_para_template_dict = json.loads(profile.dados_calendario_json)
     except json.JSONDecodeError:
-        dados_presenca = {}
+        messages.warning(request, "Dados de calendário corrompidos. Exibindo calendário vazio.")
+    except AttributeError: 
+        messages.error(request, "Perfil do aluno não possui campo 'dados_calendario_json'. Verifique modelos e migrações.")
 
-    return render(request, 'editar_calendario_aluno.html', {
+    context = {
         'aluno': aluno,
-        'dados_presenca_aluno_json': json.dumps(dados_presenca)
-    })
+        'dados_presenca_aluno_json': json.dumps(dados_para_template_dict), 
+    } 
+    return render(request, 'editar_calendario_aluno.html', context)
+
+
+    
+@login_required 
+def salvar_justificativas_aluno_view(request):
+    user_profile = getattr(request.user, 'profile', None)
+
+    if not user_profile:
+        messages.error(request, "Perfil de usuário não encontrado. Não foi possível salvar as justificativas.")
+        return redirect('home') 
+    dados_calendario_json_string = request.POST.get('dados_calendario_justificado')
+
+    if dados_calendario_json_string:
+        try:
+            dados_para_salvar_dict = json.loads(dados_calendario_json_string)
+            
+            user_profile.dados_calendario_json = json.dumps(dados_para_salvar_dict)
+            user_profile.save()
+            
+            messages.success(request, "Suas alterações no calendário foram salvas com sucesso!")
+        except json.JSONDecodeError:
+            messages.error(request, "Ocorreu um erro ao processar os dados do calendário. Formato inválido.")
+        except Exception as e:
+            messages.error(request, f"Ocorreu um erro inesperado ao salvar suas alterações: {e}")
+            print(f"Erro ao salvar justificativas para {request.user.username}: {e}") 
+    else:
+        messages.warning(request, "Nenhum dado de calendário foi enviado para salvar.")
+
+
+    return redirect('pagina_presenca_eventos') 

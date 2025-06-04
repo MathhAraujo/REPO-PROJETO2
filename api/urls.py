@@ -36,4 +36,8 @@ urlpatterns = [
 
     path('professor/aluno/<int:aluno_id>/desempenho/', views.editar_desempenho_aluno_view, name='editar_desempenho_aluno'),
     path('professor/aluno/<int:aluno_id>/presenca-eventos/', views.editar_calendario_aluno_view, name='editar_calendario_aluno'),
+
+    path('aluno/salvar-justificativas/', views.salvar_justificativas_aluno_view, name='salvar_justificativas_aluno'),
+
+
 ]   
