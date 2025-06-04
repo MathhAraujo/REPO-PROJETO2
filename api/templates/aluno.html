@@ -1,112 +1,356 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Área do Aluno</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Aluno - {{ user.first_name|default:user.username }}</title>
+    {% load static %}
     <style>
         body {
             margin: 0;
-            background-color: #ddd;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5; 
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden; 
         }
-        .aluno-container {
+
+        /* --- HEADER STYLES (Mesmos da home.html para consistência) --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 25px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: calc(100% - 50px);
+            z-index: 1010; 
+            height: 50px;
+        }
+        .logo-container { display: flex; align-items: center; }
+        .logo-container svg { height: 38px; width: auto; }
+        .header-navigation-menu { 
+            flex-grow: 1; display: flex; justify-content: center; align-items: center;
+        }
+        .header-menu-button.cursos-button {
+            background-color: #00796b; color: white; padding: 0 25px; 
+            width: auto; font-weight: 600; font-size: 0.95em;
+            border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 32px; margin: 0 10px; border-radius: 5px; cursor: pointer;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+            display: flex; align-items: center; justify-content: center; 
+            text-decoration: none; 
+        }
+        .header-menu-button.cursos-button:hover {
+            background-color: #005a4f; box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+        }
+        .user-menu-trigger {
+            cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: background-color 0.2s ease;
+        }
+        .user-menu-trigger:hover { background-color: #f0f0f0; }
+        .user-menu-trigger svg { 
+            width: 28px; height: 28px; fill: #555; transition: fill 0.3s ease;
+        }
+        .user-menu-trigger.logged-in svg { fill: #00796b; }
+
+        .user-side-menu {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+            background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15);
+            padding-top: 70px; box-sizing: border-box;
+            transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+            z-index: 1005; display: flex; flex-direction: column;
+        }
+        .user-side-menu.open { right: 0; }
+        .user-side-menu a {
+            display: block; padding: 14px 20px; color: #333; text-decoration: none;
+            border-bottom: 1px solid #f0f0f0; font-size: 1em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .user-side-menu a:hover { background-color: #f7f7f7; color: #00796b; }
+        #logoutForm { margin: 0; padding: 0; width: 100%; border-bottom: 1px solid #f0f0f0; }
+        .user-side-menu .logout-button {
+            display: block; width: 100%; padding: 14px 20px; color: white;
+            background-color: #d9534f; border: none; font-size: 1em;
+            text-align: left; cursor: pointer; font-weight: bold; 
+            transition: background-color 0.2s ease, color 0.2s ease;
+            box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: normal; 
+        }
+        .user-side-menu .logout-button:hover { background-color: #c9302c; color: white; }
+        .overlay-menu {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.4); z-index: 1000; 
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s;
+        }
+        .overlay-menu.open { opacity: 1; visibility: visible; transition-delay: 0s; }
+        /* --- FIM HEADER STYLES --- */
+
+        .page-container-aluno {
+            width: 100%;
+            max-width: 960px; 
+            margin: 0 auto;
+            padding: calc(50px + 2rem) 1rem 2rem 1rem; 
+            box-sizing: border-box;
+        }
+
+        .aluno-profile-header {
+            background-color: #ffffff;
             padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             display: flex;
             align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
         }
-        .voltar {
+        
+        .back-button-area-aluno {
             position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background-color: #7a7272;
-            color: black;
+            top: 1.5rem;
+            left: 1.5rem;
+            background-color: #e9ecef;
+            color: #495057;
+            border: none;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .aluno-info {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-        .avatar {
-            width: 250px;
-            height: 250px;
-            background-color: #7a7272;
-            border-radius: 50%;
-        }
-        .detalhes {
+            width: 40px;
+            height: 40px;
             font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
         }
-        .detalhes h2 {
-            margin: 0 0 1rem 0;
+        .back-button-area-aluno:hover {
+            background-color: #dee2e6;
         }
-        .detalhes ul {
+
+        .avatar-aluno {
+            width: 100px;
+            height: 100px;
+            background-color: #00796b; 
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            font-weight: bold;
+            overflow: hidden; 
+            flex-shrink: 0;
+        }
+        .avatar-aluno img { width: 100%; height: 100%; object-fit: cover; }
+
+        .aluno-info-text h1 {
+            font-size: 1.8em;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 0.25rem;
+        }
+        .aluno-info-text p {
+            font-size: 1em;
+            color: #555;
+            margin-top: 0;
+        }
+
+        .aluno-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Ajustado minmax */
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .aluno-menu-item {
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            min-height: 120px; 
+        }
+        .aluno-menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            color: #00796b;
+        }
+        .aluno-menu-item svg {
+            width: 36px;
+            height: 36px;
+            margin-bottom: 0.75rem;
+            stroke-width: 1.5; 
+        }
+        .aluno-menu-item span {
+            font-size: 1.05em;
+            font-weight: 600;
+        }
+        
+        .aluno-menu-item.cursos svg { stroke: #FF9800; } 
+        .aluno-menu-item.desempenho svg { stroke: #4CAF50; } 
+        .aluno-menu-item.dados svg { stroke: #2196F3; } 
+        .aluno-menu-item.oportunidades svg { stroke: #9C27B0; } 
+        .aluno-menu-item.certificados svg { stroke: #FFC107; } 
+        .aluno-menu-item.presenca svg { stroke: #00BCD4; } /* Ciano para Presença/Eventos */
+
+
+        .aluno-section {
+            background-color: #ffffff;
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            margin-bottom: 2rem;
+        }
+        .aluno-section h2 {
+            color: #00796b;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.5em;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0.5rem;
+        }
+        .aluno-section ul {
             list-style: none;
             padding: 0;
         }
-        .detalhes li {
-            margin-bottom: 0.5rem;
+        .aluno-section li { /* Estilo base para itens de lista na seção */
+            padding: 0.7rem 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+        .aluno-section li:last-child {
+            border-bottom: none;
+        }
+        .aluno-section li .materia { font-weight: 500; color: #333; }
+        .aluno-section li .nota { font-weight: bold; padding: 0.2em 0.5em; border-radius: 4px; color: white; }
+
+        /* Escala de notas qualitativas */
+        .nota.muito-bom    { background-color: #28a745; } /* Verde escuro */
+        .nota.bom          { background-color: #5cb85c; } /* Verde */
+        .nota.satisfatorio { background-color: #5bc0de; } /* Azul claro */
+        .nota.regular      { background-color: #f0ad4e; color: #333; } /* Amarelo/Laranja */
+        .nota.insatisfatorio{ background-color: #d9534f; } /* Vermelho */
+
+
+        @media (max-width: 768px) {
+            .aluno-profile-header {
+                flex-direction: column; text-align: center; padding-top: 3.5rem; 
+            }
+            .back-button-area-aluno { top: 0.8rem; left: 0.8rem; }
+            .avatar-aluno { width: 90px; height: 90px; font-size: 2rem; }
+            .aluno-info-text h1 { font-size: 1.5em; }
+            .aluno-menu-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
+            .aluno-menu-item { padding: 1rem; min-height: 100px; }
+            .aluno-menu-item svg { width: 30px; height: 30px; }
+            .aluno-menu-item span { font-size: 0.95em; }
+             .aluno-section li { flex-direction: column; align-items: flex-start; }
+            .aluno-section li .nota { margin-top: 0.3rem; align-self: flex-start; }
+        }
+         @media (max-width: 992px) { 
+            .header-navigation-menu { display: none; } 
+        }
+
     </style>
 </head>
 <body>
-    <a href="/" class="voltar">&lt;</a>
-    <div class="aluno-container">
-        <div class="aluno-info">
-            <div class="avatar"></div>
-            <div class="detalhes">
-                <h2>NOME</h2>
-                <ul>
-                    <li>
-                        <form action="{% url 'pagina_cadastro' %}" method="get" style="margin: 0;">
-                            <button type="submit" style="
-                                background-color: #2196F3;
-                                color: white;
-                                padding: 8px 16px;
-                                border: none;
-                                border-radius: 5px;
-                                cursor: pointer;
-                                font-size: 1rem;
-                            ">Cadastro</button>
-                        </form>
-                    </li>                    
-                    <li>
-                        <form action="{% url 'pagina_menucursos' %}" method="get" style="margin: 0;">
-                            <button type="submit" style="
-                                background-color: #FF5722;
-                                color: white;
-                                padding: 8px 16px;
-                                border: none;
-                                border-radius: 5px;
-                                cursor: pointer;
-                                font-size: 1rem;
-                            ">Curso</button>
-                        </form>
-                    </li>
-                    <li>
-                        <form action="{% url 'pagina_desempenho' %}" method="get" style="margin: 0;">
-                            <button type="submit" style="
-                                background-color: #4CAF50;
-                                color: white;
-                                padding: 8px 16px;
-                                border: none;
-                                border-radius: 5px;
-                                cursor: pointer;
-                                font-size: 1rem;
-                            ">Desempenho</button>
-                        </form>
-                    </li>                    
-                    <li>Oportunidades</li>
-                </ul>
+    {% load static %} 
+    <header>
+        <div class="logo-container">
+            <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><path d="M5 5 H15 V10 H20 V5 H30 V15 H25 V20 H30 V30 H20 V25 H15 V30 H5 V20 H10 V15 H5 Z" fill="#257FF9"/><g transform="translate(38, 2)"><circle cx="10" cy="10" r="3" fill="#F06141"/><path d="M2 15 Q10 12 18 15" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0 20 Q10 16 20 20" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M-2 25 Q10 20 22 25" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/></g><text x="70" y="27" font-family="Segoe UI, sans-serif" font-size="14px" fill="#555">Plataforma</text></svg>
+        </div>
+        <nav class="header-navigation-menu">
+            <a href="{% url 'pagina_cursos' %}" class="header-menu-button cursos-button">Nossos Cursos</a>
+        </nav>
+        <div class="user-menu-trigger {% if user.is_authenticated %}logged-in{% endif %}" id="userMenuTriggerBtn" title="Menu do Usuário">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 11.5c-5 0-9 2.5-9 4v.5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.5c0-1.5-4-4-9-4Z"/></svg>
+        </div>
+    </header>
+
+    <div id="userSideMenu" class="user-side-menu">
+        {% if user.is_authenticated %}
+            {% if user.profile.tipo_usuario == 'professor' %}
+                <a href="{% url 'area_professor' %}">Meu Perfil (Professor)</a>
+            {% elif user.profile.tipo_usuario == 'aluno' %}
+                <a href="{% url 'area_aluno' %}">Meu Perfil (Aluno)</a>
+            {% else %}
+                <a href="#">Meu Perfil</a>
+            {% endif %}
+            <a href="#">Área Acadêmica</a>
+            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <form method="post" action="{% url 'logout' %}" id="logoutForm">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
+        {% endif %}
+    </div>
+    <div id="overlayMenu" class="overlay-menu"></div>
+
+    <div class="page-container-aluno">
+        <div class="aluno-profile-header">
+            <a href="{% url 'home' %}" class="back-button-area-aluno" title="Voltar para Home">&#x2190;</a>
+            <div class="avatar-aluno">
+                {% if user.first_name and user.last_name %}
+                    {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
+                {% elif user.first_name %}
+                    {{ user.first_name|slice:":1"|upper }}
+                {% else %}
+                    {{ user.username|slice:":1"|upper }}
+                {% endif %}
+            </div>
+            <div class="aluno-info-text">
+                <h1>Olá, {{ user.first_name|default:user.username }}!</h1>
+                <p>Bem-vindo(a) à sua Área do Aluno. Explore seus recursos abaixo.</p>
             </div>
         </div>
-    </div>
-</body>
-</html>
+
+        <div class="aluno-menu-grid">
+            <a href="{% url 'pagina_cursos' %}" class="aluno-menu-item cursos">
+                <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <span>Meus Cursos</span>
+            </a>
+            <a href="{% url 'pagina_desempenho' %}" class="aluno-menu-item desempenho">
+                <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span>Meu Desempenho</span>
+            </a>
+            <a href="{% url 'meus_dados_pessoais' %}" class="aluno-menu-item dados">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                <span>Meus Dados</span>
+            </a>
+            <a href="{% url 'pagina_presenca_eventos' %}" class="aluno-menu-item presenca"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+                <span>Presença/Eventos</span>
+            </a>
+             <a href="#" class="aluno-menu-item certificados">
+                <svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline><path d="m10.5 13.5-2 2-2-2"></path><path d="m15.5 10.5-2 2-2-2"></path></svg>
+                <span>Certificados</span>
+            </a>
+            <a href="#" class="aluno-menu-item oportunidades"> 
+                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                <span>Oportunidades</span>
+            </a>
+        </div>
+
+        <div class="aluno-section">
+            <h2>Meu Desempenho Acadêmico (Exemplo)</h2>
+            <ul>
+                <li><span class="materia">Matemática</span> <span class="nota muito-bom">Muito Bom</span></li>
+                <li><span class="materia

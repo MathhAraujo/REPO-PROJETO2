@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transformando Sonhos - Plataforma Personalizada</title>
     <style>
-        /* Estilos CSS permanecem em grande parte os mesmos da versão anterior.
-           A classe .user-menu-trigger.logged-in svg já foi definida. */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -98,7 +96,7 @@
             fill: #555; 
             transition: fill 0.3s ease;
         }
-        .user-menu-trigger.logged-in svg { /* Aplicado pelo Django agora */
+        .user-menu-trigger.logged-in svg {
             fill: #00796b; 
         }
 
@@ -111,15 +109,41 @@
             z-index: 1005; display: flex; flex-direction: column;
         }
         .user-side-menu.open { right: 0; }
-        .user-side-menu a { /* Simplificado, pois o botão de simulação foi removido */
+        .user-side-menu a {
             display: block; padding: 14px 20px; color: #333; text-decoration: none;
             border-bottom: 1px solid #f0f0f0; font-size: 1em;
             transition: background-color 0.2s ease, color 0.2s ease;
         }
         .user-side-menu a:hover { background-color: #f7f7f7; color: #00796b; }
-        /* Removido .menu-item-like-button e .menu-separator se não forem mais usados por outros botões */
-        /* Se você tiver outros botões que não são links, pode manter .menu-item-like-button */
-        .user-side-menu .django-note {
+        
+        #logoutForm { /* Estilo para o formulário de logout */
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            border-bottom: 1px solid #f0f0f0; /* Consistência com outros itens de menu */
+        }
+        .user-side-menu .logout-button {
+            display: block; 
+            width: 100%;   
+            padding: 14px 20px; 
+            color: white;
+            background-color: #d9534f; /* Vermelho */
+            border: none; 
+            font-size: 1em;
+            text-align: left; 
+            cursor: pointer;
+            font-weight: bold; 
+            transition: background-color 0.2s ease, color 0.2s ease;
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: normal; 
+        }
+        .user-side-menu .logout-button:hover {
+            background-color: #c9302c; /* Vermelho mais escuro */
+            color: white;
+        }
+
+        .user-side-menu .django-note { /* Removido se não for mais simulação */
             padding: 10px 20px; font-size: 0.8em; color: #777; background-color: #f9f9f9;
             border-top: 1px solid #eee; margin-top: auto; 
         }
@@ -274,18 +298,33 @@
         </div>
     </header>
 
-    <div id="userSideMenu" class="user-side-menu">
+   <div id="userSideMenu" class="user-side-menu">
         {% if user.is_authenticated %}
-            <a href="#">Meu Perfil</a> <a href="#">Área Acadêmica</a> <a href="{% url 'pagina_cursos' %}">Cursos</a> 
-            <form method="post" action="{% url 'logout' %}" style="margin:0;"> {% csrf_token %}
-                <button type="submit" class="menu-item-like-button" style="color: #d9534f; font-weight:bold;">Logout</button>
+       
+           
+        {% if user.profile.tipo_usuario == 'professor' %}
+            <a href="{% url 'area_professor' %}" id="menuUserProfileLink">Meu Perfil</a>
+        {% elif user.profile.tipo_usuario == 'aluno' %}
+            <a href="{% url 'area_aluno' %}" id="menuUserProfileLink">Meu Perfil</a>
+        {% else %}
+            <a href="#" id="menuUserProfileLink">Meu Perfil ({{ user.profile.tipo_usuario }})</a> 
+        {% endif %}
+            
+            <a href="#">Área Acadêmica</a>
+            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <form method="post" action="{% url 'logout' %}" id="logoutForm">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Logout</button>
             </form>
         {% else %}
+            <p style="padding: 5px 20px; background-color: #fcc; color: #333; font-size: 0.8em;">
+                DEBUG: Usuário NÃO está autenticado.
+            </p>
             <a href="{% url 'pagina_cursos' %}">Cursos</a> 
             <a href="{% url 'login' %}">Login</a>
             <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
         {% endif %}
-        </div>
+    </div>
     <div id="overlayMenu" class="overlay-menu"></div>
 
     <div class="page-container">
@@ -315,7 +354,7 @@
             {% endif %}
 
             <div id="nenhum-aviso-selecionado" 
-                 style="display: {% if not user.is_authenticated or not algum_aviso_inicial_ativo %}flex{% else %}none{% endif %};">
+                 style="display: {% if not user.is_authenticated and not alguma_secao_inicial_ativa_aqui %}flex{% else %}none{% endif %};">
                  <span class="icon">🔔</span><p>Selecione um aviso na barra lateral para ver os detalhes.</p>
             </div>
 
@@ -326,13 +365,13 @@
                     <div id="texto-sobreposto-1" class="aviso-texto-sobreposto"><h4>Detalhes do Comunicado</h4><p>Informamos uma atualização crítica nos prazos para submissão de projetos. Novas diretrizes estão disponíveis. Agradecemos a atenção!</p></div>
                 </div>
             </section>
-            <section id="aviso-detalhe-2" class="caixa-aviso-detalhe"> </section>
-            <section id="aviso-detalhe-3" class="caixa-aviso-detalhe"> </section>
-            <section id="aviso-detalhe-4" class="caixa-aviso-detalhe"> </section>
-            <section id="aviso-detalhe-5" class="caixa-aviso-detalhe"> </section>
-            <section id="aviso-detalhe-6" class="caixa-aviso-detalhe"> </section>
-            <section id="aviso-detalhe-7" class="caixa-aviso-detalhe"> </section>
-            <section id="aviso-detalhe-8" class="caixa-aviso-detalhe"> </section>
+            <section id="aviso-detalhe-2" class="caixa-aviso-detalhe"><h3>Lançamento: Novas Funcionalidades!</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/6495ED/FFFFFF?text=Explore+as+Novidades" alt="Imagem Novas Funcionalidades" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-2"><div id="texto-sobreposto-2" class="aviso-texto-sobreposto"><h4>Explore as Novidades!</h4><p>Descubra ferramentas inéditas e um painel de controle redesenhado para otimizar sua experiência. Tutorial disponível na seção de Ajuda.</p></div></div></section>
+            <section id="aviso-detalhe-3" class="caixa-aviso-detalhe"><h3>Confira Nossa Agenda de Eventos</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/3CB371/FFFFFF?text=Eventos+de+Junho" alt="Imagem Agenda de Eventos" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-3"><div id="texto-sobreposto-3" class="aviso-texto-sobreposto"><h4>Não Perca!</h4><p>O mês está repleto de webinars e workshops. Participe e interaja com especialistas e nossa comunidade. Inscrições abertas!</p></div></div></section>
+            <section id="aviso-detalhe-4" class="caixa-aviso-detalhe"><h3>Sua Opinião é Importante</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/DB7093/FFFFFF?text=Feedback+da+Comunidade" alt="Imagem Feedback da Comunidade" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-4"><div id="texto-sobreposto-4" class="aviso-texto-sobreposto"><h4>Feedback Compilado</h4><p>Compilamos suas sugestões e comentários. Confira as próximas melhorias planejadas com base em suas valiosas contribuições.</p></div></div></section>
+            <section id="aviso-detalhe-5" class="caixa-aviso-detalhe"><h3>Atualização das Políticas de Privacidade</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/BDB76B/FFFFFF?text=Políticas+de+Privacidade" alt="Imagem Políticas de Privacidade" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-5"><div id="texto-sobreposto-5" class="aviso-texto-sobreposto"><h4>Privacidade Reforçada</h4><p>Revisamos nossas políticas para maior clareza e proteção dos seus dados. Acesse o documento completo para mais informações.</p></div></div></section>
+            <section id="aviso-detalhe-6" class="caixa-aviso-detalhe"><h3>Inscrições Abertas: Programa de Mentoria</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/4682B4/FFFFFF?text=Programa+de+Mentoria" alt="Imagem Programa de Mentoria" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-6"><div id="texto-sobreposto-6" class="aviso-texto-sobreposto"><h4>Desenvolva sua Carreira!</h4><p>Participe do nosso programa de mentoria e conecte-se com profissionais experientes. Vagas limitadas, inscreva-se já!</p></div></div></section>
+            <section id="aviso-detalhe-7" class="caixa-aviso-detalhe"><h3>Manutenção Programada do Sistema</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/FFA07A/FFFFFF?text=Manutenção+Agendada" alt="Imagem Manutenção Programada" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-7"><div id="texto-sobreposto-7" class="aviso-texto-sobreposto"><h4>Aviso de Manutenção</h4><p>Nossa plataforma passará por uma manutenção essencial no próximo sábado, das 02:00 às 04:00. Agradecemos a sua paciência.</p></div></div></section>
+            <section id="aviso-detalhe-8" class="caixa-aviso-detalhe"><h3>Estamos Contratando: Novas Vagas!</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/20B2AA/FFFFFF?text=Junte-se+a+Nós" alt="Imagem Vagas Abertas" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-8"><div id="texto-sobreposto-8" class="aviso-texto-sobreposto"><h4>Faça Parte da Equipe!</h4><p>Temos diversas oportunidades em aberto para profissionais talentosos. Confira nossas vagas e candidate-se para transformar sonhos conosco!</p></div></div></section>
 
             {% if user.is_authenticated %}
             <section id="painel-usuario" class="caixa-aviso-detalhe">
@@ -347,7 +386,8 @@
                         <p>Este é o seu espaço! Aqui você pode gerenciar seus cursos, acompanhar seu progresso e atualizar suas informações.</p>
                         <p style="margin-top: 15px;">
                             <a href="{% url 'pagina_cursos' %}">Ver Meus Cursos</a> | 
-                            <a href="#">Configurações da Conta</a> </p>
+                            <a href="#">Configurações da Conta</a> 
+                        </p>
                     </div>
                 </div>
                 <p>Recursos úteis e atalhos aparecerão aqui para facilitar sua navegação e atividades na plataforma.</p>
@@ -358,7 +398,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- Elementos e Variáveis Globais para UI ---
             const sidebarLinks = Array.from(document.querySelectorAll('.sidebar-aviso-link'));
             const avisoDetalheSections = document.querySelectorAll('.caixa-aviso-detalhe');
             const defaultMessageContainer = document.getElementById('nenhum-aviso-selecionado');
@@ -369,10 +408,9 @@
             const userSideMenu = document.getElementById('userSideMenu');
             const overlayMenu = document.getElementById('overlayMenu');
             
-            // Removido: isUserLoggedIn, toggleLoginStateBtn e lógica de simulação de login
+            // A lógica de simulação de login (isUserLoggedIn, toggleLoginStateBtn) foi removida.
             // O estado de login agora é determinado pelo template Django.
 
-            // --- Event Listeners do Menu de Usuário (apenas abrir/fechar) ---
             if (userMenuTriggerBtn) { 
                 userMenuTriggerBtn.addEventListener('click', function() {
                     userSideMenu.classList.toggle('open');
@@ -386,31 +424,24 @@
                 });
             }
             
-            // Fechar menu ao clicar em um link dentro dele (para links de navegação real)
-            const userMenuLinks = userSideMenu.querySelectorAll('a');
+            const userMenuLinks = userSideMenu.querySelectorAll('a, .logout-button'); // Inclui o botão de logout
             userMenuLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    // Se for um link que realmente navega (não um # simples para ações JS)
-                    if (this.getAttribute('href') && this.getAttribute('href') !== '#') {
-                        userSideMenu.classList.remove('open');
-                        overlayMenu.classList.remove('open');
+                link.addEventListener('click', function(event) {
+                    // Se for um link que não é um submit de formulário e o href é '#', previne o default.
+                    if (this.tagName === 'A' && this.getAttribute('href') === '#') {
+                        event.preventDefault();
                     }
-                    // Se for o botão de logout (que é um form submit), o menu também deve fechar.
-                    // O próprio submit do formulário de logout já fará o reload da página.
+                    // Para qualquer clique em item de menu (link ou botão de logout), fecha o menu.
+                    // A navegação/submit ocorrerá normalmente.
+                    userSideMenu.classList.remove('open');
+                    overlayMenu.classList.remove('open');
                 });
             });
 
-
-            // --- Lógica dos Avisos (permanece similar) ---
             function setActiveAviso(targetId) {
+                let avisoAtivado = false;
                 if (defaultMessageContainer) {
-                    // Só esconde a mensagem padrão se um aviso válido for ativado
-                    const targetElementExists = document.getElementById(targetId);
-                    if (targetElementExists) {
-                        defaultMessageContainer.style.display = 'none';
-                    } else {
-                         defaultMessageContainer.style.display = 'flex'; // Garante que fique visível se target não existir
-                    }
+                    defaultMessageContainer.style.display = 'none'; // Esconde por padrão, reaparece se nada for ativado
                 }
 
                 avisoDetalheSections.forEach(section => {
@@ -424,9 +455,7 @@
                 sidebarLinks.forEach(sl => sl.classList.remove('ativo'));
 
                 const targetElement = document.getElementById(targetId);
-                // Filtra apenas os links da sidebar que estão atualmente visíveis (controlados pelo Django agora)
                 const currentVisibleSidebarLinks = sidebarLinks.filter(link => {
-                    // Verifica se o elemento pai (li) não está com display: none
                     const parentLi = link.closest('li');
                     return parentLi && getComputedStyle(parentLi).display !== 'none';
                 });
@@ -436,10 +465,17 @@
                     targetElement.classList.add('ativa');
                     targetLink.classList.add('ativo');
                     mainContent.scrollTop = 0;
-                } else if (targetElement) { 
-                    targetElement.classList.add('ativa'); 
+                    avisoAtivado = true;
+                } else if (targetElement && targetElement.id === 'painel-usuario' && document.getElementById('sidebar-link-painel-usuario').querySelector('a').classList.contains('ativo')) {
+                    // Caso especial para o painel do usuário se o link estiver ativo mas não na lista visível (raro)
+                    targetElement.classList.add('ativa');
                     mainContent.scrollTop = 0;
-                } else if (defaultMessageContainer) { 
+                    avisoAtivado = true;
+                }
+                
+                // Se nenhum aviso foi ativado e não há mensagem de boas vindas visível, mostra "nenhum aviso"
+                const welcomeMsg = document.getElementById('welcomeMessageContainer');
+                if (!avisoAtivado && defaultMessageContainer && (!welcomeMsg || getComputedStyle(welcomeMsg).display === 'none')) { 
                     defaultMessageContainer.style.display = 'flex';
                 }
             }
@@ -462,7 +498,6 @@
                 });
             });
 
-            // Mudança Automática de Aviso com Scroll
             avisoDetalheSections.forEach(section => {
                 section.addEventListener('wheel', function(event) {
                     const isActiveAndNoScroll = this.classList.contains('ativa') && (this.scrollHeight <= this.clientHeight);
@@ -501,13 +536,16 @@
                 }, { passive: false }); 
             });
 
-        
-            const firstVisibleSidebarLink = sidebarLinks.find(link => {
-                const parentLi = link.closest('li');
-                return parentLi && getComputedStyle(parentLi).display !== 'none';
+            // Lógica para mostrar a mensagem "nenhum-aviso-selecionado" se apropriado
+            const welcomeMsg = document.getElementById('welcomeMessageContainer');
+            let activeSectionExists = false;
+            avisoDetalheSections.forEach(section => {
+                if (section.classList.contains('ativa')) {
+                    activeSectionExists = true;
+                }
             });
-            if (firstVisibleSidebarLink) {
-           
+            if (defaultMessageContainer && !activeSectionExists && (!welcomeMsg || getComputedStyle(welcomeMsg).display === 'none')) {
+                defaultMessageContainer.style.display = 'flex';
             }
 
 

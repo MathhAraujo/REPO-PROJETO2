@@ -1,27 +1,36 @@
 from django.urls import path
-from . import views
-from django.contrib.auth import views as auth_views
-from django.views.generic import TemplateView
-from .views import login_view, cadastro_view, logout_view
+from . import views 
 
 
 urlpatterns = [
-    path('getAllStudents/', views.getAllStudents, name="get_all_students"),
-    path('getAllTeachers/', views.getAllTeachers, name="get_all_teachers"),
-    path('getAllSponsors/', views.getAllSponsors, name="get_all_sponsors"),
-    path('getAllCourses/', views.getAllCourses, name="get_all_courses"),
-    path('createStudent/', views.createStudent, name="post_new_student"),
-    path('createTeacher/', views.createTeacher, name="post_new_teacher"),
-    path('createSponsor/', views.createSponsor, name="post_new_sponsor"),
-    path('createCourse/', views.createCourse, name="post_new_course"),
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('aluno/', TemplateView.as_view(template_name='aluno.html'), name='area_aluno'),
-    path('desempenho/', views.desempenho_view, name='pagina_desempenho'),
-    path('cadastro/', views.cadastro_view, name='pagina_cadastro'),
-    path('menuCursos/', views.menucursos_view, name='pagina_menucursos'),
-    path('cursos/', views.cursos_view, name='pagina_cursos'),
-    path('login/', login_view, name='login'),
-    path('cadastro/', cadastro_view, name='pagina_cadastro'),
-    path('logout/', logout_view, name='logout'),
+    # --- Views de API (mantidas como você forneceu, talvez adicionar 'api/' no path) ---
+    path('api/getAllStudents/', views.getAllStudents, name="get_all_students"),
+    path('api/getAllTeachers/', views.getAllTeachers, name="get_all_teachers"),
+    path('api/getAllSponsors/', views.getAllSponsors, name="get_all_sponsors"),
+    path('api/getAllCourses/', views.getAllCourses, name="get_all_courses"),
+    path('api/createStudent/', views.createStudent, name="post_new_student"),
+    path('api/createTeacher/', views.createTeacher, name="post_new_teacher"),
+    path('api/createSponsor/', views.createSponsor, name="post_new_sponsor"),
+    path('api/createCourse/', views.createCourse, name="post_new_course"),
+    path('', views.home_view, name='home'), 
+    path('login/', views.login_view, name='login'), #
+    path('cadastro/', views.cadastro_view, name='pagina_cadastro'), 
+    path('logout/', views.logout_view, name='logout'), 
 
-]
+   
+    path('cursos/', views.curso_detalhe_view, name='pagina_cursos'), 
+   
+   path('curso/', views.pagina_cursos_view, name='pagina_curso'), 
+
+    
+    path('painel/professor/', views.area_professor_view, name='area_professor'),
+    path('painel/aluno/', views.area_aluno_view, name='area_aluno'),
+  
+    path('desempenho/', views.desempenho_view, name='pagina_desempenho'),
+
+
+    path('meus-dados/', views.dados_pessoais_view, name='meus_dados_pessoais'),
+
+    path('presenca-eventos/', views.presenca_eventos_view, name='pagina_presenca_eventos'),
+
+]   
