@@ -314,3 +314,111 @@ def presenca_eventos_view(request):
    
     context = {}
     return render(request, 'presencaEventos.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from .models import Profile, Student, Teacher, Course, Materia, DesempenhoMateria #
+from .forms import DesempenhoMateriaFormSet 
+import json
+
+User = get_user_model()
+
+def professor_required(function):
+    actual_decorator = user_passes_test(
+        lambda u: u.is_authenticated and hasattr(u, 'profile') and u.profile.tipo_usuario == 'professor',
+        login_url='pagina_login' # Ou para uma página de "acesso negado"
+    )
+    return actual_decorator(function)
+
+
+
+@login_required
+@professor_required # Garante que só professores acessem
+def area_professor_view(request):
+    # Lista todos os usuários que têm perfil de aluno
+    alunos_users = User.objects.filter(profile__tipo_usuario='aluno').select_related('profile')
+    context = {
+        'alunos': alunos_users
+    }
+    return render(request, 'professor.html', context)
+
+@login_required
+@professor_required
+def editar_desempenho_aluno_view(request, aluno_id):
+    aluno = get_object_or_404(User, pk=aluno_id, profile__tipo_usuario='aluno')
+
+    for materia in materias:
+        DesempenhoMateria.objects.get_or_create(aluno=aluno, materia=materia)
+
+    if request.method == 'POST':
+        formset = DesempenhoMateriaFormSet(request.POST, queryset=DesempenhoMateria.objects.filter(aluno=aluno))
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, f"Desempenho de {aluno.get_full_name() or aluno.username} atualizado com sucesso!")
+            return redirect('area_professor') 
+    else:
+        formset = DesempenhoMateriaFormSet(queryset=DesempenhoMateria.objects.filter(aluno=aluno))
+
+    context = {
+        'aluno': aluno,
+        'desempenho_formset': formset
+    }
+    return render(request, 'editar_desempenho_aluno.html', context)
+
+@login_required
+@professor_required
+def editar_calendario_aluno_view(request, aluno_id):
+    aluno = get_object_or_404(User, pk=aluno_id, profile__tipo_usuario='aluno')
+    aluno_profile = aluno.profile # Assumindo que o Profile existe (criado por signal ou no cadastro)
+
+    if request.method == 'POST':
+        dados_calendario_str = request.POST.get('dados_calendario')
+        mes_selecionado_post = request.POST.get('mes_selecionado_frontend') # Se você enviar o mês via POST
+
+        if dados_calendario_str:
+            try:
+                novos_dados_calendario = json.loads(dados_calendario_str)
+                # Atualiza o campo JSON no perfil do aluno
+                aluno_profile.dados_calendario_json = json.dumps(novos_dados_calendario)
+                aluno_profile.save()
+                messages.success(request, f"Calendário de {aluno.get_full_name() or aluno.username} atualizado!")
+                # Redireciona para a mesma página para ver as mudanças (ou para area_professor)
+                return redirect('editar_calendario_aluno', aluno_id=aluno_id) 
+            except json.JSONDecodeError:
+                messages.error(request, "Erro ao processar os dados do calendário.")
+            except Exception as e:
+                messages.error(request, f"Erro ao salvar calendário: {e}")
+        else:
+            messages.warning(request, "Nenhum dado de calendário recebido para salvar.")
+
+    # Para o GET request ou se o POST falhou e re-renderiza
+    try:
+        dados_presenca_aluno = json.loads(aluno_profile.dados_calendario_json or '{}')
+    except json.JSONDecodeError:
+        dados_presenca_aluno = {}
+        
+    # Passa o mês atual ou o primeiro mês como padrão para o select do calendário
+    # O JavaScript no template também pode lidar com a seleção inicial do mês.
+    # nomes_meses = ["janeiro", ..., "dezembro"]
+    # mes_default_para_template = nomes_meses[datetime.date.today().month - 1]
+    
+    context = {
+        'aluno': aluno,
+        'dados_presenca_aluno_json': json.dumps(dados_presenca_aluno), # Passa como string JSON para o JS
+        # 'mes_selecionado_backend': mes_default_para_template # Opcional
+    }
+    return render(request, 'editar_calendario_aluno.html', context)
+

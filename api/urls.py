@@ -33,4 +33,5 @@ urlpatterns = [
 
     path('presenca-eventos/', views.presenca_eventos_view, name='pagina_presenca_eventos'),
 
+    path('professor/aluno/<int:aluno_id>/desempenho/', views.editar_desempenho_aluno_view, name='editar_desempenho_aluno'),
 ]   

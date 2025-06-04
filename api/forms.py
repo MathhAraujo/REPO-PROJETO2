@@ -78,3 +78,26 @@ class EditarDadosPessoaisForm(forms.Form):
                 self.add_error('senha_atual', "Senha atual incorreta.")
         
         return cleaned_data
+
+
+from django import forms
+from .models import DesempenhoMateria, Materia
+
+class DesempenhoMateriaForm(forms.ModelForm):
+    class Meta:
+        model = DesempenhoMateria
+        fields = ['nota_qualitativa', 'faltas', 'observacoes']
+        widgets = {
+            'nota_qualitativa': forms.Select(attrs={'class': 'form-control-select'}),
+            'faltas': forms.NumberInput(attrs={'class': 'form-control-input', 'min': '0'}),
+            'observacoes': forms.Textarea(attrs={'class': 'form-control-textarea', 'rows': 3}),
+        }
+    
+
+from django.forms import modelformset_factory
+DesempenhoMateriaFormSet = modelformset_factory(
+    DesempenhoMateria, 
+    form=DesempenhoMateriaForm, 
+    extra=0, 
+    can_delete=False 
+)

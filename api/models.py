@@ -141,3 +141,65 @@ class Course(models.Model):
 
     def __str__(self):
         return f"Title: {self.courseTitle} | Image: {self.courseImage} | Description: {self.couseDescription}"
+
+
+
+
+
+        from django.db import models
+from django.conf import settings 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+import json 
+
+@property
+def calendario(self):
+    if self.dados_calendario_json:
+        try:
+            return json.loads(self.dados_calendario_json)
+        except json.JSONDecodeError:
+             return {}
+    return {}
+
+@calendario.setter
+def calendario(self, value):
+    self.dados_calendario_json = json.dumps(value)
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.get_or_create(user=instance) 
+
+
+class Materia(models.Model):
+    nome = models.CharField(max_length=100, unique=True)
+    # Você pode adicionar uma descrição, professor responsável, etc.
+    
+    def __str__(self):
+        return self.nome
+
+class DesempenhoMateria(models.Model):
+    aluno = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='desempenhos')
+    materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
+    NOTA_CHOICES = [
+        ('', 'Não Avaliado'),
+        ('muito_bom', 'Muito Bom'),
+        ('bom', 'Bom'),
+        ('satisfatorio', 'Satisfatório'),
+        ('regular', 'Regular'),
+        ('insatisfatorio', 'Insatisfatório'),
+    ]
+    nota_qualitativa = models.CharField(
+        max_length=20,
+        choices=NOTA_CHOICES,
+        blank=True,
+        default=''
+    )
+    faltas = models.PositiveIntegerField(default=0, null=True, blank=True)
+    observacoes = models.TextField(blank=True, null=True)
+
+    class Meta:
+        unique_together = ('aluno', 'materia') 
+
+    def __str__(self):
+        return f"{self.aluno.username} - {self.materia.nome}: {self.get_nota_qualitativa_display()}"
