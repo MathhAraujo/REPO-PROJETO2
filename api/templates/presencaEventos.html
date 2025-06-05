@@ -105,6 +105,37 @@
         
         button[type="submit"].save-button:hover { background-color: #005a4f; transform: translateY(-1px); }
 
+        .popup-modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        .popup-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px 30px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 1.4em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
 
         @media (max-width: 768px) { #calendarioDisplay { gap: 5px; } .dia-calendario { height: 40px; font-size: 0.9em; } }
         @media (max-width: 992px) { .header-navigation-menu { display: none; } }
@@ -185,6 +216,18 @@
             </form>
         </div>
     </div>
+    
+    <div id="popupModal" class="popup-modal">
+        <div class="popup-content">
+            <span class="close-btn" onclick="fecharPopup()">&times;</span>
+            <h2>Informações do Dia</h2>
+            <p><strong>Dia:</strong> <span id="modal-dia"></span></p>
+            <p><strong>Eventos:</strong></p>
+            <ul id="modal-eventos"></ul>
+        </div>
+    </div>
+
+
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -341,6 +384,49 @@
             mesSelect.addEventListener('change', atualizarCalendario);
         }
         atualizarCalendario(); // Renderização inicial
+    });
+
+    function abrirPopup(dia, eventos) {
+        // Define o número do dia no modal
+        document.getElementById("modal-dia").innerText = dia;
+
+        // Limpa lista de eventos anterior
+        const eventosList = document.getElementById("modal-eventos");
+        eventosList.innerHTML = "";
+
+        // Adiciona os eventos como itens de lista
+        eventos.forEach(function(evento) {
+            const li = document.createElement("li");
+            li.innerText = evento.trim();
+            eventosList.appendChild(li);
+        });
+
+        // Exibe o popup
+        document.getElementById("popupModal").style.display = "block";
+    }
+
+    function fecharPopup() {
+        document.getElementById("popupModal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById("popupModal");
+        if (event.target === modal) {
+            fecharPopup();
+        }
+    }
+
+    // Evento de clique
+    document.addEventListener("DOMContentLoaded", function() {
+        const diasPresenca = document.querySelectorAll(".dia-calendario.dia-presenca");
+        diasPresenca.forEach(function(diaEl) {
+            diaEl.addEventListener("click", function() {
+                const dia = diaEl.getAttribute("data-dia");
+                const eventosStr = diaEl.getAttribute("data-eventos") || "";
+                const eventos = eventosStr.split(",");
+                abrirPopup(dia, eventos);
+            });
+        });
     });
     </script>
 </body>

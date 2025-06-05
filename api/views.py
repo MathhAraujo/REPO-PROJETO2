@@ -3,7 +3,8 @@ import json
 
 # Django - Core
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
+from django.template.loader import render_to_string
+from django.http import HttpResponse
 from django.contrib import messages
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError as DjangoValidationError
