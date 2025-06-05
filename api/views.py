@@ -541,3 +541,17 @@ def duvidas(request):
         }
         return render(request, 'duvidas.html', context)
 
+#cadastrar evento
+@login_required
+def cadastrar_evento(request):
+    if request.method == 'POST':
+        data = request.POST.get('data_evento')
+        descricao = request.POST.get('descricao_evento')
+
+        Evento.objects.create(data=data, descricao=descricao)
+
+        messages.success(request, 'Evento cadastrado com sucesso!')
+        return redirect('pagina_professor')  # ou onde você quiser
+
+    return render(request, 'pagina_professor.html')
+

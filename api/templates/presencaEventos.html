@@ -227,207 +227,154 @@
         </div>
     </div>
 
-
-
+    <!-- ========================== SCRIPT ========================== -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    /* --------------------------------------------------
+       Eventos vindos do backend (json) – chave YYYY-MM-DD
+       Ex.: { "2025-06-05": ["Prova", "Reunião"] }
+    -------------------------------------------------- */
+    const eventosPorDia = JSON.parse('{{ eventos_json|default:"{}"|escapejs }}');
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        /* ========= MENU LATERAL ========= */
         const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
-        const userSideMenu = document.getElementById('userSideMenu');
-        const overlayMenu = document.getElementById('overlayMenu');
-        
+        const userSideMenu       = document.getElementById('userSideMenu');
+        const overlayMenu        = document.getElementById('overlayMenu');
+
         if (userMenuTriggerBtn && userSideMenu && overlayMenu) {
-            userMenuTriggerBtn.addEventListener('click', function() {
+            userMenuTriggerBtn.addEventListener('click', () => {
                 userSideMenu.classList.toggle('open');
                 overlayMenu.classList.toggle('open');
             });
-            overlayMenu.addEventListener('click', function() {
+            overlayMenu.addEventListener('click', () => {
                 userSideMenu.classList.remove('open');
                 overlayMenu.classList.remove('open');
             });
-            const userMenuLinks = userSideMenu.querySelectorAll('a, .logout-button');
-            userMenuLinks.forEach(link => {
-                link.addEventListener('click', function(event) {
-                    if (this.tagName === 'A' && this.getAttribute('href') === '#') {
-                        event.preventDefault();
-                    }
+            userSideMenu.querySelectorAll('a, .logout-button').forEach(link => {
+                link.addEventListener('click', () => {
                     userSideMenu.classList.remove('open');
                     overlayMenu.classList.remove('open');
                 });
             });
         }
 
-        const mesSelect = document.getElementById("mes"); 
+        /* ========= CALENDÁRIO ========= */
+        const mesSelect = document.getElementById("mes");
         const calendarioDiv = document.getElementById("calendarioDisplay");
-        // Input hidden para o formulário de salvar justificativas
         const dadosCalendarioJustificadoInput = document.getElementById("dados_calendario_justificado_input");
-        
-        if (!mesSelect || !calendarioDiv) {
-            console.warn("Elementos do calendário do aluno não encontrados.");
-            return;
-        }
 
         let dadosCalendarioAluno = {};
         try {
-            const jsonData = '{{ dados_calendario_do_aluno_json|default:"{}"|escapejs }}';
-            dadosCalendarioAluno = JSON.parse(jsonData);
-            if (typeof dadosCalendarioAluno !== 'object' || dadosCalendarioAluno === null) {
-                dadosCalendarioAluno = {};
-            }
-        } catch (e) {
-            console.error("Erro ao carregar dados do calendário do aluno:", e);
-            dadosCalendarioAluno = {};
-        }
+            dadosCalendarioAluno = JSON.parse('{{ dados_calendario_do_aluno_json|default:"{}"|escapejs }}') || {};
+        } catch(e) { dadosCalendarioAluno = {}; }
 
-        const diasNoMes = {
-            janeiro: 31, fevereiro: 28, marco: 31, abril: 30, maio: 31, junho: 30,
-            julho: 31, agosto: 31, setembro: 30, outubro: 31, novembro: 30, dezembro: 31
-        };
-        const nomesMeses = ["janeiro", "fevereiro", "marco", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+        const diasNoMes  = { janeiro:31,fevereiro:28,marco:31,abril:30,maio:31,junho:30,julho:31,agosto:31,setembro:30,outubro:31,novembro:30,dezembro:31 };
+        const nomesMeses = ["janeiro","fevereiro","marco","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
 
-        nomesMeses.forEach((nomeMes) => {
-            const option = document.createElement('option');
-            option.value = nomeMes;
-            option.textContent = nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1);
-            mesSelect.appendChild(option);
+        nomesMeses.forEach(nome => {
+            const opt = document.createElement('option');
+            opt.value = nome;
+            opt.textContent = nome.charAt(0).toUpperCase() + nome.slice(1);
+            mesSelect.appendChild(opt);
         });
-        
+
         const dataAtual = new Date();
-        // Tenta usar um mês pré-selecionado passado pelo backend, se houver
-        const mesInicial = '{{ mes_selecionado_pelo_backend|default_if_none:"" }}' || nomesMeses[dataAtual.getMonth()];
-        mesSelect.value = mesInicial in diasNoMes ? mesInicial : "janeiro";
+        mesSelect.value = '{{ mes_selecionado_pelo_backend|default_if_none:"" }}' || nomesMeses[dataAtual.getMonth()];
 
         function prepararDadosParaSalvar() {
-            if (dadosCalendarioJustificadoInput && mesSelect) {
-                dadosCalendarioJustificadoInput.value = JSON.stringify(dadosCalendarioAluno);
-                // O campo 'mes_selecionado' no form já é preenchido pelo select#mes
-            }
+            dadosCalendarioJustificadoInput.value = JSON.stringify(dadosCalendarioAluno);
         }
 
+        /* ---------- monta calendário ---------- */
         function atualizarCalendario() {
-            if (!mesSelect || !calendarioDiv) return; 
-
             const mesSelecionado = mesSelect.value;
-            const totalDias = diasNoMes[mesSelecionado] || 30; 
-            
-            if (!dadosCalendarioAluno[mesSelecionado] || typeof dadosCalendarioAluno[mesSelecionado] !== 'object') {
-                dadosCalendarioAluno[mesSelecionado] = {};
-            }
-            const dadosDoMes = dadosCalendarioAluno[mesSelecionado];
+            const totalDias = diasNoMes[mesSelecionado] || 30;
+            const anoAtual = new Date().getFullYear();
+            const indiceMes = nomesMeses.indexOf(mesSelecionado); // 0-based
 
-            calendarioDiv.innerHTML = ""; 
+            if (!dadosCalendarioAluno[mesSelecionado]) dadosCalendarioAluno[mesSelecionado] = {};
+
+            calendarioDiv.innerHTML = "";
 
             for (let dia = 1; dia <= totalDias; dia++) {
                 const diaStr = String(dia);
-                const botaoDia = document.createElement("button");
-                botaoDia.innerText = dia;
-                botaoDia.classList.add('dia-calendario'); 
-                botaoDia.type = "button"; 
+                const botao  = document.createElement("button");
+                botao.type   = "button";
+                botao.classList.add('dia-calendario');
+                botao.textContent = diaStr;
 
-                let statusDia = "indefinido";
-                let motivoJustificativa = ""; // Não usado ativamente aqui, mas a estrutura pode conter
-                let justificadoPor = "";
+                /* === status presença/falta === */
+                const diaData  = dadosCalendarioAluno[mesSelecionado][diaStr];
+                let statusDia  = (typeof diaData === 'object') ? diaData.status : diaData || "indefinido";
 
-                const diaData = dadosDoMes[diaStr];
-                if (diaData && typeof diaData === 'object') { 
-                    statusDia = diaData.status || "indefinido";
-                    // motivoJustificativa = diaData.motivo || ""; // Aluno não edita motivo, apenas vê
-                    // justificadoPor = diaData.por || ""; 
-                } else if (typeof diaData === 'string') { 
-                    statusDia = diaData;
-                }
-                
-                botaoDia.classList.remove('dia-presenca', 'dia-falta', 'dia-indefinido', 'marcado-falta');
+                botao.classList.remove('dia-presenca','dia-falta','dia-indefinido','marcado-falta');
                 if (statusDia === "presente") {
-                    botaoDia.classList.add('dia-presenca');
-                    botaoDia.title = "Presença registrada";
+                    botao.classList.add('dia-presenca');  botao.title="Presença registrada";
                 } else if (statusDia === "falta") {
-                    botaoDia.classList.add('dia-falta');
-                    botaoDia.title = "Falta registrada - Clique para justificar";
+                    botao.classList.add('dia-falta');     botao.title="Falta registrada - Clique para justificar";
                 } else if (statusDia === "falta_justificada") {
-                    botaoDia.innerHTML = `<span class="marcador-justificativa">!</span>`;
-                    botaoDia.classList.add('marcado-falta'); 
-                    botaoDia.classList.add('dia-falta'); 
-                    botaoDia.title = "Falta justificada - Clique para remover justificativa";
-                } else { 
-                    botaoDia.classList.add('dia-indefinido');
+                    botao.innerHTML = '<span class="marcador-justificativa">!</span>';
+                    botao.classList.add('dia-falta','marcado-falta'); botao.title="Falta justificada - Clique para remover";
+                } else {
+                    botao.classList.add('dia-indefinido');
                 }
-                
-                if (statusDia === "falta" || statusDia === "falta_justificada") {
-                    botaoDia.addEventListener("click", function () {
-                        let statusAtualNoClique = "falta"; // Assume que era falta se não for objeto
-                        const diaAtualData = dadosCalendarioAluno[mesSelecionado]?.[diaStr];
 
-                        if (diaAtualData && typeof diaAtualData === 'object') {
-                            statusAtualNoClique = diaAtualData.status;
-                        } else if (typeof diaAtualData === 'string') {
-                            statusAtualNoClique = diaAtualData;
-                        }
-                        
-                        if (statusAtualNoClique === "falta_justificada") {
-                            // Aluno remove a justificativa, volta para falta simples
-                            dadosCalendarioAluno[mesSelecionado][diaStr] = "falta";
-                        } else { // Era 'falta' (ou qualquer outra coisa que não 'falta_justificada'), então justifica
-                            // O aluno ao justificar, não pedimos motivo neste fluxo simples,
-                            // apenas marcamos como justificada. O professor pode ver o motivo se inserido por ele.
-                            dadosCalendarioAluno[mesSelecionado][diaStr] = { status: "falta_justificada", motivo: "Justificado pelo aluno", por: "aluno"};
-                        }
-                        prepararDadosParaSalvar(); // Atualiza o input hidden
-                        atualizarCalendario(); 
+                /* === salvar/retirar justificativa === */
+                if (statusDia === "falta" || statusDia === "falta_justificada") {
+                    botao.addEventListener("click", () => {
+                        const atual = dadosCalendarioAluno[mesSelecionado][diaStr];
+                        const statusAtual = (typeof atual === 'object') ? atual.status : atual;
+                        dadosCalendarioAluno[mesSelecionado][diaStr] =
+                            (statusAtual === "falta_justificada") ? "falta"
+                            : { status:"falta_justificada", motivo:"Justificado pelo aluno", por:"aluno" };
+                        prepararDadosParaSalvar();
+                        atualizarCalendario();
                     });
                 }
-                calendarioDiv.appendChild(botaoDia);
+
+                /* === clique para abrir popup de eventos === */
+                botao.dataset.dia = diaStr;
+                if (statusDia === "presente") {
+                    botao.addEventListener("click", () => {
+                        const dataKey = `${anoAtual}-${String(indiceMes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+                        const eventos = eventosPorDia[dataKey] || [];
+                        abrirPopup(diaStr, eventos);
+                    });
+}
+
+                calendarioDiv.appendChild(botao);
             }
-            prepararDadosParaSalvar(); // Garante que o input hidden está atualizado no carregamento/mudança de mês
+            prepararDadosParaSalvar();
         }
-        
-        if (mesSelect) { // Garante que o select existe antes de adicionar listener
-            mesSelect.addEventListener('change', atualizarCalendario);
-        }
-        atualizarCalendario(); // Renderização inicial
+
+        mesSelect.addEventListener('change', atualizarCalendario);
+        atualizarCalendario();  // render inicial
     });
 
+    /* ===== POP-UP helpers ===== */
     function abrirPopup(dia, eventos) {
-        // Define o número do dia no modal
-        document.getElementById("modal-dia").innerText = dia;
+        document.getElementById("modal-dia").textContent = dia;
 
-        // Limpa lista de eventos anterior
-        const eventosList = document.getElementById("modal-eventos");
-        eventosList.innerHTML = "";
-
-        // Adiciona os eventos como itens de lista
-        eventos.forEach(function(evento) {
-            const li = document.createElement("li");
-            li.innerText = evento.trim();
-            eventosList.appendChild(li);
-        });
-
-        // Exibe o popup
+        const lista = document.getElementById("modal-eventos");
+        lista.innerHTML = "";
+        if (eventos.length) {
+            eventos.forEach(ev => {
+                const li = document.createElement("li");
+                li.textContent = ev;
+                lista.appendChild(li);
+            });
+        } else {
+            lista.innerHTML = "<li>Sem eventos para este dia.</li>";
+        }
         document.getElementById("popupModal").style.display = "block";
     }
-
     function fecharPopup() {
         document.getElementById("popupModal").style.display = "none";
     }
-
     window.onclick = function(event) {
-        const modal = document.getElementById("popupModal");
-        if (event.target === modal) {
-            fecharPopup();
-        }
-    }
-
-    // Evento de clique
-    document.addEventListener("DOMContentLoaded", function() {
-        const diasPresenca = document.querySelectorAll(".dia-calendario.dia-presenca");
-        diasPresenca.forEach(function(diaEl) {
-            diaEl.addEventListener("click", function() {
-                const dia = diaEl.getAttribute("data-dia");
-                const eventosStr = diaEl.getAttribute("data-eventos") || "";
-                const eventos = eventosStr.split(",");
-                abrirPopup(dia, eventos);
-            });
-        });
-    });
+        if (event.target === document.getElementById("popupModal")) fecharPopup();
+    };
     </script>
 </body>
 </html>
