@@ -11,6 +11,10 @@
         header { display: flex; justify-content: space-between; align-items: center; padding: 8px 25px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; width: calc(100% - 50px); z-index: 1010; height: 50px; }
         .logo-container { display: flex; align-items: center; }
         .logo-container svg { height: 38px; width: auto; }
+        header img {
+            height: 40px;
+             width: auto;
+        }        
         .header-navigation-menu { flex-grow: 1; display: flex; justify-content: center; align-items: center; }
         .header-menu-button.cursos-button { background-color: #00796b; color: white; padding: 0 25px; width: auto; font-weight: 600; font-size: 0.95em; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); height: 32px; margin: 0 10px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; display: flex; align-items: center; justify-content: center; text-decoration: none; }
         .header-menu-button.cursos-button:hover { background-color: #005a4f; box-shadow: 0 3px 6px rgba(0,0,0,0.15); transform: translateY(-1px); }
@@ -134,8 +138,8 @@
 <body>
     {% load static %}
     <header>
-        <div class="logo-container">
-            <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><path d="M5 5 H15 V10 H20 V5 H30 V15 H25 V20 H30 V30 H20 V25 H15 V30 H5 V20 H10 V15 H5 Z" fill="#257FF9"/><g transform="translate(38, 2)"><circle cx="10" cy="10" r="3" fill="#F06141"/><path d="M2 15 Q10 12 18 15" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0 20 Q10 16 20 20" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M-2 25 Q10 20 22 25" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/></g><text x="70" y="27" font-family="Segoe UI, sans-serif" font-size="14px" fill="#555">Plataforma</text></svg>
+        <div class="header img">
+            <a href="{% url 'home' %}"><img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-02-18" border="0"></a>
         </div>
         <nav class="header-navigation-menu">
             <a href="{% url 'pagina_cursos' %}" class="header-menu-button cursos-button">Nossos Cursos</a>

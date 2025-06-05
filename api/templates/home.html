@@ -29,8 +29,11 @@
             height: 50px;
         }
 
-        .logo-container { display: flex; align-items: center; }
-        .logo-container svg { height: 38px; width: auto; }
+        .logo-container { display: flex; align-items: center;}
+        header img {
+            height: 40px;
+            width: auto;
+            }
 
         .header-navigation-menu { 
             flex-grow: 1; 
@@ -238,7 +241,8 @@
             border-radius: 8px; overflow: hidden;
         }
         .aviso-imagem-clicavel {
-            width: 100%; height: auto; max-height: 450px; object-fit: cover;
+            width: 65%; height: auto; object-fit: cover;
+            position: center;
             border-radius: 8px; display: block; cursor: pointer;
             transition: transform 0.3s ease;
         }
@@ -287,8 +291,8 @@
 </head>
 <body>
     <header>
-        <div class="logo-container">
-            <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><path d="M5 5 H15 V10 H20 V5 H30 V15 H25 V20 H30 V30 H20 V25 H15 V30 H5 V20 H10 V15 H5 Z" fill="#257FF9"/><g transform="translate(38, 2)"><circle cx="10" cy="10" r="3" fill="#F06141"/><path d="M2 15 Q10 12 18 15" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0 20 Q10 16 20 20" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M-2 25 Q10 20 22 25" stroke="#F06141" stroke-width="2.5" fill="none" stroke-linecap="round"/></g><text x="70" y="27" font-family="Segoe UI, sans-serif" font-size="14px" fill="#555">Plataforma</text></svg>
+        <div class="header img">
+            <a href="{% url 'home' %}"><img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-02-18" border="0"></a>
         </div>
         <nav class="header-navigation-menu">
             <a href="{% url 'pagina_cursos' %}" class="header-menu-button cursos-button">Nossos Cursos</a>
@@ -361,17 +365,17 @@
             <section id="aviso-detalhe-1" class="caixa-aviso-detalhe">
                 <h3>Comunicado Urgente sobre Prazos</h3>
                 <div class="aviso-imagem-container">
-                    <img src="https://via.placeholder.com/800x450/FF7F50/FFFFFF?text=Prazos+Atualizados" alt="Imagem do Comunicado Urgente" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-1">
+                    <img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem do Comunicado Urgente" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-1">
                     <div id="texto-sobreposto-1" class="aviso-texto-sobreposto"><h4>Detalhes do Comunicado</h4><p>Informamos uma atualização crítica nos prazos para submissão de projetos. Novas diretrizes estão disponíveis. Agradecemos a atenção!</p></div>
                 </div>
             </section>
-            <section id="aviso-detalhe-2" class="caixa-aviso-detalhe"><h3>Lançamento: Novas Funcionalidades!</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/6495ED/FFFFFF?text=Explore+as+Novidades" alt="Imagem Novas Funcionalidades" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-2"><div id="texto-sobreposto-2" class="aviso-texto-sobreposto"><h4>Explore as Novidades!</h4><p>Descubra ferramentas inéditas e um painel de controle redesenhado para otimizar sua experiência. Tutorial disponível na seção de Ajuda.</p></div></div></section>
-            <section id="aviso-detalhe-3" class="caixa-aviso-detalhe"><h3>Confira Nossa Agenda de Eventos</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/3CB371/FFFFFF?text=Eventos+de+Junho" alt="Imagem Agenda de Eventos" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-3"><div id="texto-sobreposto-3" class="aviso-texto-sobreposto"><h4>Não Perca!</h4><p>O mês está repleto de webinars e workshops. Participe e interaja com especialistas e nossa comunidade. Inscrições abertas!</p></div></div></section>
-            <section id="aviso-detalhe-4" class="caixa-aviso-detalhe"><h3>Sua Opinião é Importante</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/DB7093/FFFFFF?text=Feedback+da+Comunidade" alt="Imagem Feedback da Comunidade" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-4"><div id="texto-sobreposto-4" class="aviso-texto-sobreposto"><h4>Feedback Compilado</h4><p>Compilamos suas sugestões e comentários. Confira as próximas melhorias planejadas com base em suas valiosas contribuições.</p></div></div></section>
-            <section id="aviso-detalhe-5" class="caixa-aviso-detalhe"><h3>Atualização das Políticas de Privacidade</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/BDB76B/FFFFFF?text=Políticas+de+Privacidade" alt="Imagem Políticas de Privacidade" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-5"><div id="texto-sobreposto-5" class="aviso-texto-sobreposto"><h4>Privacidade Reforçada</h4><p>Revisamos nossas políticas para maior clareza e proteção dos seus dados. Acesse o documento completo para mais informações.</p></div></div></section>
-            <section id="aviso-detalhe-6" class="caixa-aviso-detalhe"><h3>Inscrições Abertas: Programa de Mentoria</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/4682B4/FFFFFF?text=Programa+de+Mentoria" alt="Imagem Programa de Mentoria" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-6"><div id="texto-sobreposto-6" class="aviso-texto-sobreposto"><h4>Desenvolva sua Carreira!</h4><p>Participe do nosso programa de mentoria e conecte-se com profissionais experientes. Vagas limitadas, inscreva-se já!</p></div></div></section>
-            <section id="aviso-detalhe-7" class="caixa-aviso-detalhe"><h3>Manutenção Programada do Sistema</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/FFA07A/FFFFFF?text=Manutenção+Agendada" alt="Imagem Manutenção Programada" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-7"><div id="texto-sobreposto-7" class="aviso-texto-sobreposto"><h4>Aviso de Manutenção</h4><p>Nossa plataforma passará por uma manutenção essencial no próximo sábado, das 02:00 às 04:00. Agradecemos a sua paciência.</p></div></div></section>
-            <section id="aviso-detalhe-8" class="caixa-aviso-detalhe"><h3>Estamos Contratando: Novas Vagas!</h3><div class="aviso-imagem-container"><img src="https://via.placeholder.com/800x450/20B2AA/FFFFFF?text=Junte-se+a+Nós" alt="Imagem Vagas Abertas" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-8"><div id="texto-sobreposto-8" class="aviso-texto-sobreposto"><h4>Faça Parte da Equipe!</h4><p>Temos diversas oportunidades em aberto para profissionais talentosos. Confira nossas vagas e candidate-se para transformar sonhos conosco!</p></div></div></section>
+            <section id="aviso-detalhe-2" class="caixa-aviso-detalhe"><h3>Lançamento: Novas Funcionalidades!</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Novas Funcionalidades" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-2"><div id="texto-sobreposto-2" class="aviso-texto-sobreposto"><h4>Explore as Novidades!</h4><p>Descubra ferramentas inéditas e um painel de controle redesenhado para otimizar sua experiência. Tutorial disponível na seção de Ajuda.</p></div></div></section>
+            <section id="aviso-detalhe-3" class="caixa-aviso-detalhe"><h3>Confira Nossa Agenda de Eventos</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Agenda de Eventos" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-3"><div id="texto-sobreposto-3" class="aviso-texto-sobreposto"><h4>Não Perca!</h4><p>O mês está repleto de webinars e workshops. Participe e interaja com especialistas e nossa comunidade. Inscrições abertas!</p></div></div></section>
+            <section id="aviso-detalhe-4" class="caixa-aviso-detalhe"><h3>Sua Opinião é Importante</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Feedback da Comunidade" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-4"><div id="texto-sobreposto-4" class="aviso-texto-sobreposto"><h4>Feedback Compilado</h4><p>Compilamos suas sugestões e comentários. Confira as próximas melhorias planejadas com base em suas valiosas contribuições.</p></div></div></section>
+            <section id="aviso-detalhe-5" class="caixa-aviso-detalhe"><h3>Atualização das Políticas de Privacidade</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Políticas de Privacidade" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-5"><div id="texto-sobreposto-5" class="aviso-texto-sobreposto"><h4>Privacidade Reforçada</h4><p>Revisamos nossas políticas para maior clareza e proteção dos seus dados. Acesse o documento completo para mais informações.</p></div></div></section>
+            <section id="aviso-detalhe-6" class="caixa-aviso-detalhe"><h3>Inscrições Abertas: Programa de Mentoria</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Programa de Mentoria" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-6"><div id="texto-sobreposto-6" class="aviso-texto-sobreposto"><h4>Desenvolva sua Carreira!</h4><p>Participe do nosso programa de mentoria e conecte-se com profissionais experientes. Vagas limitadas, inscreva-se já!</p></div></div></section>
+            <section id="aviso-detalhe-7" class="caixa-aviso-detalhe"><h3>Manutenção Programada do Sistema</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Manutenção Programada" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-7"><div id="texto-sobreposto-7" class="aviso-texto-sobreposto"><h4>Aviso de Manutenção</h4><p>Nossa plataforma passará por uma manutenção essencial no próximo sábado, das 02:00 às 04:00. Agradecemos a sua paciência.</p></div></div></section>
+            <section id="aviso-detalhe-8" class="caixa-aviso-detalhe"><h3>Estamos Contratando: Novas Vagas!</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Vagas Abertas" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-8"><div id="texto-sobreposto-8" class="aviso-texto-sobreposto"><h4>Faça Parte da Equipe!</h4><p>Temos diversas oportunidades em aberto para profissionais talentosos. Confira nossas vagas e candidate-se para transformar sonhos conosco!</p></div></div></section>
 
             {% if user.is_authenticated %}
             <section id="painel-usuario" class="caixa-aviso-detalhe">

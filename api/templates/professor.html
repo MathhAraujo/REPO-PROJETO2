@@ -33,6 +33,12 @@
             height: 38px;
             width: auto;
         }
+
+        header img {
+            height: 40px;
+            width: auto;
+        }        
+
         .header-navigation-menu {
             flex-grow: 1;
             display: flex;
@@ -258,11 +264,9 @@
 <body>
 
 <header>
-    <div class="logo-container">
-        <a href="{% url 'home' %}">
-            <img src="{% static 'img/logo.svg' %}" alt="Logo" height="38">
-        </a>
-    </div>
+        <div class="header img">
+            <a href="{% url 'home' %}"><img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-02-18" border="0"></a>
+        </div>
     <div class="header-navigation-menu">
         <a href="{% url 'pagina_cursos' %}" class="header-menu-button cursos-button">Meus Cursos</a>
     </div>
