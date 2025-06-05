@@ -20,12 +20,9 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
 
    
-    path('cursos/', views.curso_detalhe_view, name='pagina_cursos'),
-   
-    path('curso/', views.pagina_cursos_view, name='pagina_curso'),
-    
-    # path("adicionar_curso/", adicionar_curso_aluno, name="adicionar_curso_aluno"),
-    # path("curso/", cursos_aluno_view, name="pagina_cursos"),
+    path("cursos/", views.pagina_cursos_view, name="pagina_cursos"),  # menuCursos.html
+    path("curso/", views.cursos_aluno_view, name="curso_aluno"),      # curso.html
+    path("adicionar_curso/", views.adicionar_curso_aluno, name="adicionar_curso_aluno"),
     
     path('painel/professor/', views.area_professor_view, name='area_professor'),
     path('painel/aluno/', views.area_aluno_view, name='area_aluno'),
