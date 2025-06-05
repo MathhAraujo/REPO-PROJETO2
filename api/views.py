@@ -30,63 +30,158 @@ User = get_user_model()
 # API Views
 @api_view(["GET"])
 def getAllStudents(request):
+    if request.method != "GET":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+
     students = Student.objects.all()
+
     serializer = StudentSerializer(students, many=True)
+           
     return Response(serializer.data, status.HTTP_200_OK)
 
 @api_view(["GET"])
 def getAllTeachers(request):
+    if request.method != "GET":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+
     teachers = Teacher.objects.all()
+
     serializer = TeacherSerializer(teachers, many=True)
+           
     return Response(serializer.data, status.HTTP_200_OK)
 
 @api_view(["GET"])
 def getAllSponsors(request):
-    sponsors = Sponsor.objects.all()
-    serializer = SponsorSerializer(sponsors, many=True)
+    if request.method != "GET":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    sponsor = Sponsor.objects.all()
+
+    serializer = SponsorSerializer(sponsor, many=True)
+           
     return Response(serializer.data, status.HTTP_200_OK)
 
 @api_view(["GET"])
 def getAllCourses(request):
-    courses = Course.objects.all()
-    serializer = CourseSerializer(courses, many=True)
+    if request.method != "GET":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    course = Course.objects.all()
+
+    serializer = CourseSerializer(course, many=True)
+           
     return Response(serializer.data, status.HTTP_200_OK)
 
 @api_view(["POST"])
-def createStudent(request): 
+def createStudent(request):
+    if request.method != "POST":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+    
     serializer = StudentSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(status.HTTP_201_CREATED)
-    return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-@api_view(["POST"])
-def createTeacher(request): 
-    serializer = TeacherSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(status.HTTP_201_CREATED)
-    return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status.HTTP_400_BAD_REQUEST)
+    
+@api_view(["POST"])
+def createTeacher(request):
+    if request.method != "POST":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+    serializer = TeacherSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(status.HTTP_201_CREATED)
+    else:
+        return Response(status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 def createSponsor(request):
+    if request.method != "POST":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+    
     serializer = SponsorSerializer(data=request.data)
+
     if serializer.is_valid():
         serializer.save()
         return Response(status.HTTP_201_CREATED)
-    return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
+    else:
+        return Response(status.HTTP_400_BAD_REQUEST)
+    
 @api_view(["POST"])
 def createCourse(request):
+    if request.method != "POST":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+    
     serializer = CourseSerializer(data=request.data)
+
     if serializer.is_valid():
         serializer.save()
         return Response(status.HTTP_201_CREATED)
-    return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status.HTTP_400_BAD_REQUEST)
+    
+@api_view(["PUT"])
+def addCourseToStudent(request, studentId, courseId):
+    if request.method != "PUT":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+    student = Student.objects.get(userId = studentId)
+
+    serializer = StudentSerializer(student)
+
+    studentData = serializer.data
+    studentData.coursesRegistred = studentData.coursesRegistred + "|" + courseId
+    studentData.coursesEval = studentData.couseresEval + "|" + "5"
+
+    newSerializer = StudentSerializer(data = studentData)
+    if newSerializer.is_valid():
+        newSerializer.save()
+        return Response(status.HTTP_202_ACCEPTED)
+    else:
+        return Response(status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(["PUT"])
+def modifyStudentEval(request, studentId, courseId, newEval):
+    if request.method != "PUT":
+        return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+    student = Student.objects.first(id = studentId)
+
+    serializer = StudentSerializer(student)
+
+    studentData = serializer.data
+    
+    studentCourses = studentData.coursesReg
+    studentEval = studentData.coursesEval
+
+    coursesStr = studentCourses.split("|")
+    evalStr = studentEval.split("|")
+    newEvalStr = ""
+
+    for i in range(len(coursesStr)):
+        if coursesStr[i] == courseId:
+            evalStr[i] = newEval
+        newEvalStr = newEvalStr + evalStr[i] + "|"
+    
+    studentData.coursesEval = newEvalStr
+
+    newSerializer = StudentSerializer(data = studentData)
+    if newSerializer.is_valid():
+        newSerializer.save()
+        return Response(status.HTTP_202_ACCEPTED)
+    else:
+        return Response(status.HTTP_400_BAD_REQUEST)
+    
 
 @api_view(["PUT"])
 def addMissedClass(request):
-    return Response({"message": "Função addMissedClass não implementada"}, status.HTTP_501_NOT_IMPLEMENTED)
+    if request.method != "PUT":
+        return Response(status.HTTP_501_NOT_IMPLEMENTED)
 
 # Views públicas
 def home_view(request):

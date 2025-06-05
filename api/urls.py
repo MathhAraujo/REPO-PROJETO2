@@ -3,24 +3,26 @@ from . import views
 
 
 urlpatterns = [
-    # --- Views de API (mantidas como você forneceu, talvez adicionar 'api/' no path) ---
-    path('api/getAllStudents/', views.getAllStudents, name="get_all_students"),
-    path('api/getAllTeachers/', views.getAllTeachers, name="get_all_teachers"),
-    path('api/getAllSponsors/', views.getAllSponsors, name="get_all_sponsors"),
-    path('api/getAllCourses/', views.getAllCourses, name="get_all_courses"),
-    path('api/createStudent/', views.createStudent, name="post_new_student"),
-    path('api/createTeacher/', views.createTeacher, name="post_new_teacher"),
-    path('api/createSponsor/', views.createSponsor, name="post_new_sponsor"),
-    path('api/createCourse/', views.createCourse, name="post_new_course"),
+    path('getAllStudents/', views.getAllStudents, name="get_all_students"),
+    path('getAllTeachers/', views.getAllTeachers, name="get_all_teachers"),
+    path('getAllSponsors/', views.getAllSponsors, name="get_all_sponsors"),
+    path('getAllCourses/', views.getAllCourses, name="get_all_courses"),
+    path('createStudent/', views.createStudent, name="post_new_student"),
+    path('createTeacher/', views.createTeacher, name="post_new_teacher"),
+    path('createSponsor/', views.createSponsor, name="post_new_sponsor"),
+    path('createCourse/', views.createCourse, name="post_new_course"),
+    path('addCourseToStudent/<str:studentId>;<str:courseId>', views.addCourseToStudent, name="add_course_to_student"),
+    path('modifyStudentEval/', views.modifyStudentEval, name="modify_student_eval"),
+
     path('', views.home_view, name='home'), 
-    path('login/', views.login_view, name='login'), #
-    path('cadastro/', views.cadastro_view, name='pagina_cadastro'), 
-    path('logout/', views.logout_view, name='logout'), 
+    path('login/', views.login_view, name='login'),
+    path('cadastro/', views.cadastro_view, name='pagina_cadastro'),
+    path('logout/', views.logout_view, name='logout'),
 
    
-    path('cursos/', views.curso_detalhe_view, name='pagina_cursos'), 
+    path('cursos/', views.curso_detalhe_view, name='pagina_cursos'),
    
-   path('curso/', views.pagina_cursos_view, name='pagina_curso'), 
+    path('curso/', views.pagina_cursos_view, name='pagina_curso'),
 
     
     path('painel/professor/', views.area_professor_view, name='area_professor'),
@@ -38,6 +40,5 @@ urlpatterns = [
     path('professor/aluno/<int:aluno_id>/presenca-eventos/', views.editar_calendario_aluno_view, name='editar_calendario_aluno'),
 
     path('aluno/salvar-justificativas/', views.salvar_justificativas_aluno_view, name='salvar_justificativas_aluno'),
-
-
+    
 ]   

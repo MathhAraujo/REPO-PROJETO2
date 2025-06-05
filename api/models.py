@@ -30,7 +30,6 @@ class User(models.Model):
             return 'sponsor'
         return 'desconhecido'
 
-
 class Admin(User):
     lastJoined = models.DateTimeField(auto_now_add=True)
 
@@ -43,11 +42,14 @@ class Student(User):
     studentAge = models.PositiveIntegerField(default=0)
     classesMissedCount = models.IntegerField(default=0)
     classesMissed = models.TextField(default="", blank=True)
+    # cursoId1|cursoId2|cursoId3|...
+    coursesReg= models.TextField(default = "", blank = True)
+    # desempenho1|desempenho2|desempenho3|...
+    coursesEval = models.TextField(default = "", blank = True)
 
     @property
     def tipo_display(self):
         return "aluno"
-
 
 class Teacher(User):
     teacherSubject = models.CharField(max_length=100)
