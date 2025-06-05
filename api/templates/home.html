@@ -11,7 +11,7 @@
             background-color: #E0F2F1;
             color: #333;
             line-height: 1.6;
-            overflow-x: hidden; 
+            overflow-x: hidden;
         }
 
         header {
@@ -25,7 +25,7 @@
             top: 0;
             left: 0;
             width: calc(100% - 50px);
-            z-index: 1010; 
+            z-index: 1010;
             height: 50px;
         }
 
@@ -35,51 +35,51 @@
             width: auto;
             }
 
-        .header-navigation-menu { 
-            flex-grow: 1; 
-            display: flex; 
-            justify-content: center; 
+        .header-navigation-menu {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
             align-items: center;
         }
-        .header-menu-button { 
-            background-color: #f0f0f0; 
-            border: 1px solid #e0e0e0; 
-            height: 32px; 
-            margin: 0 10px; 
-            border-radius: 5px; 
+        .header-menu-button {
+            background-color: #f0f0f0;
+            border: 1px solid #e0e0e0;
+            height: 32px;
+            margin: 0 10px;
+            border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 0.9em; 
-            color: #aaa; 
-            padding: 0 15px; 
-            text-decoration: none; 
-            min-width: 100px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            color: #aaa;
+            padding: 0 15px;
+            text-decoration: none;
+            min-width: 100px;
         }
-        .header-menu-button:hover { 
-            background-color: #e5e5e5; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-            transform: translateY(-1px); 
+        .header-menu-button:hover {
+            background-color: #e5e5e5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
         }
-        .header-menu-button:active { 
-            background-color: #d5d5d5; 
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); 
-            transform: translateY(0px); 
+        .header-menu-button:active {
+            background-color: #d5d5d5;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            transform: translateY(0px);
         }
         .header-menu-button.cursos-button {
-            background-color: #00796b; 
+            background-color: #00796b;
             color: white;
-            padding: 0 25px; 
-            width: auto; 
-            font-weight: 600; 
+            padding: 0 25px;
+            width: auto;
+            font-weight: 600;
             font-size: 0.95em;
-            border: none; 
+            border: none;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .header-menu-button.cursos-button:hover {
-            background-color: #005a4f; 
+            background-color: #005a4f;
             box-shadow: 0 3px 6px rgba(0,0,0,0.15);
             transform: translateY(-1px);
         }
@@ -93,14 +93,14 @@
             border-radius: 50%; transition: background-color 0.2s ease;
         }
         .user-menu-trigger:hover { background-color: #f0f0f0; }
-        .user-menu-trigger svg { 
-            width: 28px; 
-            height: 28px; 
-            fill: #555; 
+        .user-menu-trigger svg {
+            width: 28px;
+            height: 28px;
+            fill: #555;
             transition: fill 0.3s ease;
         }
         .user-menu-trigger.logged-in svg {
-            fill: #00796b; 
+            fill: #00796b;
         }
 
 
@@ -109,7 +109,10 @@
             background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15);
             padding-top: 70px; box-sizing: border-box;
             transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
-            z-index: 1005; display: flex; flex-direction: column;
+            z-index: 1005;
+            display: flex; /* Mantido para flexbox */
+            flex-direction: column; /* Mantido para flexbox */
+            overflow-y: auto; /* Adicionado para permitir scroll se o conteúdo for grande */
         }
         .user-side-menu.open { right: 0; }
         .user-side-menu a {
@@ -118,42 +121,56 @@
             transition: background-color 0.2s ease, color 0.2s ease;
         }
         .user-side-menu a:hover { background-color: #f7f7f7; color: #00796b; }
-        
-        #logoutForm { /* Estilo para o formulário de logout */
+
+        #logoutForm { 
             margin: 0;
             padding: 0;
             width: 100%;
             border-bottom: 1px solid #f0f0f0; /* Consistência com outros itens de menu */
         }
         .user-side-menu .logout-button {
-            display: block; 
-            width: 100%;   
-            padding: 14px 20px; 
+            display: block;
+            width: 110%;
+            padding: 14px 20px;
             color: white;
             background-color: #d9534f; /* Vermelho */
-            border: none; 
+            border: none;
             font-size: 1em;
-            text-align: left; 
+            text-align: left;
             cursor: pointer;
-            font-weight: bold; 
+            font-weight: bold;
             transition: background-color 0.2s ease, color 0.2s ease;
-            box-sizing: border-box; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            line-height: normal; 
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: normal;
         }
         .user-side-menu .logout-button:hover {
-            background-color: #c9302c; /* Vermelho mais escuro */
+            background-color: #c9302c; 
             color: white;
         }
 
-        .user-side-menu .django-note { /* Removido se não for mais simulação */
+       
+        .user-side-menu-image-bottom-right {
+            position: absolute; 
+            bottom: 20px; 
+            right: 20px; 
+            z-index: 20; 
+        }
+
+        .user-side-menu-image-bottom-right img {
+            max-width: 200px; 
+            height: auto;
+            display: block;
+        }
+
+        .user-side-menu .django-note { 
             padding: 10px 20px; font-size: 0.8em; color: #777; background-color: #f9f9f9;
-            border-top: 1px solid #eee; margin-top: auto; 
+            border-top: 1px solid #eee; margin-top: auto;
         }
 
         .overlay-menu {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.4); z-index: 1000; 
+            background-color: rgba(0,0,0,0.4); z-index: 1000;
             opacity: 0; visibility: hidden;
             transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s;
         }
@@ -167,12 +184,15 @@
             width: 260px; flex-shrink: 0; background-color: #f4f4f4;
             padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             height: calc(100vh - (50px + 20px + 20px + 20px)); overflow-y: auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
         }
         .sidebar h2 {
             margin-top: 0; font-size: 1.4em; color: #333;
             border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 15px;
         }
-        .sidebar ul { list-style-type: none; padding: 0; margin: 0; }
+        .sidebar ul { list-style-type: none; padding: 0; margin: 0; flex-grow: 1;}
         .sidebar ul li { margin-bottom: 8px; }
         .sidebar ul li a.sidebar-aviso-link {
             text-decoration: none; color: #333; font-size: 0.95em;
@@ -189,23 +209,23 @@
             border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             position: relative; min-height: 400px;
         }
-        
+
         #welcomeMessageContainer {
-            text-align: center; 
-            padding: 15px 20px; 
-            background-color: #fff; 
-            border-radius: 8px; 
-            margin-bottom: 25px; 
+            text-align: center;
+            padding: 15px 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            margin-bottom: 25px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.08);
             border-left: 5px solid #00796b;
         }
         #welcomeMessageContainer h2 {
-            color: #00796b; 
+            color: #00796b;
             margin: 0 0 5px 0;
             font-size: 1.6em;
         }
         #welcomeMessageContainer p {
-            margin: 0; 
+            margin: 0;
             color: #555;
             font-size: 1em;
         }
@@ -237,7 +257,7 @@
         }
 
         .aviso-imagem-container {
-            position: relative; margin-bottom: 20px; 
+            position: relative; margin-bottom: 20px;
             border-radius: 8px; overflow: hidden;
         }
         .aviso-imagem-clicavel {
@@ -255,19 +275,19 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
             opacity: 0; visibility: hidden; border-radius: 8px;
             transform: scale(0.95);
-            transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), 
-                        visibility 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), 
+            transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+                        visibility 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
                         transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
         .aviso-texto-sobreposto.visivel { opacity: 1; visibility: visible; transform: scale(1); }
         .aviso-texto-sobreposto h4 { margin-top: 0; margin-bottom: 15px; font-size: 1.5em; font-weight: bold; }
         .aviso-texto-sobreposto p { margin-top: 0; margin-bottom: 10px; font-size: 1.1em; line-height: 1.5; }
         .aviso-texto-sobreposto p:last-child { margin-bottom: 0; }
-        .aviso-texto-sobreposto a { color: #ADD8E6; text-decoration: underline; } 
+        .aviso-texto-sobreposto a { color: #ADD8E6; text-decoration: underline; }
         .aviso-texto-sobreposto a:hover { color: #87CEEB; }
 
-        @media (max-width: 992px) { 
-            .header-navigation-menu { display: none; } 
+        @media (max-width: 992px) {
+            .header-navigation-menu { display: none; }
         }
         @media (max-width: 768px) {
             header { padding: 8px 15px; width: calc(100% - 30px); height: 45px; }
@@ -285,7 +305,8 @@
             .aviso-texto-sobreposto { padding: 20px; }
             .aviso-texto-sobreposto h4 { font-size: 1.3em; }
             .aviso-texto-sobreposto p { font-size: 1em;}
-            .user-side-menu { width: 250px; right: -270px; } 
+            .user-side-menu { width: 250px; right: -270px; }
+            .user-side-menu-image-bottom-right img { max-width: 100px; } /* Ajuste para telas menores */
         }
     </style>
 </head>
@@ -307,18 +328,18 @@
 
    <div id="userSideMenu" class="user-side-menu">
         {% if user.is_authenticated %}
-       
-           
+
+
         {% if user.profile.tipo_usuario == 'professor' %}
             <a href="{% url 'area_professor' %}" id="menuUserProfileLink">Meu Perfil</a>
         {% elif user.profile.tipo_usuario == 'aluno' %}
             <a href="{% url 'area_aluno' %}" id="menuUserProfileLink">Meu Perfil</a>
         {% else %}
-            <a href="#" id="menuUserProfileLink">Meu Perfil ({{ user.profile.tipo_usuario }})</a> 
+            <a href="#" id="menuUserProfileLink">Meu Perfil ({{ user.profile.tipo_usuario }})</a>
         {% endif %}
-            
+
             <a href="#">Área Acadêmica</a>
-            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
             <form method="post" action="{% url 'logout' %}" id="logoutForm">
                 {% csrf_token %}
                 <button type="submit" class="logout-button">Logout</button>
@@ -327,10 +348,15 @@
             <p style="padding: 5px 20px; background-color: #fcc; color: #333; font-size: 0.8em;">
                 DEBUG: Usuário NÃO está autenticado.
             </p>
-            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
             <a href="{% url 'login' %}">Login</a>
             <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
         {% endif %}
+
+        {# Imagem adicionada no canto inferior direito do menu lateral #}
+        <div class="user-side-menu-image-bottom-right">
+            <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
+        </div>
     </div>
     <div id="overlayMenu" class="overlay-menu"></div>
 
@@ -360,7 +386,7 @@
             </div>
             {% endif %}
 
-            <div id="nenhum-aviso-selecionado" 
+            <div id="nenhum-aviso-selecionado"
                  style="display: {% if not user.is_authenticated and not alguma_secao_inicial_ativa_aqui %}flex{% else %}none{% endif %};">
                  <span class="icon">🔔</span><p>Selecione um aviso na barra lateral para ver os detalhes.</p>
             </div>
@@ -384,16 +410,16 @@
             <section id="painel-usuario" class="caixa-aviso-detalhe">
                 <h3>Meu Painel Rápido</h3>
                 <div class="aviso-imagem-container">
-                    <img src="https://via.placeholder.com/800x400/778899/FFFFFF?text=Bem-vindo+ao+Seu+Painel" 
-                         alt="Painel do Usuário" 
-                         class="aviso-imagem-clicavel" 
+                    <img src="https://via.placeholder.com/800x400/778899/FFFFFF?text=Bem-vindo+ao+Seu+Painel"
+                         alt="Painel do Usuário"
+                         class="aviso-imagem-clicavel"
                          data-text-overlay-target="texto-painel-usuario">
                     <div id="texto-painel-usuario" class="aviso-texto-sobreposto">
                         <h4>Acesso Rápido e Personalizado</h4>
                         <p>Este é o seu espaço! Aqui você pode gerenciar seus cursos, acompanhar seu progresso e atualizar suas informações.</p>
                         <p style="margin-top: 15px;">
-                            <a href="{% url 'pagina_cursos' %}">Ver Meus Cursos</a> | 
-                            <a href="#">Configurações da Conta</a> 
+                            <a href="{% url 'pagina_cursos' %}">Ver Meus Cursos</a> |
+                            <a href="#">Configurações da Conta</a>
                         </p>
                     </div>
                 </div>
@@ -409,16 +435,13 @@
             const avisoDetalheSections = document.querySelectorAll('.caixa-aviso-detalhe');
             const defaultMessageContainer = document.getElementById('nenhum-aviso-selecionado');
             const mainContent = document.querySelector('.main-content');
-            let scrollTimeout; 
+            let scrollTimeout;
 
             const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
             const userSideMenu = document.getElementById('userSideMenu');
             const overlayMenu = document.getElementById('overlayMenu');
-            
-            // A lógica de simulação de login (isUserLoggedIn, toggleLoginStateBtn) foi removida.
-            // O estado de login agora é determinado pelo template Django.
 
-            if (userMenuTriggerBtn) { 
+            if (userMenuTriggerBtn) {
                 userMenuTriggerBtn.addEventListener('click', function() {
                     userSideMenu.classList.toggle('open');
                     overlayMenu.classList.toggle('open');
@@ -430,16 +453,13 @@
                     overlayMenu.classList.remove('open');
                 });
             }
-            
-            const userMenuLinks = userSideMenu.querySelectorAll('a, .logout-button'); // Inclui o botão de logout
+
+            const userMenuLinks = userSideMenu.querySelectorAll('a, .logout-button');
             userMenuLinks.forEach(link => {
                 link.addEventListener('click', function(event) {
-                    // Se for um link que não é um submit de formulário e o href é '#', previne o default.
                     if (this.tagName === 'A' && this.getAttribute('href') === '#') {
                         event.preventDefault();
                     }
-                    // Para qualquer clique em item de menu (link ou botão de logout), fecha o menu.
-                    // A navegação/submit ocorrerá normalmente.
                     userSideMenu.classList.remove('open');
                     overlayMenu.classList.remove('open');
                 });
@@ -448,7 +468,7 @@
             function setActiveAviso(targetId) {
                 let avisoAtivado = false;
                 if (defaultMessageContainer) {
-                    defaultMessageContainer.style.display = 'none'; // Esconde por padrão, reaparece se nada for ativado
+                    defaultMessageContainer.style.display = 'none';
                 }
 
                 avisoDetalheSections.forEach(section => {
@@ -474,22 +494,20 @@
                     mainContent.scrollTop = 0;
                     avisoAtivado = true;
                 } else if (targetElement && targetElement.id === 'painel-usuario' && document.getElementById('sidebar-link-painel-usuario').querySelector('a').classList.contains('ativo')) {
-                    // Caso especial para o painel do usuário se o link estiver ativo mas não na lista visível (raro)
                     targetElement.classList.add('ativa');
                     mainContent.scrollTop = 0;
                     avisoAtivado = true;
                 }
-                
-                // Se nenhum aviso foi ativado e não há mensagem de boas vindas visível, mostra "nenhum aviso"
+
                 const welcomeMsg = document.getElementById('welcomeMessageContainer');
-                if (!avisoAtivado && defaultMessageContainer && (!welcomeMsg || getComputedStyle(welcomeMsg).display === 'none')) { 
+                if (!avisoAtivado && defaultMessageContainer && (!welcomeMsg || getComputedStyle(welcomeMsg).display === 'none')) {
                     defaultMessageContainer.style.display = 'flex';
                 }
             }
-            
+
             sidebarLinks.forEach(link => {
                 link.addEventListener('click', function(event) {
-                    event.preventDefault(); 
+                    event.preventDefault();
                     setActiveAviso(this.dataset.target);
                 });
             });
@@ -518,32 +536,31 @@
                                 return parentLi && getComputedStyle(parentLi).display !== 'none';
                             });
                             const currentActiveLink = currentVisibleSidebarLinks.find(link => link.classList.contains('ativo'));
-                            
+
                             if (!currentActiveLink) return;
 
                             const currentIndex = currentVisibleSidebarLinks.indexOf(currentActiveLink);
                             let navigated = false;
 
-                            if (event.deltaY > 0) { 
+                            if (event.deltaY > 0) {
                                 if (currentIndex < currentVisibleSidebarLinks.length - 1) {
                                     setActiveAviso(currentVisibleSidebarLinks[currentIndex + 1].dataset.target);
                                     navigated = true;
                                 }
-                            } else if (event.deltaY < 0) { 
+                            } else if (event.deltaY < 0) {
                                 if (currentIndex > 0) {
                                     setActiveAviso(currentVisibleSidebarLinks[currentIndex - 1].dataset.target);
                                     navigated = true;
                                 }
                             }
                             if (navigated) {
-                                event.preventDefault(); 
+                                event.preventDefault();
                             }
-                        }, 100); 
+                        }, 100);
                     }
-                }, { passive: false }); 
+                }, { passive: false });
             });
 
-            // Lógica para mostrar a mensagem "nenhum-aviso-selecionado" se apropriado
             const welcomeMsg = document.getElementById('welcomeMessageContainer');
             let activeSectionExists = false;
             avisoDetalheSections.forEach(section => {
@@ -554,8 +571,6 @@
             if (defaultMessageContainer && !activeSectionExists && (!welcomeMsg || getComputedStyle(welcomeMsg).display === 'none')) {
                 defaultMessageContainer.style.display = 'flex';
             }
-
-
         });
     </script>
 </body>

@@ -37,7 +37,7 @@
         header img {
             height: 40px;
             width: auto;
-        }        
+        }
 
         .header-navigation-menu {
             flex-grow: 1;
@@ -102,16 +102,19 @@
             z-index: 1005;
             display: flex;
             flex-direction: column;
+            overflow-y: auto; /* Adicionado para permitir scroll se o conteúdo for grande */
         }
         .user-side-menu.open {
             right: 0;
         }
         .user-side-menu a {
+            display: block; /* Garante que os links ocupem a largura total para padding e borda */
             padding: 14px 20px;
             color: #333;
             text-decoration: none;
             border-bottom: 1px solid #f0f0f0;
             font-size: 1em;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
         .user-side-menu a:hover {
             background-color: #f7f7f7;
@@ -119,6 +122,7 @@
         }
         #logoutForm {
             margin: 0;
+            width: 100%; /* Garante que o formulário ocupe 100% da largura */
         }
         .logout-button {
             width: 100%;
@@ -129,26 +133,25 @@
             text-align: left;
             cursor: pointer;
             font-weight: bold;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            box-sizing: border-box; /* Garante que padding e borda sejam incluídos na largura */
         }
         .logout-button:hover {
             background-color: #c9302c;
         }
-        .overlay-menu {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.4);
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s;
+
+        /* Novo estilo para o contêiner da imagem no menu lateral, posicionado absolutamente */
+        .user-side-menu-image-bottom-right {
+            position: absolute; /* Posicionamento absoluto em relação ao user-side-menu */
+            bottom: 15px; /* Distância do fundo */
+            right: 15px; /* Distância da direita */
+            z-index: 10; /* Garante que a imagem fique acima de outros elementos se houver sobreposição */
         }
-        .overlay-menu.open {
-            opacity: 1;
-            visibility: visible;
-            transition-delay: 0s;
+
+        .user-side-menu-image-bottom-right img {
+            max-width: 120px; /* Ajuste o tamanho da imagem conforme necessário */
+            height: auto;
+            display: block;
         }
 
         /* === CONTEÚDO PRINCIPAL === */
@@ -259,14 +262,18 @@
                 flex-wrap: wrap;
             }
         }
+        @media (max-width: 768px) {
+            .user-side-menu-image-bottom-right img { max-width: 100px; } /* Ajuste para telas menores */
+            header { padding: 8px 15px; } /* Ajusta padding do header em telas pequenas */
+        }
     </style>
 </head>
 <body>
 
 <header>
-        <div class="header img">
-            <a href="{% url 'home' %}"><img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-02-18" border="0"></a>
-        </div>
+    <div class="header img">
+        <a href="{% url 'home' %}"><img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-02-18" border="0"></a>
+    </div>
     <div class="header-navigation-menu">
         <a href="{% url 'pagina_cursos' %}" class="header-menu-button cursos-button">Meus Cursos</a>
     </div>
@@ -285,6 +292,11 @@
         {% csrf_token %}
         <button type="submit" class="logout-button">Sair</button>
     </form>
+
+    {# Imagem adicionada no canto inferior direito do menu lateral #}
+    <div class="user-side-menu-image-bottom-right">
+        <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
+    </div>
 </div>
 
 <main class="page-container-main">

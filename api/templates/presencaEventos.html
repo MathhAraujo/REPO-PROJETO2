@@ -10,105 +10,136 @@
         body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color:rgb(50, 75, 112); color: #333; line-height: 1.6; overflow-x: hidden; }
 
         header { display: flex; justify-content: space-between; align-items: center; padding: 8px 25px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; width: calc(100% - 50px); z-index: 1010; height: 50px; }
-        
+
         .logo-container { display: flex; align-items: center; }
-        
+
         .logo-container svg { height: 38px; width: auto; }
-        
+
         header img {
             height: 40px;
             width: auto;
-        }        
+        }
 
-        
         .header-navigation-menu { flex-grow: 1; display: flex; justify-content: center; align-items: center; }
-        
+
         .header-menu-button.cursos-button { background-color: #00796b; color: white; padding: 0 25px; width: auto; font-weight: 600; font-size: 0.95em; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); height: 32px; margin: 0 10px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; display: flex; align-items: center; justify-content: center; text-decoration: none; }
-        
+
         .header-menu-button.cursos-button:hover { background-color: #005a4f; box-shadow: 0 3px 6px rgba(0,0,0,0.15); transform: translateY(-1px); }
-        
+
         .user-menu-trigger { cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.2s ease; }
-        
+
         .user-menu-trigger:hover { background-color: #f0f0f0; }
-        
+
         .user-menu-trigger svg { width: 28px; height: 28px; fill: #555; transition: fill 0.3s ease; }
-        
+
         .user-menu-trigger.logged-in svg { fill: #00796b; }
-        
-        .user-side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15); padding-top: 70px; box-sizing: border-box; transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1); z-index: 1005; display: flex; flex-direction: column; }
-        
+
+        /* Estilos do Menu Lateral */
+        .user-side-menu {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+            background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15);
+            padding-top: 70px; box-sizing: border-box;
+            transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+            z-index: 1005; display: flex; flex-direction: column;
+            overflow-y: auto; /* Permite rolagem se o conteúdo for grande */
+        }
+
         .user-side-menu.open { right: 0; }
-        
-        .user-side-menu a { display: block; padding: 14px 20px; color: #333; text-decoration: none; border-bottom: 1px solid #f0f0f0; font-size: 1em; transition: background-color 0.2s ease, color 0.2s ease; }
-        
+
+        .user-side-menu a {
+            display: block; padding: 14px 20px; color: #333; text-decoration: none;
+            border-bottom: 1px solid #f0f0f0; font-size: 1em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
         .user-side-menu a:hover { background-color: #f7f7f7; color: #00796b; }
-        
+
         #logoutForm { margin: 0; padding: 0; width: 100%; border-bottom: 1px solid #f0f0f0; }
-        
-        .user-side-menu .logout-button { display: block; width: 100%; padding: 14px 20px; color: white; background-color: #d9534f; border: none; font-size: 1em; text-align: left; cursor: pointer; font-weight: bold; transition: background-color 0.2s ease, color 0.2s ease; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: normal; }
-        
+
+        .user-side-menu .logout-button {
+            display: block; width: 100%; padding: 14px 20px; color: white;
+            background-color: #d9534f; border: none; font-size: 1em;
+            text-align: left; cursor: pointer; font-weight: bold;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: normal;
+        }
+
         .user-side-menu .logout-button:hover { background-color: #c9302c; color: white; }
-        
+
+        /* Estilo para a imagem no canto inferior direito do menu lateral */
+        .user-side-menu-image-bottom-right {
+            position: absolute; /* Posicionamento absoluto em relação ao user-side-menu */
+            bottom: 15px; /* Distância do fundo */
+            right: 15px; /* Distância da direita */
+            z-index: 10; /* Garante que a imagem fique acima de outros elementos se houver sobreposição */
+        }
+        .user-side-menu-image-bottom-right img {
+            max-width: 120px; /* Ajuste o tamanho da imagem conforme necessário */
+            height: auto;
+            display: block;
+        }
+
         .overlay-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s; }
-        
+
         .overlay-menu.open { opacity: 1; visibility: visible; transition-delay: 0s; }
-        
+
         .page-container-main { width: 100%; max-width: 900px; margin: 0 auto; padding: calc(50px + 2rem) 1rem 2rem 1rem; box-sizing: border-box; }
-        
+
         .page-title { text-align: center; margin-bottom: 2.5rem; font-size: 2.2em; font-weight: 600; color: #f0f2f5; position: relative; padding-bottom: 0.5rem; }
-        
+
         .page-title::after { content: ''; width: 80px; height: 4px; background-color: #88d1c7; display: block; margin: 0.5rem auto 0 auto; border-radius: 2px; }
-        
+
         .back-button-container { margin-bottom: 1.5rem; }
-        
+
         .back-button { color: #f0f2f5; background-color: rgba(255,255,255,0.1); text-decoration: none; font-weight: 500; font-size: 1em; display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 5px; transition: background-color 0.2s ease; }
-        
+
         .back-button:hover { background-color: rgba(255,255,255,0.2); }
-        
+
         .back-button svg { width: 20px; height: 20px; margin-right: 0.5em; stroke: #f0f2f5; }
-        
+
         .calendario-container { background-color: #fff; padding: 1.5rem 2rem; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); text-align: center; }
-        
+
         .calendario-container label { font-weight: 600; margin-right: 0.5rem; color: #555; }
-        
+
         .calendario-container select#mes { padding: 0.6rem 1rem; font-size: 1em; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 1.5rem; background-color: #fff; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-        
+
         .calendario-container select#mes:focus { outline: none; border-color: #00796b; box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.15); }
-        
+
         #calendarioDisplay { margin: 1rem auto; display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; max-width: 400px; }
-        
+
         .dia-calendario { height: 45px; width: 100%; border: 1px solid #eee; border-radius: 5px; font-weight: bold; color: #333; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease; }
-        
+
         .dia-calendario:hover { transform: scale(1.05); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        
-        .dia-presenca { background-color: #a5d6a7; color: #1b5e20; } 
-        
+
+        .dia-presenca { background-color: #a5d6a7; color: #1b5e20; }
+
         .dia-presenca:hover { background-color: #81c784; }
-        
-        .dia-falta { background-color: #ef9a9a; color: #c62828; } 
-        
+
+        .dia-falta { background-color: #ef9a9a; color: #c62828; }
+
         .dia-falta:hover { background-color: #e57373; }
-        
-        .dia-indefinido { background-color: #e0e0e0; color: #757575; } 
-        
+
+        .dia-indefinido { background-color: #e0e0e0; color: #757575; }
+
         .dia-indefinido:hover { background-color: #bdbdbd; }
-        
+
         .dia-calendario.marcado-falta { background-color: #ffcdd2 !important; color: #b71c1c !important; border: 2px dashed #c62828; }
-        
+
         .dia-calendario .marcador-justificativa { font-size: 1.5em; line-height: 1; }
-        
+
         .legenda-calendario { margin-top: 1.5rem; font-size: 0.9em; color: #555; }
-        
+
         .legenda-calendario span { margin: 0 10px; }
-        
+
         .legenda-calendario .cor-presenca { color: #2e7d32; font-weight: bold; }
-        
+
         .legenda-calendario .cor-falta { color: #c62828; font-weight: bold; }
-        
+
         .submit-button-container { text-align: center; margin-top: 2.5rem; }
-        
+
         button[type="submit"].save-button { padding: 0.8rem 2.5rem; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1.0em; font-weight: bold; transition: background-color 0.2s ease, transform 0.1s ease; }
-        
+
         button[type="submit"].save-button:hover { background-color: #005a4f; transform: translateY(-1px); }
 
         .popup-modal {
@@ -145,6 +176,10 @@
 
         @media (max-width: 768px) { #calendarioDisplay { gap: 5px; } .dia-calendario { height: 40px; font-size: 0.9em; } }
         @media (max-width: 992px) { .header-navigation-menu { display: none; } }
+        @media (max-width: 768px) {
+            .user-side-menu-image-bottom-right img { max-width: 100px; } /* Ajuste para telas menores */
+            header { width: 100%; padding: 8px 15px; box-sizing: border-box; } /* Ajusta padding e width do header em telas pequenas */
+        }
     </style>
 </head>
 <body>
@@ -169,22 +204,28 @@
             {% else %}
                 <a href="#">Meu Perfil</a>
             {% endif %}
-            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <a href="#">Área Acadêmica</a>
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
             <form method="post" action="{% url 'logout' %}" id="logoutForm">
                 {% csrf_token %}
                 <button type="submit" class="logout-button">Logout</button>
             </form>
         {% else %}
-            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
             <a href="{% url 'pagina_login' %}">Login</a>
             <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
         {% endif %}
+
+        {# Imagem adicionada no canto inferior direito do menu lateral #}
+        <div class="user-side-menu-image-bottom-right">
+            <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
+        </div>
     </div>
     <div id="overlayMenu" class="overlay-menu"></div>
 
     <div class="page-container-main">
         <div class="back-button-container">
-            <a href="{% url 'area_aluno' %}" class="back-button"> 
+            <a href="{% url 'area_aluno' %}" class="back-button">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 Voltar para Minha Área
             </a>
@@ -222,7 +263,7 @@
             </form>
         </div>
     </div>
-    
+
     <div id="popupModal" class="popup-modal">
         <div class="popup-content">
             <span class="close-btn" onclick="fecharPopup()">&times;</span>
@@ -233,11 +274,10 @@
         </div>
     </div>
 
-    <!-- ========================== SCRIPT ========================== -->
     <script>
     /* --------------------------------------------------
-       Eventos vindos do backend (json) – chave YYYY-MM-DD
-       Ex.: { "2025-06-05": ["Prova", "Reunião"] }
+        Eventos vindos do backend (json) – chave YEAR-MM-DD
+        Ex.: { "2025-06-05": ["Prova", "Reunião"] }
     -------------------------------------------------- */
     const eventosPorDia = JSON.parse('{{ eventos_json|default:"{}"|escapejs }}');
 
@@ -245,7 +285,7 @@
 
         /* ========= MENU LATERAL ========= */
         const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
-        const userSideMenu       = document.getElementById('userSideMenu');
+        const userSideMenu      = document.getElementById('userSideMenu');
         const overlayMenu        = document.getElementById('overlayMenu');
 
         if (userMenuTriggerBtn && userSideMenu && overlayMenu) {
@@ -320,7 +360,7 @@
                 } else if (statusDia === "falta") {
                     botao.classList.add('dia-falta');     botao.title="Falta registrada - Clique para justificar";
                 } else if (statusDia === "falta_justificada") {
-                    botao.innerHTML = '<span class="marcador-justificativa">!</span>';
+                    botao.innerHTML = `${diaStr} <span class="marcador-justificativa">!</span>`; /* Ajuste para manter o número do dia */
                     botao.classList.add('dia-falta','marcado-falta'); botao.title="Falta justificada - Clique para remover";
                 } else {
                     botao.classList.add('dia-indefinido');
@@ -329,8 +369,8 @@
                 /* === salvar/retirar justificativa === */
                 if (statusDia === "falta" || statusDia === "falta_justificada") {
                     botao.addEventListener("click", () => {
-                        const atual = dadosCalendarioAluno[mesSelecionado][diaStr];
-                        const statusAtual = (typeof atual === 'object') ? atual.status : atual;
+                        const atual = dadosCalendarioAluno[mesSelecionado]?.[diaStr]; // Use optional chaining
+                        const statusAtual = (typeof atual === 'object') ? atual.status : atual; // Extrai o status
                         dadosCalendarioAluno[mesSelecionado][diaStr] =
                             (statusAtual === "falta_justificada") ? "falta"
                             : { status:"falta_justificada", motivo:"Justificado pelo aluno", por:"aluno" };
@@ -341,13 +381,14 @@
 
                 /* === clique para abrir popup de eventos === */
                 botao.dataset.dia = diaStr;
-                if (statusDia === "presente") {
+                // Só adiciona o listener de eventos se o dia não for uma falta clicável
+                if (statusDia !== "falta" && statusDia !== "falta_justificada") {
                     botao.addEventListener("click", () => {
                         const dataKey = `${anoAtual}-${String(indiceMes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
                         const eventos = eventosPorDia[dataKey] || [];
                         abrirPopup(diaStr, eventos);
                     });
-}
+                }
 
                 calendarioDiv.appendChild(botao);
             }

@@ -13,8 +13,8 @@
         .logo-container svg { height: 38px; width: auto; }
         header img {
             height: 40px;
-             width: auto;
-        }        
+            width: auto;
+        }
         .header-navigation-menu { flex-grow: 1; display: flex; justify-content: center; align-items: center; }
         .header-menu-button.cursos-button { background-color: #00796b; color: white; padding: 0 25px; width: auto; font-weight: 600; font-size: 0.95em; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); height: 32px; margin: 0 10px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; display: flex; align-items: center; justify-content: center; text-decoration: none; }
         .header-menu-button.cursos-button:hover { background-color: #005a4f; box-shadow: 0 3px 6px rgba(0,0,0,0.15); transform: translateY(-1px); }
@@ -22,13 +22,44 @@
         .user-menu-trigger:hover { background-color: #f0f0f0; }
         .user-menu-trigger svg { width: 28px; height: 28px; fill: #555; transition: fill 0.3s ease; }
         .user-menu-trigger.logged-in svg { fill: #00796b; }
-        .user-side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15); padding-top: 70px; box-sizing: border-box; transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1); z-index: 1005; display: flex; flex-direction: column; }
+
+        /* Estilos do Menu Lateral */
+        .user-side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            box-shadow: -3px 0 8px rgba(0,0,0,0.15);
+            padding-top: 70px;
+            box-sizing: border-box;
+            transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+            z-index: 1005;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Permite rolagem se o conteúdo for grande */
+        }
         .user-side-menu.open { right: 0; }
         .user-side-menu a { display: block; padding: 14px 20px; color: #333; text-decoration: none; border-bottom: 1px solid #f0f0f0; font-size: 1em; transition: background-color 0.2s ease, color 0.2s ease; }
         .user-side-menu a:hover { background-color: #f7f7f7; color: #00796b; }
         #logoutForm { margin: 0; padding: 0; width: 100%; border-bottom: 1px solid #f0f0f0; }
         .user-side-menu .logout-button { display: block; width: 100%; padding: 14px 20px; color: white; background-color: #d9534f; border: none; font-size: 1em; text-align: left; cursor: pointer; font-weight: bold; transition: background-color 0.2s ease, color 0.2s ease; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: normal; }
         .user-side-menu .logout-button:hover { background-color: #c9302c; color: white; }
+
+        /* Estilo para a imagem no canto inferior direito do menu lateral */
+        .user-side-menu-image-bottom-right {
+            position: absolute; /* Posicionamento absoluto em relação ao user-side-menu */
+            bottom: 15px; /* Distância do fundo */
+            right: 15px; /* Distância da direita */
+            z-index: 10; /* Garante que a imagem fique acima de outros elementos se houver sobreposição */
+        }
+        .user-side-menu-image-bottom-right img {
+            max-width: 120px; /* Ajuste o tamanho da imagem conforme necessário */
+            height: auto;
+            display: block;
+        }
+
         .overlay-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s; }
         .overlay-menu.open { opacity: 1; visibility: visible; transition-delay: 0s; }
         .page-container-main { width: 100%; max-width: 800px; margin: 0 auto; padding: calc(50px + 2rem) 1rem 2rem 1rem; box-sizing: border-box; }
@@ -66,6 +97,10 @@
         .messages-container li.success { background-color: #5cb85c; }
         .messages-container li.error { background-color: #d9534f; }
         @media (max-width: 992px) { .header-navigation-menu { display: none; } }
+        @media (max-width: 768px) {
+            .user-side-menu-image-bottom-right img { max-width: 100px; } /* Ajuste para telas menores */
+            header { width: 100%; padding: 8px 15px; box-sizing: border-box; } /* Ajusta padding e width do header em telas pequenas */
+        }
     </style>
 </head>
 <body>
@@ -90,16 +125,21 @@
             {% else %}
                 <a href="#">Meu Perfil</a>
             {% endif %}
-            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
             <form method="post" action="{% url 'logout' %}" id="logoutForm">
                 {% csrf_token %}
                 <button type="submit" class="logout-button">Logout</button>
             </form>
         {% else %}
-            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
             <a href="{% url 'pagina_login' %}">Login</a>
             <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
         {% endif %}
+
+        {# Imagem adicionada no canto inferior direito do menu lateral #}
+        <div class="user-side-menu-image-bottom-right">
+            <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
+        </div>
     </div>
     <div id="overlayMenu" class="overlay-menu"></div>
 
@@ -111,7 +151,7 @@
             </a>
         </div>
         <h1 class="page-title">Editar Calendário de Presença</h1>
-        
+
         <div class="calendario-edit-container">
             <h2>Aluno(a): {{ aluno.get_full_name|default:aluno.username }}</h2>
             <p class="aluno-subtitulo">Email: {{ aluno.email }}</p>
@@ -129,33 +169,33 @@
                 <div class="calendario-controls">
                     <label for="mes_calendario_aluno">Selecionar Mês:</label>
                     <select id="mes_calendario_aluno" name="mes_selecionado">
-                        </select>
+                    </select>
                     <input type="hidden" name="dados_calendario" id="dados_calendario_input">
                 </div>
 
                 <div id="calendarioEditDisplay">
-                    </div>
+                </div>
                 <div class="legenda-calendario-edit">
                     <p>Clique em um dia para alterar seu status (Ciclo: Indefinido &rarr; Presente &rarr; Falta &rarr; F. Justificada &rarr; Indefinido):</p>
-                    <span class="legenda-cor-presenca" style="display:inline-block; padding:2px 5px; border-radius:3px; margin:0 2px;">Presença</span> | 
-                    <span class="legenda-cor-falta" style="display:inline-block; padding:2px 5px; border-radius:3px; margin:0 2px;">Falta</span> | 
+                    <span class="legenda-cor-presenca" style="display:inline-block; padding:2px 5px; border-radius:3px; margin:0 2px;">Presença</span> |
+                    <span class="legenda-cor-falta" style="display:inline-block; padding:2px 5px; border-radius:3px; margin:0 2px;">Falta</span> |
                     <span class="legenda-cor-justificada" style="display:inline-block; padding:2px 5px; border-radius:3px; margin:0 2px;">F. Justificada (Aluno/Prof)</span>
                 </div>
-                
+
                 <div class="submit-button-container">
                     <button type="submit" class="save-button">Salvar Alterações no Calendário</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // --- Lógica do Menu Lateral ---
         const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
         const userSideMenu = document.getElementById('userSideMenu');
         const overlayMenu = document.getElementById('overlayMenu');
-        
+
         if (userMenuTriggerBtn && userSideMenu && overlayMenu) {
             userMenuTriggerBtn.addEventListener('click', function() {
                 userSideMenu.classList.toggle('open');
@@ -184,7 +224,7 @@
 
         if (!mesSelect || !calendarioDiv || !dadosCalendarioInput) {
             console.warn("Elementos do calendário para edição não encontrados nesta página.");
-            return; 
+            return;
         }
 
         let dadosCalendarioGlobal = {}; // Usar um nome diferente para os dados globais do calendário
@@ -219,17 +259,17 @@
         function renderizarCalendario() {
             const mesSelecionado = mesSelect.value;
             const totalDias = diasNoMes[mesSelecionado] || 30;
-            
+
             if (!dadosCalendarioGlobal[mesSelecionado] || typeof dadosCalendarioGlobal[mesSelecionado] !== 'object') {
                 dadosCalendarioGlobal[mesSelecionado] = {};
             }
             const dadosDoMes = dadosCalendarioGlobal[mesSelecionado];
-            calendarioDiv.innerHTML = ""; 
+            calendarioDiv.innerHTML = "";
 
             for (let dia = 1; dia <= totalDias; dia++) {
                 const diaStr = String(dia);
                 const botaoDia = document.createElement("button");
-                botaoDia.type = "button"; 
+                botaoDia.type = "button";
                 botaoDia.innerText = dia;
                 botaoDia.classList.add('dia-calendario-edit');
                 botaoDia.dataset.dia = diaStr;
@@ -239,14 +279,14 @@
                 let justificadoPelo = ""; // Para diferenciar quem justificou (aluno/professor)
 
                 const diaData = dadosDoMes[diaStr];
-                if (diaData && typeof diaData === 'object') { 
+                if (diaData && typeof diaData === 'object') {
                     statusDia = diaData.status || "indefinido";
                     motivoJustificativa = diaData.motivo || "";
                     justificadoPelo = diaData.por || ""; // Novo: para saber quem justificou
-                } else if (typeof diaData === 'string') { 
+                } else if (typeof diaData === 'string') {
                     statusDia = diaData; // Compatibilidade com estrutura antiga simples
                 }
-                
+
                 botaoDia.classList.remove('dia-presenca', 'dia-falta', 'dia-falta-justificada', 'dia-indefinido');
                 botaoDia.title = ""; // Limpa o title anterior
 
@@ -283,7 +323,7 @@
                     } else if (typeof diaDataAtual === 'string') {
                         statusAtualNoClique = diaDataAtual;
                     }
-                    
+
                     let novoStatus;
                     let novoMotivoParaSalvar = motivoExistente;
                     let quemJustificou = justificadoPeloAtual;
@@ -297,13 +337,13 @@
                             novoMotivoParaSalvar = prompt("Motivo da justificativa (opcional):", "Justificado pelo professor");
                             if (novoMotivoParaSalvar === null) novoMotivoParaSalvar = "Justificado pelo professor"; // Cancelou o prompt
                         }
-                        quemJustificou = "professor"; 
+                        quemJustificou = "professor";
                     } else if (statusAtualNoClique === "falta_justificada") {
-                        novoStatus = "indefinido"; 
+                        novoStatus = "indefinido";
                         novoMotivoParaSalvar = "";
                         quemJustificou = "";
                     } else {
-                        novoStatus = "presente"; 
+                        novoStatus = "presente";
                     }
 
                     if (novoStatus === "indefinido") {
@@ -319,9 +359,9 @@
                             dadosCalendarioGlobal[mesSelecionado][diaStr] = novoStatus;
                         }
                     }
-                    
+
                     dadosCalendarioInput.value = JSON.stringify(dadosCalendarioGlobal);
-                    renderizarCalendario(); 
+                    renderizarCalendario();
                 });
                 calendarioDiv.appendChild(botaoDia);
             }
@@ -329,7 +369,7 @@
         }
 
         mesSelect.addEventListener('change', renderizarCalendario);
-        renderizarCalendario(); 
+        renderizarCalendario();
     });
     </script>
 </body>

@@ -11,7 +11,7 @@
             background-color: #f0f2f5; /* Fundo geral suave */
             color: #333;
             line-height: 1.6;
-            overflow-x: hidden; 
+            overflow-x: hidden;
         }
 
         /* --- HEADER E MENU LATERAL (Copiar estilos da home.html) --- */
@@ -26,19 +26,19 @@
         header img {
             height: 40px;
             width: auto;
-        }     
+        }
 
-        .header-navigation-menu { 
+        .header-navigation-menu {
             flex-grow: 1; display: flex; justify-content: center; align-items: center;
         }
         .header-menu-button.cursos-button {
-            background-color: #00796b; color: white; padding: 0 25px; 
+            background-color: #00796b; color: white; padding: 0 25px;
             width: auto; font-weight: 600; font-size: 0.95em;
             border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             height: 32px; margin: 0 10px; border-radius: 5px; cursor: pointer;
             transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-            display: flex; align-items: center; justify-content: center; 
-            text-decoration: none; 
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none;
         }
         .header-menu-button.cursos-button:hover {
             background-color: #005a4f; box-shadow: 0 3px 6px rgba(0,0,0,0.15);
@@ -49,17 +49,19 @@
             border-radius: 50%; transition: background-color 0.2s ease;
         }
         .user-menu-trigger:hover { background-color: #f0f0f0; }
-        .user-menu-trigger svg { 
+        .user-menu-trigger svg {
             width: 28px; height: 28px; fill: #555; transition: fill 0.3s ease;
         }
         .user-menu-trigger.logged-in svg { fill: #00796b; }
 
+        /* Estilos do Menu Lateral */
         .user-side-menu {
             position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
             background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15);
             padding-top: 70px; box-sizing: border-box;
             transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
             z-index: 1005; display: flex; flex-direction: column;
+            overflow-y: auto; /* Permite rolagem se o conteúdo for grande */
         }
         .user-side-menu.open { right: 0; }
         .user-side-menu a {
@@ -72,15 +74,29 @@
         .user-side-menu .logout-button {
             display: block; width: 100%; padding: 14px 20px; color: white;
             background-color: #d9534f; border: none; font-size: 1em;
-            text-align: left; cursor: pointer; font-weight: bold; 
+            text-align: left; cursor: pointer; font-weight: bold;
             transition: background-color 0.2s ease, color 0.2s ease;
-            box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            line-height: normal; 
+            box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: normal;
         }
         .user-side-menu .logout-button:hover { background-color: #c9302c; color: white; }
+
+        /* Estilo para a imagem no canto inferior direito do menu lateral */
+        .user-side-menu-image-bottom-right {
+            position: absolute; /* Posicionamento absoluto em relação ao user-side-menu */
+            bottom: 15px; /* Distância do fundo */
+            right: 15px; /* Distância da direita */
+            z-index: 10; /* Garante que a imagem fique acima de outros elementos se houver sobreposição */
+        }
+        .user-side-menu-image-bottom-right img {
+            max-width: 120px; /* Ajuste o tamanho da imagem conforme necessário */
+            height: auto;
+            display: block;
+        }
+
         .overlay-menu {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.4); z-index: 1000; 
+            background-color: rgba(0,0,0,0.4); z-index: 1000;
             opacity: 0; visibility: hidden;
             transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s;
         }
@@ -89,9 +105,9 @@
 
         .page-container-main {
             width: 100%;
-            max-width: 1100px; 
+            max-width: 1100px;
             margin: 0 auto;
-            padding: calc(50px + 2rem) 1rem 2rem 1rem; 
+            padding: calc(50px + 2rem) 1rem 2rem 1rem;
             box-sizing: border-box;
         }
 
@@ -113,7 +129,7 @@
             margin: 0.5rem auto 0 auto;
             border-radius: 2px;
         }
-        
+
         .back-button-container {
             margin-bottom: 1.5rem;
         }
@@ -324,10 +340,13 @@
             }
             .page-title { font-size: 1.8em; }
         }
-         @media (max-width: 992px) { 
-            .header-navigation-menu { display: none; } 
+        @media (max-width: 992px) {
+            .header-navigation-menu { display: none; }
         }
-
+        @media (max-width: 768px) {
+            .user-side-menu-image-bottom-right img { max-width: 100px; } /* Ajuste para telas menores */
+            header { width: 100%; padding: 8px 15px; box-sizing: border-box; } /* Ajusta padding e width do header em telas pequenas */
+        }
     </style>
 </head>
 <body>
@@ -353,16 +372,21 @@
                 <a href="#">Meu Perfil</a>
             {% endif %}
             <a href="#">Área Acadêmica</a>
-            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
             <form method="post" action="{% url 'logout' %}" id="logoutForm">
                 {% csrf_token %}
                 <button type="submit" class="logout-button">Logout</button>
             </form>
         {% else %}
-            <a href="{% url 'pagina_cursos' %}">Cursos</a> 
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
             <a href="{% url 'pagina_login' %}">Login</a>
             <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
         {% endif %}
+
+        {# Imagem adicionada no canto inferior direito do menu lateral #}
+        <div class="user-side-menu-image-bottom-right">
+            <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
+        </div>
     </div>
     <div id="overlayMenu" class="overlay-menu"></div>
 
@@ -443,8 +467,8 @@
             const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
             const userSideMenu = document.getElementById('userSideMenu');
             const overlayMenu = document.getElementById('overlayMenu');
-            
-            if (userMenuTriggerBtn) { 
+
+            if (userMenuTriggerBtn) {
                 userMenuTriggerBtn.addEventListener('click', function() {
                     userSideMenu.classList.toggle('open');
                     overlayMenu.classList.toggle('open');
@@ -456,7 +480,7 @@
                     overlayMenu.classList.remove('open');
                 });
             }
-            
+
             const userMenuLinks = userSideMenu.querySelectorAll('a, .logout-button');
             userMenuLinks.forEach(link => {
                 link.addEventListener('click', function(event) {
