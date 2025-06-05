@@ -380,8 +380,7 @@ def editar_calendario_aluno_view(request, aluno_id):
     profile = getattr(aluno, 'profile', None)
     if not profile or profile.tipo_usuario != 'aluno':
         messages.error(request, "Usuário inválido ou não é um aluno.")
-        return redirect('area_professor') # Nome da sua URL da área do professor
-
+        return redirect('area_professor') 
     if request.method == 'POST':
         dados_json_recebidos = request.POST.get('dados_calendario')
 
@@ -450,3 +449,73 @@ def salvar_justificativas_aluno_view(request):
 
 
     return redirect('pagina_presenca_eventos') 
+
+
+
+    #---------------------
+    #ADICIONANDO DUVIDAS
+    #--------------------
+
+    #duvidas
+
+
+from .models import Duvida
+
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import AnonymousUser
+
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.urls import reverse
+
+@login_required
+def duvidas(request):
+    aba = request.GET.get('aba', 'Geral')
+    duvidas = Duvida.objects.none()
+
+    if request.method == 'POST':
+        titulo = request.POST.get('titulo')
+        texto = request.POST.get('texto')
+        destinatario_form = request.POST.get('destinatario') 
+        
+        remetente_obj = request.user 
+
+        if request.user.get_full_name():
+            nome_remetente = request.user.get_full_name()
+        else:
+            nome_remetente = request.user.username
+        
+        if titulo and texto and destinatario_form:
+            Duvida.objects.create(
+                titulo=titulo,
+                texto=texto,
+                nome=nome_remetente,
+                destinatario=destinatario_form, 
+                remetente=remetente_obj 
+            )
+            return redirect(f"{reverse('pagina_duvidas')}?aba=Envios") 
+    
+    if aba == 'Envios':
+        duvidas = Duvida.objects.filter(remetente=request.user).order_by('-data')
+    elif aba == 'Geral':
+        duvidas = Duvida.objects.filter(destinatario='Geral').order_by('-data')
+    elif aba == 'Professor':
+        duvidas = Duvida.objects.filter(destinatario__in=['Geral', 'Professor']).order_by('-data')
+    elif aba == 'Administrador':
+        duvidas = Duvida.objects.filter(destinatario__in=['Geral', 'Administrador']).order_by('-data')
+    else:
+        duvidas = Duvida.objects.none()
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        context = {'duvidas': duvidas}
+        html_list = render_to_string('duvidas_list_partial.html', context, request=request)
+        return HttpResponse(html_list)
+    else:
+        context = {
+            'duvidas': duvidas,
+            'aba_selecionada': aba, 
+        }
+        return render(request, 'duvidas.html', context)
+

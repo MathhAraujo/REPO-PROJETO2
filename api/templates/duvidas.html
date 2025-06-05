@@ -1,0 +1,368 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dúvidas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <style>
+        :root {
+            --azul-fundo: #0e1445;
+            --azul-claro: #2cbcc9;
+            --azul-hover: #219ca8;
+            --branco: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--azul-fundo);
+            color: var(--branco);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background-color: var(--branco);
+            width: 240px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+
+        .sidebar img {
+            width: 90px;
+            margin-bottom: 30px;
+        }
+
+        .menu-button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background-color: var(--azul-claro);
+            color: black;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .menu-button:hover, .menu-button.selected {
+            background-color: var(--azul-hover);
+        }
+
+        .container {
+            margin-left: 260px;
+            padding: 40px;
+            flex: 1;
+            position: relative;
+        }
+
+        .background-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{% static 'img/pattern.svg' %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            opacity: 0.05;
+            z-index: 0;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 30px;
+            z-index: 1;
+            position: relative;
+        }
+
+        table {
+            width: 100%;
+            border-spacing: 0 10px;
+            z-index: 1;
+            position: relative;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 20px;
+        }
+
+        th {
+            color: var(--branco);
+            font-size: 1em;
+        }
+
+        .duvida-box {
+            background-color: var(--branco);
+            color: black;
+            border-radius: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .form-nova-duvida {
+            margin-top: 40px;
+            background-color: var(--branco);
+            color: black;
+            padding: 25px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 600px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .form-nova-duvida input,
+        .form-nova-duvida textarea,
+        .form-nova-duvida select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        .form-nova-duvida button {
+            padding: 10px 25px;
+            background-color: var(--azul-claro);
+            color: black;
+            font-weight: bold;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-nova-duvida button:hover {
+            background-color: var(--azul-hover);
+        }
+
+        .btn-apagar {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .btn-apagar:hover {
+            background: #c0392b;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                justify-content: space-around;
+                box-shadow: none;
+            }
+
+            .container {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            table, .form-nova-duvida {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="{% static 'img/logo.png' %}" alt="Logo" />
+        <button class="menu-button" onclick="selecionarDestino('Geral')">Geral</button>
+        <button class="menu-button" onclick="selecionarDestino('Professor')">Professor</button>
+        <button class="menu-button" onclick="selecionarDestino('Administrador')">Administrador</button>
+        <button class="menu-button" onclick="selecionarDestino('Envios')">Envios</button>
+    </div>
+
+    <div class="container">
+        <div class="background-pattern"></div>
+        <h1>Dúvidas</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Nome</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="duvidas-lista">
+                {% comment %}
+                O conteúdo desta <tbody> será preenchido pelo JavaScript após o carregamento inicial e as seleções de aba.
+                Assim, o Django não precisa renderizar todas as dúvidas logo de cara.
+                {% endcomment %}
+            </tbody>
+        </table>
+
+        <div id="form-envio" style="display: none; justify-content: center; margin-top: 40px;">
+            <form method="post" class="form-nova-duvida">
+                {% csrf_token %}
+                <h3>Adicionar nova dúvida</h3>
+
+                <select name="destinatario" required>
+                    <option value="" disabled selected>Selecione o destinatário</option>
+                    <option value="Geral">Geral</option>
+                    <option value="Professor">Professor</option>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Professores">Professores</option>
+                </select>
+
+                <input type="text" name="titulo" placeholder="Título da dúvida" required />
+                <textarea name="texto" placeholder="Descreva sua dúvida..." required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Função para buscar dúvidas do servidor e atualizar a tabela
+        function fetchDuvidas(destino) {
+            const duvidasLista = document.getElementById('duvidas-lista');
+            duvidasLista.innerHTML = '<tr><td colspan="4">Carregando dúvidas...</td></tr>'; // Mensagem de carregamento
+
+            // Faz uma requisição GET para a URL '/duvidas/' com o parâmetro 'aba'
+            fetch(`/duvidas/?aba=${destino}`)
+                .then(response => {
+                    if (!response.ok) {
+                        // Se a resposta não for OK (ex: 403, 500), joga um erro
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text(); // A resposta é o HTML completo da página
+                })
+                .then(html => {
+                    // Para extrair apenas o conteúdo do tbody, precisamos analisar o HTML completo
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    
+                    // Tenta encontrar o elemento com id 'duvidas-lista' no DOM parsed
+                    const newTableBodyElement = doc.getElementById('duvidas-lista');
+                    if (newTableBodyElement) {
+                        duvidasLista.innerHTML = newTableBodyElement.innerHTML;
+                    } else {
+                        // Caso o elemento não seja encontrado, significa que a resposta do servidor não é a esperada.
+                        // Isso pode acontecer se o Django retornar uma página de erro (403, 500)
+                        // ou uma página de login, onde o id 'duvidas-lista' não existe.
+                        console.error('Erro: Elemento #duvidas-lista não encontrado na resposta do servidor.');
+                        duvidasLista.innerHTML = '<tr><td colspan="4">Erro ao carregar. Verifique o console para mais detalhes.</td></tr>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dúvidas:', error);
+                    duvidasLista.innerHTML = `<tr><td colspan="4">Erro ao carregar dúvidas. (${error.message || 'Erro de rede/servidor'}).</td></tr>`;
+                });
+        }
+
+        function selecionarDestino(destino) {
+            const buttons = document.querySelectorAll('.menu-button');
+            buttons.forEach(btn => {
+                // Remove a classe 'selected' de todos os botões
+                btn.classList.remove('selected');
+            });
+            // Encontra o botão clicado e adiciona a classe 'selected'
+            const button = Array.from(buttons).find(btn => btn.textContent === destino);
+            if (button) {
+                button.classList.add('selected');
+            }
+
+            const form = document.getElementById('form-envio');
+            if (destino === 'Envios') {
+                form.style.display = 'flex';
+            } else {
+                form.style.display = 'none';
+            }
+
+            // CHAMA A FUNÇÃO PARA BUSCAR E ATUALIZAR AS DÚVIDAS
+            fetchDuvidas(destino);
+        }
+
+        function toggleDescricao(row) {
+            const descricao = row.nextElementSibling;
+            if (descricao && descricao.classList.contains('descricao')) {
+                descricao.style.display = descricao.style.display === 'none' ? 'table-row' : 'none';
+            }
+        }
+
+        function apagarDuvida(event, duvidaId) {
+            event.stopPropagation(); // evita abrir a descrição ao clicar no botão
+
+            if (!confirm('Tem certeza que deseja cancelar essa dúvida?')) return;
+
+            fetch(`/duvidas/apagar/${duvidaId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Remove a linha da dúvida e sua descrição (se visível) do DOM
+                    const btn = event.target;
+                    const tr = btn.closest('tr');
+                    const descricaoTr = tr.nextElementSibling;
+                    tr.remove();
+                    if (descricaoTr && descricaoTr.classList.contains('descricao')) {
+                        descricaoTr.remove();
+                    }
+                    // Após apagar, recarregue a lista para garantir que esteja atualizada
+                    // Pega a aba que estava selecionada atualmente para recarregar o conteúdo correto
+                    const currentSelectedButton = document.querySelector('.menu-button.selected');
+                    const currentAba = currentSelectedButton ? currentSelectedButton.textContent : 'Geral';
+                    fetchDuvidas(currentAba);
+
+                } else {
+                    // Tenta ler a mensagem de erro do backend, se houver
+                    response.json().then(data => {
+                        alert(`Falha ao apagar dúvida: ${data.message || data.status || 'Erro desconhecido.'}`);
+                    }).catch(() => {
+                        alert('Falha ao apagar dúvida.'); // Fallback se a resposta não for JSON
+                    });
+                }
+            })
+            .catch(() => alert('Erro na requisição para apagar dúvida.'));
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialAba = '{{ aba_selecionada|default:"Geral" }}';
+            selecionarDestino(initialAba);
+        });
+    </script>
+</body>
+</html>

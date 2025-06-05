@@ -40,5 +40,8 @@ urlpatterns = [
     path('professor/aluno/<int:aluno_id>/presenca-eventos/', views.editar_calendario_aluno_view, name='editar_calendario_aluno'),
 
     path('aluno/salvar-justificativas/', views.salvar_justificativas_aluno_view, name='salvar_justificativas_aluno'),
+
+    path('duvidas/', views.duvidas, name='pagina_duvidas'),
+
     
 ]   

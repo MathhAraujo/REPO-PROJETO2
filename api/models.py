@@ -197,3 +197,28 @@ class DesempenhoMateria(models.Model):
 
     def __str__(self):
         return f"{self.aluno.username} - {self.materia.nome}: {self.get_nota_qualitativa_display()}"
+
+
+
+   #---------------------
+    #ADICIONANDO DUVIDAS
+    #--------------------
+
+    #duvidas
+
+from django.conf import settings 
+
+class Duvida(models.Model):
+    titulo = models.CharField(max_length=200)
+    texto = models.TextField()
+    remetente = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='duvidas_enviadas', null=True, blank=True)
+    nome = models.CharField(max_length=100)
+    destinatario = models.CharField(max_length=50)
+    data = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.titulo
+
+    class Meta:
+        verbose_name = "Dúvida"
+        verbose_name_plural = "Dúvidas"
