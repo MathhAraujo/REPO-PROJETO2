@@ -555,3 +555,46 @@ def cadastrar_evento(request):
 
     return render(request, 'pagina_professor.html')
 
+
+
+#add curso
+
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
+# import json
+
+
+# @csrf_exempt
+# def adicionar_curso_aluno(request):
+#     if request.method == "POST":
+#         data = json.loads(request.body)
+#         curso_id = data.get("curso_id")
+
+#         if not curso_id:
+#             return JsonResponse({"status": "invalid data"}, status=400)
+
+#         cursos_salvos = request.session.get("cursos_aluno", [])
+
+#         if curso_id not in cursos_salvos:
+#             cursos_salvos.append(curso_id)
+#             request.session["cursos_aluno"] = cursos_salvos
+
+#         return JsonResponse({"status": "ok", "cursos": cursos_salvos})
+    
+#     return JsonResponse({"status": "error"}, status=400)
+
+
+# def cursos_aluno_view(request):
+#     cursos_ids = request.session.get("cursos_aluno", [])
+    
+#     # Exemplo de lista fixa de cursos
+#     cursos_disponiveis = {
+#         "1": "Atividade 1",
+#         "2": "Atividade 2",
+#         "3": "Atividade 3",
+#         "4": "Atividade 4"
+#     }
+
+#     cursos_adicionados = [cursos_disponiveis[cid] for cid in cursos_ids if cid in cursos_disponiveis]
+
+#     return render(request, "curso.html", {"cursos": cursos_adicionados})
