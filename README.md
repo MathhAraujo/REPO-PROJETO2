@@ -60,6 +60,9 @@ https://docs.google.com/document/d/15BGn9IhJNXdXndK_rH_m846a0L8SBbLWyqlDAfl-Ziw/
 >_Especialmente no desenvolvimento ágil de software, histórias (ou user stories, em inglês) são descrições breves e simples de uma funcionalidade do sistema, escritas da perspectiva do usuário final._
 
 ## Issue/Bug Tracker
+```
+https://github.com/MathhAraujo/REPO-PROJETO2/issues
+```
 
 - Issue 9
 ![image](/api/media/bug9.png)
