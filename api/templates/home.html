@@ -296,6 +296,9 @@
         </div>
         <nav class="header-navigation-menu">
             <a href="{% url 'pagina_cursos' %}" class="header-menu-button cursos-button">Nossos Cursos</a>
+            {% if user.is_authenticated and user.profile.tipo_usuario == 'professor' %}
+                <a href="{% url 'novo_curso' %}" class="header-menu-button cursos-button">Adicionar Curso</a>
+            {% endif %}
         </nav>
         <div class="user-menu-trigger {% if user.is_authenticated %}logged-in{% endif %}" id="userMenuTriggerBtn" title="Menu do Usuário">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 11.5c-5 0-9 2.5-9 4v.5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.5c0-1.5-4-4-9-4Z"/></svg>

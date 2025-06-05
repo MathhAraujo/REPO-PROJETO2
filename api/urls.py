@@ -42,5 +42,6 @@ urlpatterns = [
 
     path('duvidas/', views.duvidas, name='pagina_duvidas'),
 
+    path('novo_curso/', views.novo_curso, name='novo_curso'),
     
 ]   

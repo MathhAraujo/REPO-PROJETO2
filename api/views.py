@@ -609,3 +609,22 @@ def adicionar_curso_aluno(request):
         return JsonResponse({"status": "ok", "cursos": cursos_salvos})
 
     return JsonResponse({"status": "error"}, status=400)
+
+@login_required
+@professor_required
+def novo_curso(request):
+    if request.method == 'POST':
+        nome = request.POST.get('nome', '').strip()
+        descricao = request.POST.get('descricao', '').strip()
+
+        if not nome or not descricao:
+            messages.error(request, "Todos os campos são obrigatórios.")
+        else:
+            try:
+                Course.objects.create(nome=nome, descricao=descricao)
+                messages.success(request, "Curso criado com sucesso!")
+                return redirect('pagina_cursos')  # ou onde quiser redirecionar
+            except Exception as e:
+                messages.error(request, f"Erro ao criar curso: {e}")
+
+    return render(request, 'novo_curso.html')
