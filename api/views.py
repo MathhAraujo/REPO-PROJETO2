@@ -216,53 +216,77 @@ def cadastro_view(request):
 
         if not all([nome, email, senha, confirmarsenha, tipo_usuario]):
             erro_para_template = 'Todos os campos são obrigatórios.'
-        elif senha != confirmarsenha:
-            erro_para_template = 'As senhas não coincidem.'
-        elif len(senha) < 8:
-            erro_para_template = 'A senha deve ter pelo menos 8 caracteres.'
-        elif tipo_usuario not in ['aluno', 'professor']:
-            erro_para_template = 'Tipo de usuário inválido.'
-        else:
+        elif not erro_para_template:
             try:
                 validate_email(email)
-                if User.objects.filter(username=email).exists() or User.objects.filter(email=email).exists():
-                    erro_para_template = 'Email já cadastrado.'
             except DjangoValidationError:
-                erro_para_template = 'Email inválido.'
-
+                erro_para_template = 'O formato do email é inválido.'
+        elif not erro_para_template and senha != confirmarsenha:
+            erro_para_template = 'As senhas não coincidem.'
+        elif not erro_para_template and len(senha) < 8: 
+            erro_para_template = 'A senha deve ter pelo menos 8 caracteres.'
+        elif not erro_para_template and tipo_usuario not in ['aluno', 'professor']:
+            erro_para_template = 'Por favor, selecione um tipo de usuário válido.'
+        elif not erro_para_template:
+            if User.objects.filter(username=email).exists():
+                erro_para_template = 'Este email já está cadastrado como nome de usuário.'
+            elif User.objects.filter(email=email).exists(): 
+                erro_para_template = 'Este email já está cadastrado.'
+        
         if erro_para_template:
             messages.error(request, erro_para_template) 
             return render(request, 'cadastro.html', {'erro': erro_para_template, 'form_data': form_data})
+        else:
+            try:
+                partes_nome = nome.split(' ', 1)
+                first_name = partes_nome[0]
+                last_name = partes_nome[1] if len(partes_nome) > 1 else ''
 
-        try:
-            first_name, *rest = nome.split(' ', 1)
-            last_name = rest[0] if rest else ''
-            user = User.objects.create_user(username=email, email=email, password=senha, first_name=first_name, last_name=last_name)
-            Profile.objects.create(user=user, tipo_usuario=tipo_usuario)
-            messages.success(request, 'Cadastro realizado com sucesso! Faça o login.')
-            return redirect('login')
-        except Exception as e:
-            messages.error(request, f'Erro ao criar usuário: {e}')
-            return render(request, 'cadastro.html', {'erro': 'Erro ao criar conta.', 'form_data': form_data})
-
-    return render(request, 'cadastro.html', {'form_data': form_data})
+                user = User.objects.create_user(
+                    username=email, 
+                    email=email,
+                    password=senha,
+                    first_name=first_name,
+                    last_name=last_name
+                )
+                if hasattr(user, 'profile'):
+                    user.profile.tipo_usuario = tipo_usuario
+                    user.profile.save()
+                else:
+                    Profile.objects.create(user=user, tipo_usuario=tipo_usuario)
+                messages.success(request, 'Cadastro realizado com sucesso! Por favor, faça o login.')
+                return redirect('login') # Nome da URL de login
+            except Exception as e:
+                print(f"Erro ao criar usuário ou perfil: {e}") 
+                erro_para_template = 'Ocorreu um erro ao criar sua conta. Tente novamente.'
+                messages.error(request, erro_para_template)
+                return render(request, 'cadastro.html', {'erro': erro_para_template, 'form_data': form_data})
+    return render(request, 'cadastro.html', {'form_data': form_data if request.method == 'POST' else {}})
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('home') 
 
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST) 
         if form.is_valid():
-            user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
-            if user:
+            username = form.cleaned_data.get('username') 
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password) 
+            if user is not None:
                 login(request, user)
-                messages.success(request, f"Bem-vindo(a) {user.first_name or user.username}!")
-                return redirect(request.GET.get('next') or 'home')
-            messages.error(request, "Credenciais inválidas.")
+                messages.success(request, f"Bem-vindo(a) de volta, {user.first_name or user.username}!")
+                next_url = request.GET.get('next') 
+                if next_url:
+                    return redirect(next_url)
+                return redirect('home') 
+            else:
+                messages.error(request, "Email (nome de usuário) ou senha inválidos.")
+        else:
+            messages.error(request, "Verifique os dados inseridos.")
     else:
         form = AuthenticationForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'login.html', {'form': form}) 
 
 @login_required
 def logout_view(request):
@@ -368,9 +392,6 @@ def editar_desempenho_aluno_view(request, aluno_id):
         formset = DesempenhoMateriaFormSet(queryset=DesempenhoMateria.objects.filter(aluno=aluno))
 
     return render(request, 'editar_desempenho_aluno.html', {'aluno': aluno, 'desempenho_formset': formset})
-
-
-
 
 @login_required
 @professor_required

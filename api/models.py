@@ -8,8 +8,8 @@ import json
 # MODELOS DE USUÁRIO (Abstrato e Derivados)
 class User(models.Model):
     userId = models.AutoField(primary_key=True)
-    userName = models.CharField(max_length=100, default="John Doe")  # Sugestão: use 'username'
-    userEmail = models.EmailField()  # Sugestão: use 'email'
+    userName = models.CharField(max_length=100, default="John Doe") 
+    userEmail = models.EmailField() 
     userJoinDate = models.DateField(auto_now_add=True)
 
     class Meta:
@@ -94,20 +94,6 @@ class Profile(models.Model):
     @calendario.setter
     def calendario(self, value):
         self.dados_calendario_json = json.dumps(value)
-
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def save_user_profile(sender, instance, **kwargs):
-    try:
-        instance.profile.save()
-    except Profile.DoesNotExist:
-        Profile.objects.create(user=instance)
 
 
 # DADOS ESTENDIDOS DO USUÁRIO
