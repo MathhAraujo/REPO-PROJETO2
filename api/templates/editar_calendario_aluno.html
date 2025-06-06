@@ -6,7 +6,7 @@
     <title>Editar Calendário - {{ aluno.get_full_name|default:aluno.username }}</title>
     {% load static %}
     <style>
-      
+       
         body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color:#373F70; color: #333; line-height: 1.6; overflow-x: hidden; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 8px 25px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; width: calc(100% - 50px); z-index: 1010; height: 50px; }
         .logo-container { display: flex; align-items: center; }
@@ -46,7 +46,7 @@
         .user-side-menu .logout-button { display: block; width: 100%; padding: 14px 20px; color: white; background-color: #d9534f; border: none; font-size: 1em; text-align: left; cursor: pointer; font-weight: bold; transition: background-color 0.2s ease, color 0.2s ease; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: normal; }
         .user-side-menu .logout-button:hover { background-color: #c9302c; color: white; }
 
-        
+   
         .user-side-menu-image-bottom-right {
             position: absolute; 
             bottom: 15px; 
@@ -54,7 +54,7 @@
             z-index: 10; 
         }
         .user-side-menu-image-bottom-right img {
-            max-width: 120px; 
+            max-width: 120px; /* Ajuste o tamanho da imagem conforme necessário */
             height: auto;
             display: block;
         }
@@ -135,7 +135,6 @@
             <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
         {% endif %}
 
-
         <div class="user-side-menu-image-bottom-right">
             <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
         </div>
@@ -190,6 +189,7 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+
         const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
         const userSideMenu = document.getElementById('userSideMenu');
         const overlayMenu = document.getElementById('overlayMenu');
@@ -215,6 +215,7 @@
             });
         }
 
+   
         const mesSelect = document.getElementById("mes_calendario_aluno");
         const calendarioDiv = document.getElementById("calendarioEditDisplay");
         const dadosCalendarioInput = document.getElementById("dados_calendario_input");
@@ -286,6 +287,7 @@
 
                 botaoDia.classList.remove('dia-presenca', 'dia-falta', 'dia-falta-justificada', 'dia-indefinido');
                 botaoDia.title = ""; 
+
                 if (statusDia === "presente") {
                     botaoDia.classList.add('dia-presenca');
                 } else if (statusDia === "falta") {
@@ -298,6 +300,7 @@
                            botaoDia.innerHTML = `${dia} <span style="font-size:0.7em; color:blue;">(A)</span>`;
                         } else {
                            botaoDia.innerText = dia; 
+                        }
                     } else {
                         botaoDia.title = "Falta Justificada (sem motivo detalhado)";
                     }
@@ -350,7 +353,7 @@
                         if (novoStatus === "falta_justificada") {
                             dadosCalendarioGlobal[mesSelecionado][diaStr] = { status: novoStatus, motivo: novoMotivoParaSalvar, por: quemJustificou };
                         } else {
-                            
+                             
                             dadosCalendarioGlobal[mesSelecionado][diaStr] = novoStatus;
                         }
                     }
