@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Professor - Gerenciar Alunos</title>
+    {% load static %}
+    <style>
+        /* === CSS BÁSICO E HEADER === */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color:rgb(42, 53, 70);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 25px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1010;
+            height: 50px;
+        }
+        .logo-container svg {
+            height: 38px;
+            width: auto;
+        }
+
+        header img {
+            height: 40px;
+            width: auto;
+        }
+
+        .header-navigation-menu {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .header-menu-button.cursos-button {
+            background-color: #00796b;
+            color: white;
+            padding: 0 25px;
+            height: 32px;
+            font-weight: 600;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .header-menu-button.cursos-button:hover {
+            background-color: #005a4f;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+        }
+        .user-menu-trigger {
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+        .user-menu-trigger:hover {
+            background-color: #f0f0f0;
+        }
+        .user-menu-trigger svg {
+            width: 28px;
+            height: 28px;
+            fill: #555;
+        }
+        .user-menu-trigger.logged-in svg {
+            fill: #00796b;
+        }
+
+        .user-side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #fff;
+            box-shadow: -3px 0 8px rgba(0,0,0,0.15);
+            padding-top: 70px;
+            box-sizing: border-box;
+            transition: right 0.35s ease;
+            z-index: 1005;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Adicionado para permitir scroll se o conteúdo for grande */
+        }
+        .user-side-menu.open {
+            right: 0;
+        }
+        .user-side-menu a {
+            display: block; /* Garante que os links ocupem a largura total para padding e borda */
+            padding: 14px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 1em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .user-side-menu a:hover {
+            background-color: #f7f7f7;
+            color: #00796b;
+        }
+        #logoutForm {
+            margin: 0;
+            width: 100%; /* Garante que o formulário ocupe 100% da largura */
+        }
+        .logout-button {
+            width: 100%;
+            padding: 14px 20px;
+            color: white;
+            background-color: #d9534f;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            box-sizing: border-box; /* Garante que padding e borda sejam incluídos na largura */
+        }
+        .logout-button:hover {
+            background-color: #c9302c;
+        }
+
+        /* Novo estilo para o contêiner da imagem no menu lateral, posicionado absolutamente */
+        .user-side-menu-image-bottom-right {
+            position: absolute; /* Posicionamento absoluto em relação ao user-side-menu */
+            bottom: 15px; /* Distância do fundo */
+            right: 15px; /* Distância da direita */
+            z-index: 10; /* Garante que a imagem fique acima de outros elementos se houver sobreposição */
+        }
+
+        .user-side-menu-image-bottom-right img {
+            max-width: 120px; /* Ajuste o tamanho da imagem conforme necessário */
+            height: auto;
+            display: block;
+        }
+
+        /* === CONTEÚDO PRINCIPAL === */
+        .page-container-main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: calc(50px + 2rem) 1rem 2rem 1rem;
+            box-sizing: border-box;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 2em;
+            font-weight: 600;
+            color: #00695C;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            width: 70px;
+            height: 4px;
+            background-color: #00796b;
+            display: block;
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+
+        .alunos-list-container {
+            background-color: #fff;
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+        }
+
+        .alunos-list-container h2 {
+            color: #00796b;
+            font-size: 1.4em;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .aluno-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .aluno-item:last-child {
+            border-bottom: none;
+        }
+
+        .aluno-nome {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .aluno-email {
+            font-size: 0.9em;
+            color: #777;
+            margin-left: 1rem;
+        }
+
+        .aluno-actions a {
+            margin-left: 0.8rem;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+            font-size: 0.85em;
+            transition: background-color 0.2s ease;
+        }
+
+        .edit-desempenho-btn {
+            background-color: #2196F3;
+        }
+        .edit-desempenho-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .edit-calendario-btn {
+            background-color: #FF9800;
+        }
+        .edit-calendario-btn:hover {
+            background-color: #F57C00;
+        }
+
+        .no-alunos {
+            text-align: center;
+            color: #777;
+            padding: 2rem;
+        }
+
+        @media (max-width: 600px) {
+            .aluno-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .aluno-actions {
+                margin-top: 1rem;
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+        }
+        @media (max-width: 768px) {
+            .user-side-menu-image-bottom-right img { max-width: 100px; } /* Ajuste para telas menores */
+            header { padding: 8px 15px; } /* Ajusta padding do header em telas pequenas */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header img">
+        <a href="{% url 'home' %}"><img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-02-18" border="0"></a>
+    </div>
+    <div class="header-navigation-menu">
+        <a href="{% url 'pagina_cursos' %}" class="header-menu-button cursos-button">Meus Cursos</a>
+    </div>
+    <div class="user-menu-trigger" onclick="toggleUserMenu()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+        </svg>
+    </div>
+</header>
+
+<div class="overlay-menu" id="overlayMenu" onclick="toggleUserMenu()"></div>
+<div class="user-side-menu" id="userSideMenu">
+    <a href="{% url 'area_professor' %}">Meu Perfil</a>
+    <a href="{% url 'pagina_cursos' %}">Meus Cursos</a>
+    <form id="logoutForm" method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="logout-button">Sair</button>
+    </form>
+
+    {# Imagem adicionada no canto inferior direito do menu lateral #}
+    <div class="user-side-menu-image-bottom-right">
+        <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
+    </div>
+</div>
+
+<main class="page-container-main">
+    <h1 class="page-title">Gerenciar Alunos</h1>
+
+    <div class="alunos-list-container">
+        <h2>Lista de Alunos</h2>
+        {% if alunos %}
+            {% for aluno in alunos %}
+                <div class="aluno-item">
+                    <div>
+                        <span class="aluno-nome">{{ aluno.nome }}</span>
+                        <span class="aluno-email">{{ aluno.email }}</span>
+                    </div>
+                    <div class="aluno-actions">
+                        <a href="{% url 'editar_desempenho_aluno' aluno.id %}" class="edit-desempenho-btn">Desempenho</a>
+                        <a href="{% url 'editar_calendario_aluno' aluno.id %}" class="edit-calendario-btn">Calendário</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-alunos">Nenhum aluno cadastrado no momento.</p>
+        {% endif %}
+    </div>
+</main>
+
+<script>
+    function toggleUserMenu() {
+        const menu = document.getElementById('userSideMenu');
+        const overlay = document.getElementById('overlayMenu');
+        const isOpen = menu.classList.contains('open');
+        menu.classList.toggle('open', !isOpen);
+        overlay.classList.toggle('open', !isOpen);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+{% extends 'presencaEventos.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/presenca_eventos.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="calendar-container">
+  <div class="calendar">
+    <div class="month">
+      <i class="fas fa-angle-left prev"></i>
+      <div class="date">setembro 2023</div>
+      <i class="fas fa-angle-right next"></i>
+    </div>
+    <div class="weekdays">
+      <div>Dom</div>
+      <div>Seg</div>
+      <div>Ter</div>
+      <div>Qua</div>
+      <div>Qui</div>
+      <div>Sex</div>
+      <div>Sáb</div>
+    </div>
+    <div class="days"></div>
+  </div>
+</div>
+
+<script>
+  const date = new Date();
+
+  const renderCalendar = () => {
+    date.setDate(1);
+
+    const monthDays = document.querySelector(".days");
+
+    const lastDay = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      0
+    ).getDate();
+
+    const prevLastDay = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      0
+    ).getDate();
+
+    const firstDayIndex = date.getDay();
+
+    const lastDayIndex = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      0
+    ).getDay();
+
+    const nextDays = 7 - lastDayIndex - 1;
+
+    const months = [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro",
+    ];
+
+    document.querySelector(".date").innerHTML =
+      months[date.getMonth()] + " " + date.getFullYear();
+
+    let days = "";
+
+    for (let x = firstDayIndex; x > 0; x--) {
+      days += `<div class="prev-date">${prevLastDay - x + 1}</div>`;
+    }
+
+    for (let i = 1; i <= lastDay; i++) {
+      if (
+        i === new Date().getDate() &&
+        date.getMonth() === new Date().getMonth() &&
+        date.getFullYear() === new Date().getFullYear()
+      ) {
+        days += `<div class="today">${i}</div>`;
+      } else {
+        days += `<div>${i}</div>`;
+      }
+    }
+
+    for (let j = 1; j <= nextDays; j++) {
+      days += `<div class="next-date">${j}</div>`;
+    }
+
+    monthDays.innerHTML = days;
+
+    document.querySelectorAll(".days div:not(.prev-date):not(.next-date)").forEach(day => {
+      day.addEventListener("click", () => {
+        const selectedDay = day.textContent;
+        const selectedMonth = months[date.getMonth()];
+        const selectedYear = date.getFullYear();
+
+        Swal.fire({
+          title: "Informações do Dia",
+          html: `<b>Dia Selecionado:</b> ${selectedDay} de ${selectedMonth} de ${selectedYear}`,
+          icon: "info",
+          confirmButtonText: "Fechar",
+        });
+      });
+    });
+  };
+
+  document.querySelector(".prev").addEventListener("click", () => {
+    date.setMonth(date.getMonth() - 1);
+    renderCalendar();
+  });
+
+  document.querySelector(".next").addEventListener("click", () => {
+    date.setMonth(date.getMonth() + 1);
+    renderCalendar();
+  });
+
+  renderCalendar();
+</script>
+{% endblock %}

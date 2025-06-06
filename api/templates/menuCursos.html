@@ -8,156 +8,159 @@
     body {
       font-family: sans-serif;
       margin: 0;
-      padding: 0;
-      background-color: #f0f0f0;
-      overflow-x: hidden;
-    }
-    header, footer {
-      background-color: #222;
+      background-color: #2f3263;
       color: #fff;
-      padding: 15px 20px;
-      text-align: center;
     }
-    header img {
-      height: 40px;
-      vertical-align: middle;
-      margin-right: 10px;
+
+    header {
+      background: linear-gradient(to right, #f5f5f5, #e0e0e0); /* branco puxado para o cinza */
+      padding: 20px;
+      color: black;
     }
+
     .header-content {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
+      gap: 20px;
     }
+
+    .header-img img {
+      height: 60px;
+      width: auto;
+    }
+
     .container {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 50px;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .curso-box {
-      background-color: #fff;
-      border-radius: 20px;
       padding: 40px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: flex-start;
-      gap: 30px;
-      position: relative;
     }
-    .imagem {
-      width: 300px;
-      height: 180px;
-      background-color: #ccc;
+
+    .curso-item {
+      background-color: white;
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-radius: 5px;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .status-circle {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: gray;
+      margin-left: 10px;
+    }
+
+    .selected .status-circle {
+      background-color: #4CAF50; /* verde */
+    }
+
+    .not-selected .status-circle {
+      background-color: #f44336; /* vermelho */
+    }
+
+    .add-btn {
+      width: 40px;
+      height: 40px;
+      background-color: #ddd;
+      color: black;
+      font-size: 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 10px;
-      font-size: 1.3rem;
-      flex-shrink: 0;
+      margin-top: 20px;
     }
-    .resumo {
-      flex: 1;
+
+    .add-btn:hover {
+      background-color: #ccc;
     }
-    .resumo p {
-      font-size: 1.2rem;
-      margin: 0 0 10px;
-    }
-    .drive-button {
-      background-color: #e0e0e0;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
-    .drive-button:hover {
-      background-color: #d0d0d0;
-    }
-    .descricao {
-      background-color: #f9f9f9;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 15px;
-      margin-top: 10px;
-      display: none;
-    }
-    .expand-btn {
-      background: none;
-      border: none;
-      color: #0066cc;
-      cursor: pointer;
-      padding: 0;
-      font-size: 0.95rem;
-      text-decoration: underline;
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #ccc;
     }
   </style>
-  <script>
-    function toggleDescricao(id) {
-      const desc = document.getElementById(id);
-      if (desc.style.display === 'block') {
-        desc.style.display = 'none';
-      } else {
-        desc.style.display = 'block';
-      }
-    }
-  </script>
 </head>
 <body>
   <header>
     <div class="header-content">
-      <img src="logo.png" alt="Logo EduCare">
-      <h1>Portal de Cursos - EduCare</h1>
+      <div class="header-img">
+        <a href="{% url 'home' %}">
+          <img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="EduCare Logo" border="0">
+        </a>
+      </div>
+      <h1></h1>
     </div>
   </header>
 
   <div class="container">
-    <!-- Curso 1 -->
-    <div class="curso-box">
-      <div class="imagem">imagem</div>
-      <div class="resumo">
-        <p>Resumo do Curso 1</p>
-        <a href="{% url 'pagina_cursos' %}" class="drive-button">Acessar Curso</a>
-        <button class="expand-btn" onclick="toggleDescricao('desc1')">Ver mais</button>
-        <div class="descricao" id="desc1">
-          Descrição detalhada do Curso 1...
-        </div>
+    <div id="cursos">
+      <div class="curso-item" onclick="selecionarCurso(this)" data-id="1">
+        <span>Atividade 1 STATUS</span>
+        <div class="status-circle"></div>
+      </div>
+      <div class="curso-item" onclick="selecionarCurso(this)" data-id="2">
+        <span>Atividade 2 STATUS</span>
+        <div class="status-circle"></div>
+      </div>
+      <div class="curso-item" onclick="selecionarCurso(this)" data-id="3">
+        <span>Atividade 3 STATUS</span>
+        <div class="status-circle not-selected"></div>
+      </div>
+      <div class="curso-item" onclick="selecionarCurso(this)" data-id="4">
+        <span>Atividade 4 STATUS</span>
+        <div class="status-circle"></div>
       </div>
     </div>
 
-    <!-- Curso 2 -->
-    <div class="curso-box">
-      <div class="imagem">imagem</div>
-      <div class="resumo">
-        <p>Resumo do Curso 2</p>
-        <button class="drive-button" onclick="window.location.href='/curso/2/'">Acessar Curso</button>
-        <button class="expand-btn" onclick="toggleDescricao('desc2')">Ver mais</button>
-        <div class="descricao" id="desc2">
-          Descrição detalhada do Curso 2. Informações sobre a duração, público-alvo e certificações oferecidas neste curso.
-        </div>
-      </div>
-    </div>
-
-    <!-- Curso 3 -->
-    <div class="curso-box">
-      <div class="imagem">imagem</div>
-      <div class="resumo">
-        <p>Resumo do Curso 3</p>
-        <button class="drive-button" onclick="window.location.href='/curso/3/'">Acessar Curso</button>
-        <button class="expand-btn" onclick="toggleDescricao('desc3')">Ver mais</button>
-        <div class="descricao" id="desc3">
-          Descrição detalhada do Curso 3. Conhecimentos que o aluno adquirirá ao concluir este curso, além de projetos práticos.
-        </div>
-      </div>
-    </div>
+    <button class="add-btn" onclick="adicionarCurso()">+</button>
   </div>
 
   <footer>
     <p>&copy; 2025 EduCare. Todos os direitos reservados.</p>
   </footer>
+
+  <script>
+    let cursoSelecionado = null;
+
+    function selecionarCurso(el) {
+      document.querySelectorAll('.curso-item').forEach(item => {
+        item.classList.remove('selected');
+      });
+
+      el.classList.add('selected');
+      cursoSelecionado = el.dataset.id;
+    }
+
+    function adicionarCurso() {
+      if (!cursoSelecionado) {
+        alert("Selecione um curso primeiro.");
+        return;
+      }
+
+      // Enviar para o backend via POST com fetch
+      fetch("{% url 'adicionar_curso_aluno' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ curso_id: cursoSelecionado })
+      }).then(response => {
+        if (response.ok) {
+          alert("Curso adicionado com sucesso!");
+        } else {
+          alert("Erro ao adicionar curso.");
+        }
+      });
+    }
+  </script>
 </body>
 </html>

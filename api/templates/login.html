@@ -1,60 +1,421 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <style>
-    body {
-      background: #7cc26d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-    .login-container {
-      background: white;
-      padding: 40px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      border-radius: 4px;
-      text-align: center;
-    }
-    .login-container input[type="text"],
-    .login-container input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      background: #f1f1f1;
-    }
-    .login-container button {
-      width: 100%;
-      padding: 12px;
-      background-color: #55a94f;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    .login-container p {
-      margin-top: 20px;
-      font-size: 0.9em;
-      color: gray;
-    }
-    .login-container a {
-      color: #55a94f;
-      text-decoration: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Plataforma de Sonhos</title>
+    <style>
+        /* Estilos Globais e do Header (mesmos do cadastro.html e home.html) */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #E0F2F1; /* Mesmo fundo da home */
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 25px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: calc(100% - 50px);
+            z-index: 1010; 
+            height: 50px;
+        }
+
+        .logo-container { display: flex; align-items: center; }
+        .logo-container svg { height: 38px; width: auto; }
+        header img {
+            height: 40px;
+             width: auto;
+        }        
+
+        .header-navigation-menu { 
+            flex-grow: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
+        .header-menu-button { 
+            background-color: #f0f0f0; 
+            border: 1px solid #e0e0e0; 
+            height: 32px; 
+            margin: 0 10px; 
+            border-radius: 5px; 
+            cursor: pointer;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 0.9em; 
+            color: #aaa; 
+            padding: 0 15px; 
+            text-decoration: none; 
+            min-width: 100px; 
+        }
+        .header-menu-button:hover { 
+            background-color: #e5e5e5; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            transform: translateY(-1px); 
+        }
+        .header-menu-button:active { 
+            background-color: #d5d5d5; 
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); 
+            transform: translateY(0px); 
+        }
+        .header-menu-button.cursos-button {
+            background-color: #00796b; 
+            color: white;
+            padding: 0 25px; 
+            width: auto; 
+            font-weight: 600; 
+            font-size: 0.95em;
+            border: none; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header-menu-button.cursos-button:hover {
+            background-color: #005a4f; 
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+        }
+        .header-menu-button.cursos-button:active {
+            background-color: #004d40;
+            transform: translateY(0px);
+        }
+
+        .user-menu-trigger {
+            cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: background-color 0.2s ease;
+        }
+        .user-menu-trigger:hover { background-color: #f0f0f0; }
+        .user-menu-trigger svg { width: 28px; height: 28px; fill: #555; }
+
+        .user-side-menu {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+            background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15);
+            padding-top: 70px; box-sizing: border-box;
+            transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+            z-index: 1005; display: flex; flex-direction: column;
+        }
+        .user-side-menu.open { right: 0; }
+        .user-side-menu a, .user-side-menu .menu-item-like-button {
+            display: block; padding: 14px 20px; color: #333; text-decoration: none;
+            border-bottom: 1px solid #f0f0f0; font-size: 1em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .user-side-menu a:hover, .user-side-menu .menu-item-like-button:hover { background-color: #f7f7f7; color: #00796b; }
+        .user-side-menu .menu-item-like-button {
+            background: none; border: none; border-bottom: 1px solid #f0f0f0;
+            text-align: left; width: 100%; cursor: pointer;
+        }
+        .user-side-menu .menu-separator { height: 10px; background-color: #f0f0f0; margin: 10px 0; }
+        .user-side-menu .django-note {
+            padding: 10px 20px; font-size: 0.8em; color: #777; background-color: #f9f9f9;
+            border-top: 1px solid #eee; margin-top: auto; 
+        }
+
+        .overlay-menu {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.4); z-index: 1000; 
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s;
+        }
+        .overlay-menu.open { opacity: 1; visibility: visible; transition-delay: 0s; }
+
+        /* Estilos Específicos da Página de Autenticação (Login/Cadastro) */
+        .page-container-auth { 
+            padding: 2rem;
+            padding-top: calc(50px + 3rem); 
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            min-height: calc(100vh - (50px + 3rem)); 
+            box-sizing: border-box;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 2.5rem; 
+            border-radius: 10px; 
+            max-width: 450px; /* Ligeiramente mais estreito para login */
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        }
+
+        .form-container h1 {
+            color: #00695C; 
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 1.5rem; 
+            font-size: 2em; 
+        }
+
+        .messages-container {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 0 1.5rem 0; 
+        }
+        .messages-container li {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+            font-size: 0.95em;
+        }
+        .messages-container li.error, .django-error-specific { 
+            background-color: #d9534f; 
+        }
+        .django-form-errors { 
+            margin-bottom: 1rem;
+        }
+        .django-form-errors ul { list-style-type: none; padding: 0; margin: 0; }
+        .django-form-errors li {
+            padding: 10px 15px; background-color: #d9534f; color: white;
+            border-radius: 5px; font-size: 0.9em; text-align: center; margin-bottom: 5px;
+        }
+
+        label {
+            display: block;
+            margin-top: 1.2rem;
+            color: #555; 
+            font-weight: 600; 
+            font-size: 0.95em;
+        }
+
+        input[type="text"], /* Usado para username/email no login */
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.8rem; 
+            margin-top: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; 
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #00796b; 
+            box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.15); 
+        }
+
+        button[type="submit"] {
+            width: 100%; 
+            margin-top: 1.5rem; /* Reduzido um pouco o espaço antes do botão */
+            padding: 0.9rem 1.5rem; 
+            background-color: #00796b; 
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #005a4f; 
+            transform: translateY(-2px);
+        }
+         button[type="submit"]:active {
+            transform: translateY(0px);
+            background-color: #004d40;
+        }
+        
+        .form-options { 
+            text-align: right;
+            margin-top: 0.8rem; /* Menor espaço */
+            margin-bottom: 1.5rem; /* Espaço antes do botão de submit */
+            font-size: 0.9em;
+        }
+        .form-options a {
+            color: #00796b;
+            text-decoration: none;
+        }
+        .form-options a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-link-container { 
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.95em;
+            color: #555;
+        }
+        .auth-link-container a {
+            color: #00796b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .auth-link-container a:hover {
+            text-decoration: underline;
+        }
+
+         @media (max-width: 768px) {
+            .page-container-auth {
+                padding: 1rem;
+                padding-top: calc(45px + 2rem); 
+            }
+            .form-container {
+                padding: 1.5rem;
+                max-width: 100%; 
+            }
+            .form-container h1 {
+                font-size: 1.8em;
+            }
+        }
+         @media (max-width: 992px) { 
+            .header-navigation-menu { display: none; } 
+        }
+    </style>
 </head>
 <body>
-  <form class="login-container" action="{% url 'login' %}" method="post">
-    {% csrf_token %}
-    <input type="text" name="usuario" placeholder="Usuário" required>
-    <input type="password" name="senha" placeholder="Senha" required>
-    <button type="submit">Entrar</button>
-    <p>Não tem cadastro? <a href="{% url 'pagina_cadastro' %}">Crie uma conta</a></p>
-  </form>
+    <header>
+        <div class="header img">
+            <a href="{% url 'home' %}"><img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-02-18" border="0"></a>
+        </div>
+        <nav class="header-navigation-menu">
+            <a href="{% url 'pagina_cursos' %}" class="header-menu-button cursos-button">Nossos Cursos</a>
+        </nav>
+        <div class="user-menu-trigger" id="userMenuTriggerBtn" title="Menu do Usuário">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 11.5c-5 0-9 2.5-9 4v.5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.5c0-1.5-4-4-9-4Z"/></svg>
+        </div>
+    </header>
+
+    <div id="userSideMenu" class="user-side-menu">
+        <a href="#" id="menuUserProfileLink" style="display:none;">Meu Perfil</a>
+        <a href="#" id="menuAreaAcademicaLink" style="display:none;">Área Acadêmica</a>
+        <a href="{% url 'pagina_cursos' %}" id="menuCursosLink">Cursos</a> 
+        <a href="{% url 'login' %}" id="menuLoginLink">Login</a>
+        <div class="menu-separator"></div>
+        <button id="toggleLoginStateBtn" class="menu-item-like-button">Simular Login</button>
+        <div class="django-note">
+            Nota: Em um projeto Django, o estado de login e os links seriam controlados pelo backend (<code>{{ user.is_authenticated }}</code>).
+        </div>
+    </div>
+    <div id="overlayMenu" class="overlay-menu"></div>
+
+    <div class="page-container-auth">
+        <div class="form-container">
+            <h1>Acessar sua Conta</h1>
+
+            {% if messages %}
+                <ul class="messages-container">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if erro and not messages %} 
+                <ul class="messages-container"><li class="django-error-specific">{{ erro }}</li></ul>
+            {% endif %}
+            
+            {% if form.non_field_errors %}
+                <div class="django-form-errors">
+                    <ul>
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'login' %}"> {% csrf_token %}
+                
+                <label for="id_username">Email (ou nome de usuário):</label>
+                <input type="text" name="username" id="id_username" value="{{ request.POST.username|default:'' }}" required autofocus>
+                <label for="id_password">Senha:</label>
+                <input type="password" name="password" id="id_password" required>
+                <div class="form-options">
+                    <a href="#">Esqueceu a senha?</a> </div>
+
+                <button type="submit">Entrar</button>
+                
+                <form method="post" action="{% url 'login' %}"> {% csrf_token %}
+    <div class="auth-link-container">
+        <p>Não tem uma conta? <a href="{% url 'pagina_cadastro' %}">Cadastre-se aqui</a></p>
+    </div>
+</form>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Script para o Menu Lateral de Usuário (mesmo da home.html e cadastro.html)
+        document.addEventListener('DOMContentLoaded', function() {
+            const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
+            const userSideMenu = document.getElementById('userSideMenu');
+            const overlayMenu = document.getElementById('overlayMenu');
+            const toggleLoginStateBtn = document.getElementById('toggleLoginStateBtn');
+            const menuLoginLink = document.getElementById('menuLoginLink');
+            const menuAreaAcademicaLink = document.getElementById('menuAreaAcademicaLink');
+            const menuUserProfileLink = document.getElementById('menuUserProfileLink');
+            const menuCursosUserMenuLink = document.getElementById('menuCursosLink'); 
+            let isUserLoggedIn = false; 
+
+            function updateUserMenuState() {
+                if (isUserLoggedIn) {
+                    menuLoginLink.style.display = 'none';
+                    menuAreaAcademicaLink.style.display = 'block';
+                    menuUserProfileLink.style.display = 'block'; 
+                    toggleLoginStateBtn.textContent = 'Simular Logout';
+                } else {
+                    menuLoginLink.style.display = 'block';
+                    menuAreaAcademicaLink.style.display = 'none';
+                    menuUserProfileLink.style.display = 'none'; 
+                    toggleLoginStateBtn.textContent = 'Simular Login';
+                }
+            }
+            updateUserMenuState(); 
+
+            if (userMenuTriggerBtn) { 
+                userMenuTriggerBtn.addEventListener('click', function() {
+                    userSideMenu.classList.toggle('open');
+                    overlayMenu.classList.toggle('open');
+                });
+            }
+
+            if (overlayMenu) {
+                overlayMenu.addEventListener('click', function() {
+                    userSideMenu.classList.remove('open');
+                    overlayMenu.classList.remove('open');
+                });
+            }
+            
+            if (toggleLoginStateBtn) {
+                toggleLoginStateBtn.addEventListener('click', function() {
+                    isUserLoggedIn = !isUserLoggedIn;
+                    updateUserMenuState();
+                });
+            }
+            
+            [menuLoginLink, menuAreaAcademicaLink, menuUserProfileLink, menuCursosUserMenuLink].forEach(link => {
+                if(link) { 
+                    link.addEventListener('click', function(event) {
+                        if (this.getAttribute('href') === '#') {
+                            event.preventDefault();
+                        }
+                        // Para links reais (com href que não é '#'), a navegação ocorrerá.
+                        // Apenas fechamos o menu.
+                        userSideMenu.classList.remove('open');
+                        overlayMenu.classList.remove('open');
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

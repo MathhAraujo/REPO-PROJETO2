@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Presença e Eventos - Plataforma de Sonhos</title>
+    {% load static %}
+    <style>
+        /* Seus estilos CSS completos aqui */
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color:rgb(50, 75, 112); color: #333; line-height: 1.6; overflow-x: hidden; }
+
+        header { display: flex; justify-content: space-between; align-items: center; padding: 8px 25px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; width: calc(100% - 50px); z-index: 1010; height: 50px; }
+
+        .logo-container { display: flex; align-items: center; }
+
+        .logo-container svg { height: 38px; width: auto; }
+
+        header img {
+            height: 40px;
+            width: auto;
+        }
+
+        .header-navigation-menu { flex-grow: 1; display: flex; justify-content: center; align-items: center; }
+
+        .header-menu-button.cursos-button { background-color: #00796b; color: white; padding: 0 25px; width: auto; font-weight: 600; font-size: 0.95em; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); height: 32px; margin: 0 10px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+
+        .header-menu-button.cursos-button:hover { background-color: #005a4f; box-shadow: 0 3px 6px rgba(0,0,0,0.15); transform: translateY(-1px); }
+
+        .user-menu-trigger { cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.2s ease; }
+
+        .user-menu-trigger:hover { background-color:rgb(240, 240, 240); }
+
+        .user-menu-trigger svg { width: 28px; height: 28px; fill: #555; transition: fill 0.3s ease; }
+
+        .user-menu-trigger.logged-in svg { fill: #00796b; }
+
+        /* Estilos do Menu Lateral */
+        .user-side-menu {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+            background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15);
+            padding-top: 70px; box-sizing: border-box;
+            transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+            z-index: 1005; display: flex; flex-direction: column;
+            overflow-y: auto; /* Permite rolagem se o conteúdo for grande */
+        }
+
+        .user-side-menu.open { right: 0; }
+
+        .user-side-menu a {
+            display: block; padding: 14px 20px; color: #333; text-decoration: none;
+            border-bottom: 1px solid #f0f0f0; font-size: 1em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .user-side-menu a:hover { background-color: #f7f7f7; color: #00796b; }
+
+        #logoutForm { margin: 0; padding: 0; width: 100%; border-bottom: 1px solid #f0f0f0; }
+
+        .user-side-menu .logout-button {
+            display: block; width: 100%; padding: 14px 20px; color: white;
+            background-color: #d9534f; border: none; font-size: 1em;
+            text-align: left; cursor: pointer; font-weight: bold;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: normal;
+        }
+
+        .user-side-menu .logout-button:hover { background-color: #c9302c; color: white; }
+
+        /* Estilo para a imagem no canto inferior direito do menu lateral */
+        .user-side-menu-image-bottom-right {
+            position: absolute; /* Posicionamento absoluto em relação ao user-side-menu */
+            bottom: 15px; /* Distância do fundo */
+            right: 15px; /* Distância da direita */
+            z-index: 10; /* Garante que a imagem fique acima de outros elementos se houver sobreposição */
+        }
+        .user-side-menu-image-bottom-right img {
+            max-width: 120px; /* Ajuste o tamanho da imagem conforme necessário */
+            height: auto;
+            display: block;
+        }
+
+        .overlay-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s; }
+
+        .overlay-menu.open { opacity: 1; visibility: visible; transition-delay: 0s; }
+
+        .page-container-main { width: 100%; max-width: 900px; margin: 0 auto; padding: calc(50px + 2rem) 1rem 2rem 1rem; box-sizing: border-box; }
+
+        .page-title { text-align: center; margin-bottom: 2.5rem; font-size: 2.2em; font-weight: 600; color: #f0f2f5; position: relative; padding-bottom: 0.5rem; }
+
+        .page-title::after { content: ''; width: 80px; height: 4px; background-color: #88d1c7; display: block; margin: 0.5rem auto 0 auto; border-radius: 2px; }
+
+        .back-button-container { margin-bottom: 1.5rem; }
+
+        .back-button { color: #f0f2f5; background-color: rgba(255,255,255,0.1); text-decoration: none; font-weight: 500; font-size: 1em; display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 5px; transition: background-color 0.2s ease; }
+
+        .back-button:hover { background-color: rgba(255,255,255,0.2); }
+
+        .back-button svg { width: 20px; height: 20px; margin-right: 0.5em; stroke: #f0f2f5; }
+
+        .calendario-container { background-color: #fff; padding: 1.5rem 2rem; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); text-align: center; }
+
+        .calendario-container label { font-weight: 600; margin-right: 0.5rem; color: #555; }
+
+        .calendario-container select#mes { padding: 0.6rem 1rem; font-size: 1em; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 1.5rem; background-color: #fff; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+
+        .calendario-container select#mes:focus { outline: none; border-color: #00796b; box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.15); }
+
+        #calendarioDisplay { margin: 1rem auto; display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; max-width: 400px; }
+
+        .dia-calendario { height: 45px; width: 100%; border: 1px solid #eee; border-radius: 5px; font-weight: bold; color: #333; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease; }
+
+        .dia-calendario:hover { transform: scale(1.05); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        .dia-presenca { background-color: #a5d6a7; color: #1b5e20; }
+
+        .dia-presenca:hover { background-color: #81c784; }
+
+        .dia-falta { background-color: #ef9a9a; color: #c62828; }
+
+        .dia-falta:hover { background-color: #e57373; }
+
+        .dia-indefinido { background-color: #e0e0e0; color: #757575; }
+
+        .dia-indefinido:hover { background-color:rgb(189, 189, 189); }
+
+        .dia-calendario.marcado-falta { background-color: #ffcdd2 !important; color: #b71c1c !important; border: 2px dashed #c62828; }
+
+        .dia-calendario .marcador-justificativa { font-size: 1.5em; line-height: 1; }
+
+        .legenda-calendario { margin-top: 1.5rem; font-size: 0.9em; color: #555; }
+
+        .legenda-calendario span { margin: 0 10px; }
+
+        .legenda-calendario .cor-presenca { color: #2e7d32; font-weight: bold; }
+
+        .legenda-calendario .cor-falta { color: #c62828; font-weight: bold; }
+
+        .submit-button-container { text-align: center; margin-top: 2.5rem; }
+
+        button[type="submit"].save-button { padding: 0.8rem 2.5rem; background-color: #00796b; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1.0em; font-weight: bold; transition: background-color 0.2s ease, transform 0.1s ease; }
+
+        button[type="submit"].save-button:hover { background-color: #005a4f; transform: translateY(-1px); }
+
+        .popup-modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        .popup-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px 30px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 1.4em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+
+        @media (max-width: 768px) { #calendarioDisplay { gap: 5px; } .dia-calendario { height: 40px; font-size: 0.9em; } }
+        @media (max-width: 992px) { .header-navigation-menu { display: none; } }
+        @media (max-width: 768px) {
+            .user-side-menu-image-bottom-right img { max-width: 100px; } /* Ajuste para telas menores */
+            header { width: 100%; padding: 8px 15px; box-sizing: border-box; } /* Ajusta padding e width do header em telas pequenas */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header img">
+            <a href="{% url 'home' %}"><img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-02-18" border="0"></a>
+        </div>
+        <nav class="header-navigation-menu">
+            <a href="{% url 'pagina_cursos' %}" class="header-menu-button cursos-button">Nossos Cursos</a>
+        </nav>
+        <div class="user-menu-trigger {% if user.is_authenticated %}logged-in{% endif %}" id="userMenuTriggerBtn" title="Menu do Usuário">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 11.5c-5 0-9 2.5-9 4v.5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.5c0-1.5-4-4-9-4Z"/></svg>
+        </div>
+    </header>
+
+    <div id="userSideMenu" class="user-side-menu">
+        {% if user.is_authenticated %}
+            {% if user.profile.tipo_usuario == 'professor' %}
+                <a href="{% url 'area_professor' %}">Meu Painel (Professor)</a>
+            {% elif user.profile.tipo_usuario == 'aluno' %}
+                <a href="{% url 'area_aluno' %}">Minha Área (Aluno)</a>
+            {% else %}
+                <a href="#">Meu Perfil</a>
+            {% endif %}
+            <a href="#">Área Acadêmica</a>
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
+            <form method="post" action="{% url 'logout' %}" id="logoutForm">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
+            <a href="{% url 'pagina_login' %}">Login</a>
+            <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
+        {% endif %}
+
+        {# Imagem adicionada no canto inferior direito do menu lateral #}
+        <div class="user-side-menu-image-bottom-right">
+            <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
+        </div>
+    </div>
+    <div id="overlayMenu" class="overlay-menu"></div>
+
+    <div class="page-container-main">
+        <div class="back-button-container">
+            <a href="{% url 'area_aluno' %}" class="back-button">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Voltar para Minha Área
+            </a>
+        </div>
+        <h1 class="page-title">Minha Presença e Eventos</h1>
+
+        <div class="calendario-container">
+             {% if messages %}
+                <ul class="messages-container" style="max-width: 400px; margin: 0 auto 1.5rem auto;">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <form method="POST" action="{% url 'salvar_justificativas_aluno' %}">
+                {% csrf_token %}
+                <label for="mes">Selecionar Mês:</label>
+                <select id="mes" name="mes_selecionado" onchange="atualizarCalendario()">
+                    </select>
+                <input type="hidden" name="dados_calendario_justificado" id="dados_calendario_justificado_input">
+
+                <div id="calendarioDisplay">
+                    </div>
+                <div class="legenda-calendario">
+                    <span class="cor-presenca">■ Presença</span>
+                    <span class="cor-falta">■ Falta</span>
+                    <span>(Clique em uma falta para marcar/desmarcar justificativa '!')</span>
+                </div>
+                <div class="submit-button-container" style="margin-top:1.5rem;">
+                    <button type="submit" class="save-button" style="background-color:#00796b; font-size:1em; padding: 0.7rem 1.5rem;">
+                        Salvar Minhas Justificativas
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="popupModal" class="popup-modal">
+        <div class="popup-content">
+            <span class="close-btn" onclick="fecharPopup()">&times;</span>
+            <h2>Informações do Dia</h2>
+            <p><strong>Dia:</strong> <span id="modal-dia"></span></p>
+            <p><strong>Eventos:</strong></p>
+            <ul id="modal-eventos"></ul>
+        </div>
+    </div>
+
+    <script>
+    /* --------------------------------------------------
+        Eventos vindos do backend (json) – chave YEAR-MM-DD
+        Ex.: { "2025-06-05": ["Prova", "Reunião"] }
+    -------------------------------------------------- */
+    const eventosPorDia = JSON.parse('{{ eventos_json|default:"{}"|escapejs }}');
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        /* ========= MENU LATERAL ========= */
+        const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
+        const userSideMenu      = document.getElementById('userSideMenu');
+        const overlayMenu        = document.getElementById('overlayMenu');
+
+        if (userMenuTriggerBtn && userSideMenu && overlayMenu) {
+            userMenuTriggerBtn.addEventListener('click', () => {
+                userSideMenu.classList.toggle('open');
+                overlayMenu.classList.toggle('open');
+            });
+            overlayMenu.addEventListener('click', () => {
+                userSideMenu.classList.remove('open');
+                overlayMenu.classList.remove('open');
+            });
+            userSideMenu.querySelectorAll('a, .logout-button').forEach(link => {
+                link.addEventListener('click', () => {
+                    userSideMenu.classList.remove('open');
+                    overlayMenu.classList.remove('open');
+                });
+            });
+        }
+
+        /* ========= CALENDÁRIO ========= */
+        const mesSelect = document.getElementById("mes");
+        const calendarioDiv = document.getElementById("calendarioDisplay");
+        const dadosCalendarioJustificadoInput = document.getElementById("dados_calendario_justificado_input");
+
+        let dadosCalendarioAluno = {};
+        try {
+            dadosCalendarioAluno = JSON.parse('{{ dados_calendario_do_aluno_json|default:"{}"|escapejs }}') || {};
+        } catch(e) { dadosCalendarioAluno = {}; }
+
+        const diasNoMes  = { janeiro:31,fevereiro:28,marco:31,abril:30,maio:31,junho:30,julho:31,agosto:31,setembro:30,outubro:31,novembro:30,dezembro:31 };
+        const nomesMeses = ["janeiro","fevereiro","marco","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+
+        nomesMeses.forEach(nome => {
+            const opt = document.createElement('option');
+            opt.value = nome;
+            opt.textContent = nome.charAt(0).toUpperCase() + nome.slice(1);
+            mesSelect.appendChild(opt);
+        });
+
+        const dataAtual = new Date();
+        mesSelect.value = '{{ mes_selecionado_pelo_backend|default_if_none:"" }}' || nomesMeses[dataAtual.getMonth()];
+
+        function prepararDadosParaSalvar() {
+            dadosCalendarioJustificadoInput.value = JSON.stringify(dadosCalendarioAluno);
+        }
+
+        /* ---------- monta calendário ---------- */
+        function atualizarCalendario() {
+            const mesSelecionado = mesSelect.value;
+            const totalDias = diasNoMes[mesSelecionado] || 30;
+            const anoAtual = new Date().getFullYear();
+            const indiceMes = nomesMeses.indexOf(mesSelecionado); // 0-based
+
+            if (!dadosCalendarioAluno[mesSelecionado]) dadosCalendarioAluno[mesSelecionado] = {};
+
+            calendarioDiv.innerHTML = "";
+
+            for (let dia = 1; dia <= totalDias; dia++) {
+                const diaStr = String(dia);
+                const botao  = document.createElement("button");
+                botao.type   = "button";
+                botao.classList.add('dia-calendario');
+                botao.textContent = diaStr;
+
+                /* === status presença/falta === */
+                const diaData  = dadosCalendarioAluno[mesSelecionado][diaStr];
+                let statusDia  = (typeof diaData === 'object') ? diaData.status : diaData || "indefinido";
+
+                botao.classList.remove('dia-presenca','dia-falta','dia-indefinido','marcado-falta');
+                if (statusDia === "presente") {
+                    botao.classList.add('dia-presenca');  botao.title="Presença registrada";
+                } else if (statusDia === "falta") {
+                    botao.classList.add('dia-falta');     botao.title="Falta registrada - Clique para justificar";
+                } else if (statusDia === "falta_justificada") {
+                    botao.innerHTML = `${diaStr} <span class="marcador-justificativa">!</span>`; /* Ajuste para manter o número do dia */
+                    botao.classList.add('dia-falta','marcado-falta'); botao.title="Falta justificada - Clique para remover";
+                } else {
+                    botao.classList.add('dia-indefinido');
+                }
+
+                /* === salvar/retirar justificativa === */
+                if (statusDia === "falta" || statusDia === "falta_justificada") {
+                    botao.addEventListener("click", () => {
+                        const atual = dadosCalendarioAluno[mesSelecionado]?.[diaStr]; // Use optional chaining
+                        const statusAtual = (typeof atual === 'object') ? atual.status : atual; // Extrai o status
+                        dadosCalendarioAluno[mesSelecionado][diaStr] =
+                            (statusAtual === "falta_justificada") ? "falta"
+                            : { status:"falta_justificada", motivo:"Justificado pelo aluno", por:"aluno" };
+                        prepararDadosParaSalvar();
+                        atualizarCalendario();
+                    });
+                }
+
+                /* === clique para abrir popup de eventos === */
+                botao.dataset.dia = diaStr;
+                // Só adiciona o listener de eventos se o dia não for uma falta clicável
+                if (statusDia !== "falta" && statusDia !== "falta_justificada") {
+                    botao.addEventListener("click", () => {
+                        const dataKey = `${anoAtual}-${String(indiceMes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+                        const eventos = eventosPorDia[dataKey] || [];
+                        abrirPopup(diaStr, eventos);
+                    });
+                }
+
+                calendarioDiv.appendChild(botao);
+            }
+            prepararDadosParaSalvar();
+        }
+
+        mesSelect.addEventListener('change', atualizarCalendario);
+        atualizarCalendario();  // render inicial
+    });
+
+    /* ===== POP-UP helpers ===== */
+    function abrirPopup(dia, eventos) {
+        document.getElementById("modal-dia").textContent = dia;
+
+        const lista = document.getElementById("modal-eventos");
+        lista.innerHTML = "";
+        if (eventos.length) {
+            eventos.forEach(ev => {
+                const li = document.createElement("li");
+                li.textContent = ev;
+                lista.appendChild(li);
+            });
+        } else {
+            lista.innerHTML = "<li>Sem eventos para este dia.</li>";
+        }
+        document.getElementById("popupModal").style.display = "block";
+    }
+    function fecharPopup() {
+        document.getElementById("popupModal").style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target === document.getElementById("popupModal")) fecharPopup();
+    };
+    </script>
+</body>
+</html>

@@ -1,159 +1,577 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home - Solidaire</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      overflow-y: auto;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformando Sonhos - Plataforma Personalizada</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #E0F2F1;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      background-color: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 25px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: calc(100% - 50px);
+            z-index: 1010;
+            height: 50px;
+        }
 
-    .logo {
-      display: flex;
-      align-items: center;
-    }
+        .logo-container { display: flex; align-items: center;}
+        header img {
+            height: 40px;
+            width: auto;
+            }
 
-    .logo img {
-      height: 40px;
-      margin-right: 10px;
-    }
+        .header-navigation-menu {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .header-menu-button {
+            background-color: #f0f0f0;
+            border: 1px solid #e0e0e0;
+            height: 32px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            color: #aaa;
+            padding: 0 15px;
+            text-decoration: none;
+            min-width: 100px;
+        }
+        .header-menu-button:hover {
+            background-color: #e5e5e5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+        .header-menu-button:active {
+            background-color: #d5d5d5;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            transform: translateY(0px);
+        }
+        .header-menu-button.cursos-button {
+            background-color: #00796b;
+            color: white;
+            padding: 0 25px;
+            width: auto;
+            font-weight: 600;
+            font-size: 0.95em;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header-menu-button.cursos-button:hover {
+            background-color: #005a4f;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+        }
+        .header-menu-button.cursos-button:active {
+            background-color: #004d40;
+            transform: translateY(0px);
+        }
 
-    .nav-buttons button {
-      margin-right: 10px;
-      padding: 6px 12px;
-      border: none;
-      border-radius: 4px;
-      background-color: #eee;
-      cursor: pointer;
-    }
+        .user-menu-trigger {
+            cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: background-color 0.2s ease;
+        }
+        .user-menu-trigger:hover { background-color: #f0f0f0; }
+        .user-menu-trigger svg {
+            width: 28px;
+            height: 28px;
+            fill: #555;
+            transition: fill 0.3s ease;
+        }
+        .user-menu-trigger.logged-in svg {
+            fill: #00796b;
+        }
 
-    .nav-buttons button.active {
-      background-color: #111;
-      color: #fff;
-    }
 
-    .user-info {
-      text-align: right;
-      font-size: 0.9em;
-    }
+        .user-side-menu {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+            background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15);
+            padding-top: 70px; box-sizing: border-box;
+            transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+            z-index: 1005;
+            display: flex; /* Mantido para flexbox */
+            flex-direction: column; /* Mantido para flexbox */
+            overflow-y: auto; /* Adicionado para permitir scroll se o conteúdo for grande */
+        }
+        .user-side-menu.open { right: 0; }
+        .user-side-menu a {
+            display: block; padding: 14px 20px; color: #333; text-decoration: none;
+            border-bottom: 1px solid #f0f0f0; font-size: 1em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .user-side-menu a:hover { background-color: #f7f7f7; color: #00796b; }
 
-    .user-avatar {
-      display: inline-block;
-      width: 30px;
-      height: 30px;
-      background-color: #ccc;
-      border-radius: 50%;
-      margin-right: 8px;
-    }
+        #logoutForm { 
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            border-bottom: 1px solid #f0f0f0; /* Consistência com outros itens de menu */
+        }
+        .user-side-menu .logout-button {
+            display: block;
+            width: 110%;
+            padding: 14px 20px;
+            color: white;
+            background-color: #d9534f; /* Vermelho */
+            border: none;
+            font-size: 1em;
+            text-align: left;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: normal;
+        }
+        .user-side-menu .logout-button:hover {
+            background-color: #c9302c; 
+            color: white;
+        }
 
-    .content {
-      padding: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 20px;
-    }
+       
+        .user-side-menu-image-bottom-right {
+            position: absolute; 
+            bottom: 20px; 
+            right: 20px; 
+            z-index: 20; 
+        }
 
-    .card-button {
-      width: 100%;
-      aspect-ratio: 2/3;
-      background-size: cover;
-      background-position: center;
-      border: none;
-      border-radius: 16px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s;
-    }
+        .user-side-menu-image-bottom-right img {
+            max-width: 200px; 
+            height: auto;
+            display: block;
+        }
 
-    .card-button:hover {
-      transform: scale(1.05);
-    }
+        .user-side-menu .django-note { 
+            padding: 10px 20px; font-size: 0.8em; color: #777; background-color: #f9f9f9;
+            border-top: 1px solid #eee; margin-top: auto;
+        }
 
-    .card-button .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5); /* Overlay semi-transparente */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
+        .overlay-menu {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.4); z-index: 1000;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s;
+        }
+        .overlay-menu.open { opacity: 1; visibility: visible; transition-delay: 0s; }
 
-    .card-button:hover .overlay {
-      opacity: 1;
-    }
+        .page-container {
+            display: flex; margin-top: calc(50px + 20px); padding: 20px; gap: 20px;
+        }
 
-    .card-button .text {
-      color: white;
-      font-size: 1.5em;
-      text-align: center;
-      font-weight: bold;
-    }
-  </style>
+        .sidebar {
+            width: 260px; flex-shrink: 0; background-color: #f4f4f4;
+            padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            height: calc(100vh - (50px + 20px + 20px + 20px)); overflow-y: auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar h2 {
+            margin-top: 0; font-size: 1.4em; color: #333;
+            border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 15px;
+        }
+        .sidebar ul { list-style-type: none; padding: 0; margin: 0; flex-grow: 1;}
+        .sidebar ul li { margin-bottom: 8px; }
+        .sidebar ul li a.sidebar-aviso-link {
+            text-decoration: none; color: #333; font-size: 0.95em;
+            padding: 9px 12px; display: block; border-radius: 4px;
+            transition: color 0.2s ease, background-color 0.2s ease, font-weight 0.2s ease;
+        }
+        .sidebar ul li a.sidebar-aviso-link:hover { color: #004D40; background-color: #e7e7e7; }
+        .sidebar ul li a.sidebar-aviso-link.ativo {
+            background-color: #00796b; color: white; font-weight: bold;
+        }
+
+        .main-content {
+            flex-grow: 1; background-color: #4DB6AC; padding: 25px;
+            border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative; min-height: 400px;
+        }
+
+        #welcomeMessageContainer {
+            text-align: center;
+            padding: 15px 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            border-left: 5px solid #00796b;
+        }
+        #welcomeMessageContainer h2 {
+            color: #00796b;
+            margin: 0 0 5px 0;
+            font-size: 1.6em;
+        }
+        #welcomeMessageContainer p {
+            margin: 0;
+            color: #555;
+            font-size: 1em;
+        }
+
+        #nenhum-aviso-selecionado {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 300px; text-align: center; color: #fff;
+            background-color: rgba(0,0,0,0.1); border-radius: 8px;
+        }
+        #nenhum-aviso-selecionado p { font-size: 1.2em; margin:0; }
+        #nenhum-aviso-selecionado .icon { font-size: 3em; margin-bottom: 15px; }
+
+        .caixa-aviso-detalhe {
+            background-color: #ffffff; padding: 35px; border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            opacity: 0; transform: translateY(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            visibility: hidden; position: absolute;
+            top: 25px; left: 25px; right: 25px;
+            margin-bottom: 25px;
+        }
+        .caixa-aviso-detalhe.ativa {
+            opacity: 1; transform: translateY(0); visibility: visible;
+            position: relative; top: auto; left: auto; right: auto;
+        }
+        .caixa-aviso-detalhe h3 {
+            margin-top: 0; font-size: 2em;
+            color: #00695C; margin-bottom: 25px;
+        }
+
+        .aviso-imagem-container {
+            position: relative; margin-bottom: 20px;
+            border-radius: 8px; overflow: hidden;
+        }
+        .aviso-imagem-clicavel {
+            width: 65%; height: auto; object-fit: cover;
+            position: center;
+            border-radius: 8px; display: block; cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .aviso-imagem-clicavel:hover { transform: scale(1.02); }
+
+        .aviso-texto-sobreposto {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 50, 40, 0.70);
+            color: white; padding: 30px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            opacity: 0; visibility: hidden; border-radius: 8px;
+            transform: scale(0.95);
+            transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+                        visibility 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+                        transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        .aviso-texto-sobreposto.visivel { opacity: 1; visibility: visible; transform: scale(1); }
+        .aviso-texto-sobreposto h4 { margin-top: 0; margin-bottom: 15px; font-size: 1.5em; font-weight: bold; }
+        .aviso-texto-sobreposto p { margin-top: 0; margin-bottom: 10px; font-size: 1.1em; line-height: 1.5; }
+        .aviso-texto-sobreposto p:last-child { margin-bottom: 0; }
+        .aviso-texto-sobreposto a { color: #ADD8E6; text-decoration: underline; }
+        .aviso-texto-sobreposto a:hover { color: #87CEEB; }
+
+        @media (max-width: 992px) {
+            .header-navigation-menu { display: none; }
+        }
+        @media (max-width: 768px) {
+            header { padding: 8px 15px; width: calc(100% - 30px); height: 45px; }
+            .logo-container svg { height: 30px; }
+            .user-menu-trigger svg {width: 24px; height: 24px;}
+
+            .page-container { flex-direction: column; margin-top: calc(45px + 15px); padding: 15px; }
+            .sidebar { width: 100%; margin-bottom: 20px; height: auto; box-sizing: border-box; }
+            .main-content { padding: 20px; }
+            .caixa-aviso-detalhe.ativa {top: 20px; left: 20px; right: 20px; padding: 25px; }
+            #welcomeMessageContainer { margin-bottom: 20px; padding: 10px 15px; }
+            #welcomeMessageContainer h2 { font-size: 1.4em; }
+            #welcomeMessageContainer p { font-size: 0.9em; }
+            .caixa-aviso-detalhe h3 { font-size: 1.6em; }
+            .aviso-texto-sobreposto { padding: 20px; }
+            .aviso-texto-sobreposto h4 { font-size: 1.3em; }
+            .aviso-texto-sobreposto p { font-size: 1em;}
+            .user-side-menu { width: 250px; right: -270px; }
+            .user-side-menu-image-bottom-right img { max-width: 100px; } /* Ajuste para telas menores */
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <img src="{% static 'imagens/sabia.png' %}" alt="Sabiá">
-      <strong> e solidare</strong>
-    </div>
-    <div class="filters" style="margin-top: 10px;">
-      <a style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">home</a>
-      <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
-      <a style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">nós</a>
-      <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
-      <a style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">veja mais</a>
-      <span></span>&nbsp;&nbsp;&nbsp;<span> </span>
-      <a href="{% url 'area_aluno' %}" style="background: #ccc; padding: 6px 12px; border-radius: 6px; text-decoration: none; color: black;">Área do Aluno</a>
-    </div>
-    <div class="user-info">
-      <span class="user-avatar"></span>
-      <div>Usuário<br><small>Aluno</small></div>
-    </div>
-  </header>
+    <header>
+        <div class="header img">
+            <a href="{% url 'home' %}"><img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-02-18" border="0"></a>
+        </div>
+        <nav class="header-navigation-menu">
+            <a href="{% url 'pagina_cursos' %}" class="header-menu-button cursos-button">Nossos Cursos</a>
+            {% if user.is_authenticated and user.profile.tipo_usuario == 'professor' %}
+                <a href="{% url 'novo_curso' %}" class="header-menu-button cursos-button">Adicionar Curso</a>
+            {% endif %}
+        </nav>
+        <div class="user-menu-trigger {% if user.is_authenticated %}logged-in{% endif %}" id="userMenuTriggerBtn" title="Menu do Usuário">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 11.5c-5 0-9 2.5-9 4v.5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-.5c0-1.5-4-4-9-4Z"/></svg>
+        </div>
+    </header>
 
-  <div class="content">
-    <button class="card-button" style="background-image: url('{% static 'imagens/card1.jpg' %}');">
-      <div class="overlay">
-        <div class="text">Ajude uma Causa</div>
-      </div>
-    </button>
-    <button class="card-button" style="background-image: url('{% static 'imagens/card2.jpg' %}');">
-      <div class="overlay">
-        <div class="text">Projeto de Estudo</div>
-      </div>
-    </button>
-    <button class="card-button" style="background-image: url('{% static 'imagens/card3.jpg' %}');">
-      <div class="overlay">
-        <div class="text">História de Sucesso</div>
-      </div>
-    </button>
-    <button class="card-button" style="background-image: url('{% static 'imagens/card4.jpg' %}');">
-      <div class="overlay">
-        <div class="text">Solidariedade em Ação</div>
-      </div>
-    </button>
-  </div>
+   <div id="userSideMenu" class="user-side-menu">
+        {% if user.is_authenticated %}
+
+
+        {% if user.profile.tipo_usuario == 'professor' %}
+            <a href="{% url 'area_professor' %}" id="menuUserProfileLink">Meu Perfil</a>
+        {% elif user.profile.tipo_usuario == 'aluno' %}
+            <a href="{% url 'area_aluno' %}" id="menuUserProfileLink">Meu Perfil</a>
+        {% else %}
+            <a href="#" id="menuUserProfileLink">Meu Perfil ({{ user.profile.tipo_usuario }})</a>
+        {% endif %}
+
+            <a href="#">Área Acadêmica</a>
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
+            <form method="post" action="{% url 'logout' %}" id="logoutForm">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        {% else %}
+            <p style="padding: 5px 20px; background-color: #fcc; color: #333; font-size: 0.8em;">
+                DEBUG: Usuário NÃO está autenticado.
+            </p>
+            <a href="{% url 'pagina_cursos' %}">Cursos</a>
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
+        {% endif %}
+
+        {# Imagem adicionada no canto inferior direito do menu lateral #}
+        <div class="user-side-menu-image-bottom-right">
+            <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
+        </div>
+    </div>
+    <div id="overlayMenu" class="overlay-menu"></div>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <h2>Avisos</h2>
+            <ul>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-1">Comunicado Urgente</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-2">Novas Funcionalidades</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-3">Agenda de Eventos</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-4">Feedback da Comunidade</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-5">Políticas Atualizadas</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-6">Programa de Mentoria</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-7">Manutenção Programada</a></li>
+                <li><a href="#" class="sidebar-aviso-link" data-target="aviso-detalhe-8">Vagas Abertas</a></li>
+                {% if user.is_authenticated %}
+                <li id="sidebar-link-painel-usuario"><a href="#" class="sidebar-aviso-link" data-target="painel-usuario">Meu Painel</a></li>
+                {% endif %}
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            {% if user.is_authenticated %}
+            <div id="welcomeMessageContainer">
+                <h2>Bem-vindo(a) de volta, {{ user.first_name|default:user.username }}!</h2>
+                <p>É ótimo ter você aqui. Confira seus avisos e novidades abaixo.</p>
+            </div>
+            {% endif %}
+
+            <div id="nenhum-aviso-selecionado"
+                 style="display: {% if not user.is_authenticated and not alguma_secao_inicial_ativa_aqui %}flex{% else %}none{% endif %};">
+                 <span class="icon">🔔</span><p>Selecione um aviso na barra lateral para ver os detalhes.</p>
+            </div>
+
+            <section id="aviso-detalhe-1" class="caixa-aviso-detalhe">
+                <h3>Comunicado Urgente sobre Prazos</h3>
+                <div class="aviso-imagem-container">
+                    <img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem do Comunicado Urgente" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-1">
+                    <div id="texto-sobreposto-1" class="aviso-texto-sobreposto"><h4>Detalhes do Comunicado</h4><p>Informamos uma atualização crítica nos prazos para submissão de projetos. Novas diretrizes estão disponíveis. Agradecemos a atenção!</p></div>
+                </div>
+            </section>
+            <section id="aviso-detalhe-2" class="caixa-aviso-detalhe"><h3>Lançamento: Novas Funcionalidades!</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Novas Funcionalidades" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-2"><div id="texto-sobreposto-2" class="aviso-texto-sobreposto"><h4>Explore as Novidades!</h4><p>Descubra ferramentas inéditas e um painel de controle redesenhado para otimizar sua experiência. Tutorial disponível na seção de Ajuda.</p></div></div></section>
+            <section id="aviso-detalhe-3" class="caixa-aviso-detalhe"><h3>Confira Nossa Agenda de Eventos</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Agenda de Eventos" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-3"><div id="texto-sobreposto-3" class="aviso-texto-sobreposto"><h4>Não Perca!</h4><p>O mês está repleto de webinars e workshops. Participe e interaja com especialistas e nossa comunidade. Inscrições abertas!</p></div></div></section>
+            <section id="aviso-detalhe-4" class="caixa-aviso-detalhe"><h3>Sua Opinião é Importante</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Feedback da Comunidade" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-4"><div id="texto-sobreposto-4" class="aviso-texto-sobreposto"><h4>Feedback Compilado</h4><p>Compilamos suas sugestões e comentários. Confira as próximas melhorias planejadas com base em suas valiosas contribuições.</p></div></div></section>
+            <section id="aviso-detalhe-5" class="caixa-aviso-detalhe"><h3>Atualização das Políticas de Privacidade</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Políticas de Privacidade" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-5"><div id="texto-sobreposto-5" class="aviso-texto-sobreposto"><h4>Privacidade Reforçada</h4><p>Revisamos nossas políticas para maior clareza e proteção dos seus dados. Acesse o documento completo para mais informações.</p></div></div></section>
+            <section id="aviso-detalhe-6" class="caixa-aviso-detalhe"><h3>Inscrições Abertas: Programa de Mentoria</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Programa de Mentoria" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-6"><div id="texto-sobreposto-6" class="aviso-texto-sobreposto"><h4>Desenvolva sua Carreira!</h4><p>Participe do nosso programa de mentoria e conecte-se com profissionais experientes. Vagas limitadas, inscreva-se já!</p></div></div></section>
+            <section id="aviso-detalhe-7" class="caixa-aviso-detalhe"><h3>Manutenção Programada do Sistema</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Manutenção Programada" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-7"><div id="texto-sobreposto-7" class="aviso-texto-sobreposto"><h4>Aviso de Manutenção</h4><p>Nossa plataforma passará por uma manutenção essencial no próximo sábado, das 02:00 às 04:00. Agradecemos a sua paciência.</p></div></div></section>
+            <section id="aviso-detalhe-8" class="caixa-aviso-detalhe"><h3>Estamos Contratando: Novas Vagas!</h3><div class="aviso-imagem-container"><img src="https://i.ibb.co/yF69y327/Captura-de-tela-2025-06-05-185224.png" alt="Imagem Vagas Abertas" class="aviso-imagem-clicavel" data-text-overlay-target="texto-sobreposto-8"><div id="texto-sobreposto-8" class="aviso-texto-sobreposto"><h4>Faça Parte da Equipe!</h4><p>Temos diversas oportunidades em aberto para profissionais talentosos. Confira nossas vagas e candidate-se para transformar sonhos conosco!</p></div></div></section>
+
+            {% if user.is_authenticated %}
+            <section id="painel-usuario" class="caixa-aviso-detalhe">
+                <h3>Meu Painel Rápido</h3>
+                <div class="aviso-imagem-container">
+                    <img src="https://via.placeholder.com/800x400/778899/FFFFFF?text=Bem-vindo+ao+Seu+Painel"
+                         alt="Painel do Usuário"
+                         class="aviso-imagem-clicavel"
+                         data-text-overlay-target="texto-painel-usuario">
+                    <div id="texto-painel-usuario" class="aviso-texto-sobreposto">
+                        <h4>Acesso Rápido e Personalizado</h4>
+                        <p>Este é o seu espaço! Aqui você pode gerenciar seus cursos, acompanhar seu progresso e atualizar suas informações.</p>
+                        <p style="margin-top: 15px;">
+                            <a href="{% url 'pagina_cursos' %}">Ver Meus Cursos</a> |
+                            <a href="#">Configurações da Conta</a>
+                        </p>
+                    </div>
+                </div>
+                <p>Recursos úteis e atalhos aparecerão aqui para facilitar sua navegação e atividades na plataforma.</p>
+            </section>
+            {% endif %}
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = Array.from(document.querySelectorAll('.sidebar-aviso-link'));
+            const avisoDetalheSections = document.querySelectorAll('.caixa-aviso-detalhe');
+            const defaultMessageContainer = document.getElementById('nenhum-aviso-selecionado');
+            const mainContent = document.querySelector('.main-content');
+            let scrollTimeout;
+
+            const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
+            const userSideMenu = document.getElementById('userSideMenu');
+            const overlayMenu = document.getElementById('overlayMenu');
+
+            if (userMenuTriggerBtn) {
+                userMenuTriggerBtn.addEventListener('click', function() {
+                    userSideMenu.classList.toggle('open');
+                    overlayMenu.classList.toggle('open');
+                });
+            }
+            if (overlayMenu) {
+                overlayMenu.addEventListener('click', function() {
+                    userSideMenu.classList.remove('open');
+                    overlayMenu.classList.remove('open');
+                });
+            }
+
+            const userMenuLinks = userSideMenu.querySelectorAll('a, .logout-button');
+            userMenuLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    if (this.tagName === 'A' && this.getAttribute('href') === '#') {
+                        event.preventDefault();
+                    }
+                    userSideMenu.classList.remove('open');
+                    overlayMenu.classList.remove('open');
+                });
+            });
+
+            function setActiveAviso(targetId) {
+                let avisoAtivado = false;
+                if (defaultMessageContainer) {
+                    defaultMessageContainer.style.display = 'none';
+                }
+
+                avisoDetalheSections.forEach(section => {
+                    section.classList.remove('ativa');
+                    const textOverlay = section.querySelector('.aviso-texto-sobreposto.visivel');
+                    if (textOverlay) {
+                        textOverlay.classList.remove('visivel');
+                    }
+                });
+
+                sidebarLinks.forEach(sl => sl.classList.remove('ativo'));
+
+                const targetElement = document.getElementById(targetId);
+                const currentVisibleSidebarLinks = sidebarLinks.filter(link => {
+                    const parentLi = link.closest('li');
+                    return parentLi && getComputedStyle(parentLi).display !== 'none';
+                });
+                const targetLink = currentVisibleSidebarLinks.find(link => link.dataset.target === targetId);
+
+                if (targetElement && targetLink) {
+                    targetElement.classList.add('ativa');
+                    targetLink.classList.add('ativo');
+                    mainContent.scrollTop = 0;
+                    avisoAtivado = true;
+                } else if (targetElement && targetElement.id === 'painel-usuario' && document.getElementById('sidebar-link-painel-usuario').querySelector('a').classList.contains('ativo')) {
+                    targetElement.classList.add('ativa');
+                    mainContent.scrollTop = 0;
+                    avisoAtivado = true;
+                }
+
+                const welcomeMsg = document.getElementById('welcomeMessageContainer');
+                if (!avisoAtivado && defaultMessageContainer && (!welcomeMsg || getComputedStyle(welcomeMsg).display === 'none')) {
+                    defaultMessageContainer.style.display = 'flex';
+                }
+            }
+
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    setActiveAviso(this.dataset.target);
+                });
+            });
+
+            const clickableImages = document.querySelectorAll('.aviso-imagem-clicavel');
+            clickableImages.forEach(image => {
+                image.addEventListener('click', function() {
+                    const textOverlayTargetId = this.dataset.textOverlayTarget;
+                    const textOverlayElement = document.getElementById(textOverlayTargetId);
+                    if (textOverlayElement) {
+                        textOverlayElement.classList.toggle('visivel');
+                    }
+                });
+            });
+
+            avisoDetalheSections.forEach(section => {
+                section.addEventListener('wheel', function(event) {
+                    const isActiveAndNoScroll = this.classList.contains('ativa') && (this.scrollHeight <= this.clientHeight);
+                    const textOverlay = this.querySelector('.aviso-texto-sobreposto.visivel');
+
+                    if (isActiveAndNoScroll && !textOverlay) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = setTimeout(() => {
+                            const currentVisibleSidebarLinks = sidebarLinks.filter(link => {
+                                const parentLi = link.closest('li');
+                                return parentLi && getComputedStyle(parentLi).display !== 'none';
+                            });
+                            const currentActiveLink = currentVisibleSidebarLinks.find(link => link.classList.contains('ativo'));
+
+                            if (!currentActiveLink) return;
+
+                            const currentIndex = currentVisibleSidebarLinks.indexOf(currentActiveLink);
+                            let navigated = false;
+
+                            if (event.deltaY > 0) {
+                                if (currentIndex < currentVisibleSidebarLinks.length - 1) {
+                                    setActiveAviso(currentVisibleSidebarLinks[currentIndex + 1].dataset.target);
+                                    navigated = true;
+                                }
+                            } else if (event.deltaY < 0) {
+                                if (currentIndex > 0) {
+                                    setActiveAviso(currentVisibleSidebarLinks[currentIndex - 1].dataset.target);
+                                    navigated = true;
+                                }
+                            }
+                            if (navigated) {
+                                event.preventDefault();
+                            }
+                        }, 100);
+                    }
+                }, { passive: false });
+            });
+
+            const welcomeMsg = document.getElementById('welcomeMessageContainer');
+            let activeSectionExists = false;
+            avisoDetalheSections.forEach(section => {
+                if (section.classList.contains('ativa')) {
+                    activeSectionExists = true;
+                }
+            });
+            if (defaultMessageContainer && !activeSectionExists && (!welcomeMsg || getComputedStyle(welcomeMsg).display === 'none')) {
+                defaultMessageContainer.style.display = 'flex';
+            }
+        });
+    </script>
 </body>
 </html>
