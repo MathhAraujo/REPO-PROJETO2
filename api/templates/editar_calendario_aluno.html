@@ -6,7 +6,7 @@
     <title>Editar Calendário - {{ aluno.get_full_name|default:aluno.username }}</title>
     {% load static %}
     <style>
-        /* === SEUS ESTILOS CSS COMPLETOS (COMO NA VERSÃO ANTERIOR) === */
+      
         body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color:#373F70; color: #333; line-height: 1.6; overflow-x: hidden; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 8px 25px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; width: calc(100% - 50px); z-index: 1010; height: 50px; }
         .logo-container { display: flex; align-items: center; }
@@ -23,7 +23,6 @@
         .user-menu-trigger svg { width: 28px; height: 28px; fill: #555; transition: fill 0.3s ease; }
         .user-menu-trigger.logged-in svg { fill: #00796b; }
 
-        /* Estilos do Menu Lateral */
         .user-side-menu {
             position: fixed;
             top: 0;
@@ -38,7 +37,7 @@
             z-index: 1005;
             display: flex;
             flex-direction: column;
-            overflow-y: auto; /* Permite rolagem se o conteúdo for grande */
+            overflow-y: auto; 
         }
         .user-side-menu.open { right: 0; }
         .user-side-menu a { display: block; padding: 14px 20px; color: #333; text-decoration: none; border-bottom: 1px solid #f0f0f0; font-size: 1em; transition: background-color 0.2s ease, color 0.2s ease; }
@@ -47,15 +46,15 @@
         .user-side-menu .logout-button { display: block; width: 100%; padding: 14px 20px; color: white; background-color: #d9534f; border: none; font-size: 1em; text-align: left; cursor: pointer; font-weight: bold; transition: background-color 0.2s ease, color 0.2s ease; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: normal; }
         .user-side-menu .logout-button:hover { background-color: #c9302c; color: white; }
 
-        /* Estilo para a imagem no canto inferior direito do menu lateral */
+        
         .user-side-menu-image-bottom-right {
-            position: absolute; /* Posicionamento absoluto em relação ao user-side-menu */
-            bottom: 15px; /* Distância do fundo */
-            right: 15px; /* Distância da direita */
-            z-index: 10; /* Garante que a imagem fique acima de outros elementos se houver sobreposição */
+            position: absolute; 
+            bottom: 15px; 
+            right: 15px; 
+            z-index: 10; 
         }
         .user-side-menu-image-bottom-right img {
-            max-width: 120px; /* Ajuste o tamanho da imagem conforme necessário */
+            max-width: 120px; 
             height: auto;
             display: block;
         }
@@ -136,7 +135,7 @@
             <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
         {% endif %}
 
-        {# Imagem adicionada no canto inferior direito do menu lateral #}
+
         <div class="user-side-menu-image-bottom-right">
             <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
         </div>
@@ -191,7 +190,6 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // --- Lógica do Menu Lateral ---
         const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
         const userSideMenu = document.getElementById('userSideMenu');
         const overlayMenu = document.getElementById('overlayMenu');
@@ -217,7 +215,6 @@
             });
         }
 
-        // --- Script do Calendário Editável pelo Professor ---
         const mesSelect = document.getElementById("mes_calendario_aluno");
         const calendarioDiv = document.getElementById("calendarioEditDisplay");
         const dadosCalendarioInput = document.getElementById("dados_calendario_input");
@@ -227,7 +224,7 @@
             return;
         }
 
-        let dadosCalendarioGlobal = {}; // Usar um nome diferente para os dados globais do calendário
+        let dadosCalendarioGlobal = {}; 
         try {
             const jsonData = '{{ dados_presenca_aluno_json|default:"{}"|escapejs }}';
             dadosCalendarioGlobal = JSON.parse(jsonData);
@@ -276,20 +273,19 @@
 
                 let statusDia = "indefinido";
                 let motivoJustificativa = "";
-                let justificadoPelo = ""; // Para diferenciar quem justificou (aluno/professor)
+                let justificadoPelo = ""; 
 
                 const diaData = dadosDoMes[diaStr];
                 if (diaData && typeof diaData === 'object') {
                     statusDia = diaData.status || "indefinido";
                     motivoJustificativa = diaData.motivo || "";
-                    justificadoPelo = diaData.por || ""; // Novo: para saber quem justificou
+                    justificadoPelo = diaData.por || ""; 
                 } else if (typeof diaData === 'string') {
-                    statusDia = diaData; // Compatibilidade com estrutura antiga simples
+                    statusDia = diaData; 
                 }
 
                 botaoDia.classList.remove('dia-presenca', 'dia-falta', 'dia-falta-justificada', 'dia-indefinido');
-                botaoDia.title = ""; // Limpa o title anterior
-
+                botaoDia.title = ""; 
                 if (statusDia === "presente") {
                     botaoDia.classList.add('dia-presenca');
                 } else if (statusDia === "falta") {
@@ -298,11 +294,10 @@
                     botaoDia.classList.add('dia-falta-justificada');
                     if (motivoJustificativa) {
                         botaoDia.title = `Justificativa: ${motivoJustificativa}`;
-                        if(justificadoPelo === 'aluno') { // Exemplo de como diferenciar visualmente
+                        if(justificadoPelo === 'aluno') { 
                            botaoDia.innerHTML = `${dia} <span style="font-size:0.7em; color:blue;">(A)</span>`;
                         } else {
-                           botaoDia.innerText = dia; // Ou mantenha o '!' se preferir
-                        }
+                           botaoDia.innerText = dia; 
                     } else {
                         botaoDia.title = "Falta Justificada (sem motivo detalhado)";
                     }
@@ -332,10 +327,10 @@
                     else if (statusAtualNoClique === "presente") novoStatus = "falta";
                     else if (statusAtualNoClique === "falta") {
                         novoStatus = "falta_justificada";
-                        // Se o professor justifica, ele pode adicionar um motivo ou um padrão
-                        if (!motivoExistente) { // Só adiciona motivo se não houver um do aluno
+                     
+                        if (!motivoExistente) { 
                             novoMotivoParaSalvar = prompt("Motivo da justificativa (opcional):", "Justificado pelo professor");
-                            if (novoMotivoParaSalvar === null) novoMotivoParaSalvar = "Justificado pelo professor"; // Cancelou o prompt
+                            if (novoMotivoParaSalvar === null) novoMotivoParaSalvar = "Justificado pelo professor"; 
                         }
                         quemJustificou = "professor";
                     } else if (statusAtualNoClique === "falta_justificada") {
@@ -355,7 +350,7 @@
                         if (novoStatus === "falta_justificada") {
                             dadosCalendarioGlobal[mesSelecionado][diaStr] = { status: novoStatus, motivo: novoMotivoParaSalvar, por: quemJustificou };
                         } else {
-                             // Para 'presente' ou 'falta', remove a estrutura de objeto se não houver motivo.
+                            
                             dadosCalendarioGlobal[mesSelecionado][diaStr] = novoStatus;
                         }
                     }

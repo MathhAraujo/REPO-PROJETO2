@@ -6,7 +6,7 @@
     <title>Área do Professor - Gerenciar Alunos</title>
     {% load static %}
     <style>
-        /* === CSS BÁSICO E HEADER === */
+       
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -134,27 +134,27 @@
             cursor: pointer;
             font-weight: bold;
             transition: background-color 0.2s ease, color 0.2s ease;
-            box-sizing: border-box; /* Garante que padding e borda sejam incluídos na largura */
+            box-sizing: border-box; 
         }
         .logout-button:hover {
             background-color: #c9302c;
         }
 
-        /* Novo estilo para o contêiner da imagem no menu lateral, posicionado absolutamente */
+       
         .user-side-menu-image-bottom-right {
-            position: absolute; /* Posicionamento absoluto em relação ao user-side-menu */
-            bottom: 15px; /* Distância do fundo */
-            right: 15px; /* Distância da direita */
-            z-index: 10; /* Garante que a imagem fique acima de outros elementos se houver sobreposição */
+            position: absolute; 
+            bottom: 15px; 
+            right: 15px; 
+            z-index: 10; 
         }
 
         .user-side-menu-image-bottom-right img {
-            max-width: 120px; /* Ajuste o tamanho da imagem conforme necessário */
+            max-width: 120px; 
             height: auto;
             display: block;
         }
 
-        /* === CONTEÚDO PRINCIPAL === */
+
         .page-container-main {
             max-width: 1000px;
             margin: 0 auto;
@@ -293,7 +293,7 @@
         <button type="submit" class="logout-button">Sair</button>
     </form>
 
-    {# Imagem adicionada no canto inferior direito do menu lateral #}
+
     <div class="user-side-menu-image-bottom-right">
         <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
     </div>

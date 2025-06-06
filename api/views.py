@@ -1,34 +1,31 @@
-# Bibliotecas padrão
 import json
-
-# Django - Core
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.urls import reverse
 
-# Django - Autenticação
 from django.contrib.auth import login, authenticate, logout, get_user_model, update_session_auth_hash
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import AnonymousUser
 
-# Django REST Framework
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-# Modelos e Serializers
-from .models import User, Student, Teacher, Sponsor, Course, Profile, Materia, DesempenhoMateria
+from .models import User, Student, Teacher, Sponsor, Course, Profile, Materia, DesempenhoMateria, Duvida
 from .serializers import StudentSerializer, TeacherSerializer, SponsorSerializer, CourseSerializer
 
-# Forms
 from .forms import EditarDadosPessoaisForm, DesempenhoMateriaFormSet
 
 User = get_user_model()
 
-# API Views
+
 @api_view(["GET"])
 def getAllStudents(request):
     if request.method != "GET":
@@ -184,7 +181,7 @@ def addMissedClass(request):
     if request.method != "PUT":
         return Response(status.HTTP_501_NOT_IMPLEMENTED)
 
-# Views públicas
+
 def home_view(request):
     return render(request, 'home.html')
 
@@ -198,7 +195,7 @@ def pagina_cursos_view(request):
 def curso_detalhe_view(request, curso_id): 
     return render(request, 'curso.html')
 
-# Cadastro e autenticação
+# autenticação
 def cadastro_view(request):
     if request.user.is_authenticated:
         messages.info(request, "Você já está logado.")
@@ -344,10 +341,10 @@ def dados_pessoais_view(request):
     return render(request, 'dados_pessoais.html', {'form': form})
 
 # Presença
-@login_required # Garante que apenas o aluno logado veja seu calendário
+@login_required 
 def presenca_eventos_view(request):
     user = request.user
-    dados_json_para_template = "{}" # Default: calendário vazio
+    dados_json_para_template = "{}" 
 
     if hasattr(user, 'profile') and user.profile.dados_calendario_json:
         try:
@@ -473,25 +470,7 @@ def salvar_justificativas_aluno_view(request):
     return redirect('pagina_presenca_eventos') 
 
 
-
-    #---------------------
-    #ADICIONANDO DUVIDAS
-    #--------------------
-
-    #duvidas
-
-
-from .models import Duvida
-
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import AnonymousUser
-
-
-
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-from django.urls import reverse
-
+# ADICIONANDO DUVIDAS
 @login_required
 def duvidas(request):
     aba = request.GET.get('aba', 'Geral')
@@ -541,7 +520,7 @@ def duvidas(request):
         }
         return render(request, 'duvidas.html', context)
 
-#cadastrar evento
+# Cadastrar evento
 @login_required
 def cadastrar_evento(request):
     if request.method == 'POST':
@@ -551,19 +530,13 @@ def cadastrar_evento(request):
         Evento.objects.create(data=data, descricao=descricao)
 
         messages.success(request, 'Evento cadastrado com sucesso!')
-        return redirect('pagina_professor')  # ou onde você quiser
+        return redirect('pagina_professor')
 
     return render(request, 'pagina_professor.html')
 
 
 
-#add curso
-
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
-
-
+# Adicionar curso
 def pagina_cursos_view(request):
     cursos_disponiveis = {
         "1": "Atividade 1",
@@ -623,7 +596,7 @@ def novo_curso(request):
             try:
                 Course.objects.create(nome=nome, descricao=descricao)
                 messages.success(request, "Curso criado com sucesso!")
-                return redirect('pagina_cursos')  # ou onde quiser redirecionar
+                return redirect('pagina_cursos') 
             except Exception as e:
                 messages.error(request, f"Erro ao criar curso: {e}")
 

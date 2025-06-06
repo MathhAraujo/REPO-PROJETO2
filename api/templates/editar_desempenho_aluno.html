@@ -6,7 +6,7 @@
     <title>Editar Desempenho - {{ aluno.get_full_name|default:aluno.username }}</title>
     {% load static %}
     <style>
-        /* === CSS BÁSICO E HEADER (COPIAR DA HOME.HTML OU OUTRA PÁGINA CONSISTENTE) === */
+        
         body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; color: #333; line-height: 1.6; overflow-x: hidden; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 8px 25px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; width: calc(100% - 50px); z-index: 1010; height: 50px; }
         .logo-container { display: flex; align-items: center; }
@@ -23,7 +23,7 @@
         .user-menu-trigger svg { width: 28px; height: 28px; fill: #555; transition: fill 0.3s ease; }
         .user-menu-trigger.logged-in svg { fill: #00796b; }
 
-        /* Estilos do Menu Lateral */
+     
         .user-side-menu {
             position: fixed;
             top: 0;
@@ -38,7 +38,7 @@
             z-index: 1005;
             display: flex;
             flex-direction: column;
-            overflow-y: auto; /* Permite rolagem se o conteúdo for grande */
+            overflow-y: auto; 
         }
         .user-side-menu.open { right: 0; }
         .user-side-menu a { display: block; padding: 14px 20px; color: #333; text-decoration: none; border-bottom: 1px solid #f0f0f0; font-size: 1em; transition: background-color 0.2s ease, color 0.2s ease; }
@@ -47,22 +47,21 @@
         .user-side-menu .logout-button { display: block; width: 100%; padding: 14px 20px; color: white; background-color: #d9534f; border: none; font-size: 1em; text-align: left; cursor: pointer; font-weight: bold; transition: background-color 0.2s ease, color 0.2s ease; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: normal; }
         .user-side-menu .logout-button:hover { background-color: #c9302c; color: white; }
 
-        /* Estilo para a imagem no canto inferior direito do menu lateral */
         .user-side-menu-image-bottom-right {
-            position: absolute; /* Posicionamento absoluto em relação ao user-side-menu */
-            bottom: 15px; /* Distância do fundo */
-            right: 15px; /* Distância da direita */
-            z-index: 10; /* Garante que a imagem fique acima de outros elementos se houver sobreposição */
+            position: absolute; 
+            bottom: 15px; 
+            right: 15px; 
+            z-index: 10; 
         }
         .user-side-menu-image-bottom-right img {
-            max-width: 120px; /* Ajuste o tamanho da imagem conforme necessário */
+            max-width: 120px; 
             height: auto;
             display: block;
         }
 
         .overlay-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.35s ease-in-out, visibility 0s linear 0.35s; }
         .overlay-menu.open { opacity: 1; visibility: visible; transition-delay: 0s; }
-        /* --- FIM HEADER --- */
+        
 
         .page-container-main {
             width: 100%; max-width: 850px; /* Um pouco mais largo para o formset */
@@ -100,7 +99,7 @@
             font-size: 1em; color: #555; margin:0;
         }
 
-        .materia-form-item { /* Estilo para cada form do formset */
+        .materia-form-item { 
             background-color: #f9f9f9;
             padding: 1.5rem;
             border-radius: 8px;
@@ -139,7 +138,7 @@
              outline: none; border-color: #00796b;
              box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.15);
         }
-        .form-field-errors { /* Para erros de campos específicos no formset */
+        .form-field-errors { 
             list-style-type: none;
             padding: 0;
             margin: -0.5rem 0 0.8rem 0;
@@ -157,7 +156,7 @@
         }
         button[type="submit"].save-button:hover { background-color: #388E3C; transform: translateY(-1px); }
 
-        /* Mensagens */
+     
         .messages-container { list-style-type: none; padding: 0; margin: 0 0 1.5rem 0; }
         .messages-container li { padding: 10px 15px; margin-bottom: 10px; border-radius: 5px; color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; font-size: 0.95em; }
         .messages-container li.success { background-color: #5cb85c; }
@@ -204,7 +203,7 @@
             <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
         {% endif %}
 
-        {# Imagem adicionada no canto inferior direito do menu lateral #}
+    
         <div class="user-side-menu-image-bottom-right">
             <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
         </div>
@@ -244,7 +243,7 @@
 
             <form method="POST">
                 {% csrf_token %}
-                {{ desempenho_formset.management_form }} {# Essencial para FormSets #}
+                {{ desempenho_formset.management_form }} 
 
                 {% for form_materia in desempenho_formset %}
                     <div class="materia-form-item">
@@ -277,8 +276,8 @@
                                     <ul class="form-field-errors">{% for error in form_materia.observacoes.errors %}<li>{{ error }}</li>{% endfor %}</ul>
                                 {% endif %}
                            </div>
-                           {{ form_materia.id }} {# Campo hidden para o ID da instância de DesempenhoMateria #}
-                           {{ form_materia.materia }} {# Se 'materia' for um campo HiddenInput no form #}
+                           {{ form_materia.id }} 
+                           {{ form_materia.materia }} 
 
                     </div>
                 {% empty %}
@@ -293,26 +292,26 @@
     </div>
 
     <script>
-        // Script para o Menu Lateral de Usuário (mesmo da home.html)
+        
         document.addEventListener('DOMContentLoaded', function() {
             const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
             const userSideMenu = document.getElementById('userSideMenu');
             const overlayMenu = document.getElementById('overlayMenu');
 
-            if (userMenuTriggerBtn) { /* ... (lógica do menu) ... */
+            if (userMenuTriggerBtn) { 
                  userMenuTriggerBtn.addEventListener('click', function() {
                     userSideMenu.classList.toggle('open');
                     overlayMenu.classList.toggle('open');
                 });
             }
-            if (overlayMenu) { /* ... (lógica do overlay) ... */
+            if (overlayMenu) { 
                 overlayMenu.addEventListener('click', function() {
                     userSideMenu.classList.remove('open');
                     overlayMenu.classList.remove('open');
                 });
             }
             const userMenuLinks = userSideMenu.querySelectorAll('a, .logout-button');
-            userMenuLinks.forEach(link => { /* ... (lógica dos links do menu) ... */
+            userMenuLinks.forEach(link => { 
                  link.addEventListener('click', function(event) {
                     if (this.tagName === 'A' && this.getAttribute('href') === '#') {
                         event.preventDefault();

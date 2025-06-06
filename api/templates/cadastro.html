@@ -158,7 +158,7 @@
             font-size: 2em; 
         }
 
-        /* Estilo para mensagens do Django (opcional, mas recomendado) */
+    
         .messages-container {
             list-style-type: none;
             padding: 0;
@@ -310,7 +310,7 @@
                 </ul>
             {% endif %}
 
-            {% if erro and not messages %} {# Só mostra 'erro' se não houver 'messages' já exibidas #}
+            {% if erro and not messages %} 
                 <ul class="messages-container"><li class="django-error">{{ erro }}</li></ul>
             {% endif %}
 
