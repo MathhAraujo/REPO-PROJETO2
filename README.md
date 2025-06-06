@@ -72,4 +72,45 @@ https://youtu.be/-LLUgnR9l2o
 https://youtu.be/TaQ8unes33w
 ```
 
+### Screencast dos casos de teste das histórias implementadas
+CT da história 1:
+```
+https://youtu.be/UMUbjFimJuc
+```
+
+CT  da história 2:
+```
+https://youtu.be/BMItNEueMj0
+```
+
+CT da história 3:
+```
+https://youtu.be/bI6iNus2aAU
+```
+
+CT da história 4:
+```
+https://youtu.be/QywujiaQeVg
+```
+
+CT da história 5:
+```
+https://youtu.be/qhIiq5mQzQk
+```
+
+CT da história 6:
+```
+https://youtu.be/DjKkHo2CT5A
+```
+
+CT da história 7:
+```
+https://youtu.be/UVyHOCVdCWI
+```
+
+CT da história 8:
+```
+https://youtu.be/f16lsPg7Tto
+```
+
 </details>
