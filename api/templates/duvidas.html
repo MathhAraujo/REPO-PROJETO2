@@ -187,7 +187,7 @@
 </head>
 <body>
     <div class="sidebar">
-        <a href="{% url 'home' %}"><img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-02-18" border="0"></a>
+        <a href="{% url 'home' %}"><img src="https://i.ibb.co/pcDJyby/Chat-GPT-Image-5-de-jun-de-2025-19-02-18.png" alt="Logo" border="0"></a>
         <button class="menu-button" onclick="selecionarDestino('Geral')">Geral</button>
         <button class="menu-button" onclick="selecionarDestino('Professor')">Professor</button>
         <button class="menu-button" onclick="selecionarDestino('Administrador')">Administrador</button>
@@ -207,12 +207,7 @@
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody id="duvidas-lista">
-                {% comment %}
-                O conteúdo desta <tbody> será preenchido pelo JavaScript após o carregamento inicial e as seleções de aba.
-                Assim, o Django não precisa renderizar todas as dúvidas logo de cara.
-                {% endcomment %}
-            </tbody>
+            <tbody id="duvidas-lista"></tbody>
         </table>
 
         <div id="form-envio" style="display: none; justify-content: center; margin-top: 40px;">
@@ -225,7 +220,6 @@
                     <option value="Geral">Geral</option>
                     <option value="Professor">Professor</option>
                     <option value="Administrador">Administrador</option>
-                    <option value="Professores">Professores</option>
                 </select>
 
                 <input type="text" name="titulo" placeholder="Título da dúvida" required />
@@ -236,63 +230,70 @@
     </div>
 
     <script>
-        // Função para buscar dúvidas do servidor e atualizar a tabela
         function fetchDuvidas(destino) {
             const duvidasLista = document.getElementById('duvidas-lista');
-            duvidasLista.innerHTML = '<tr><td colspan="4">Carregando dúvidas...</td></tr>'; // Mensagem de carregamento
+            duvidasLista.innerHTML = '';
 
-            // Faz uma requisição GET para a URL '/duvidas/' com o parâmetro 'aba'
-            fetch(`/duvidas/?aba=${destino}`)
-                .then(response => {
-                    if (!response.ok) {
-                        // Se a resposta não for OK (ex: 403, 500), joga um erro
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.text(); // A resposta é o HTML completo da página
-                })
-                .then(html => {
-                    // Para extrair apenas o conteúdo do tbody, precisamos analisar o HTML completo
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    
-                    // Tenta encontrar o elemento com id 'duvidas-lista' no DOM parsed
-                    const newTableBodyElement = doc.getElementById('duvidas-lista');
-                    if (newTableBodyElement) {
-                        duvidasLista.innerHTML = newTableBodyElement.innerHTML;
-                    } else {
-                        // Caso o elemento não seja encontrado, significa que a resposta do servidor não é a esperada.
-                        // Isso pode acontecer se o Django retornar uma página de erro (403, 500)
-                        // ou uma página de login, onde o id 'duvidas-lista' não existe.
-                        console.error('Erro: Elemento #duvidas-lista não encontrado na resposta do servidor.');
-                        duvidasLista.innerHTML = '<tr><td colspan="4">Erro ao carregar. Verifique o console para mais detalhes.</td></tr>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar dúvidas:', error);
-                    duvidasLista.innerHTML = `<tr><td colspan="4">Erro ao carregar dúvidas. (${error.message || 'Erro de rede/servidor'}).</td></tr>`;
-                });
+            const duvidasSimuladas = {
+                'Geral': [
+                    { id: 1, titulo: 'Qual o horário das aulas?', nome: 'João Silva', data: '2025-06-05' },
+                    { id: 2, titulo: 'Onde encontro o material?', nome: 'Maria Souza', data: '2025-06-04' }
+                ],
+                'Professor': [
+                    { id: 3, titulo: 'Sobre a prova do módulo 2', nome: 'Carlos Alberto', data: '2025-06-03' }
+                ],
+                'Administrador': [
+                    { id: 4, titulo: 'Problema com a matrícula', nome: 'Ana Paula', data: '2025-06-02' }
+                ],
+                'Envios': [
+                    { id: 5, titulo: 'Não consigo enviar a atividade', nome: 'Lucas Lima', data: '2025-06-01' }
+                ]
+            };
+
+            const duvidas = duvidasSimuladas[destino] || [];
+
+            if (duvidas.length === 0) {
+                duvidasLista.innerHTML = '<tr><td colspan="4">Nenhuma dúvida encontrada para esta aba.</td></tr>';
+                return;
+            }
+
+            duvidas.forEach(duvida => {
+                const tr = document.createElement('tr');
+                tr.classList.add('duvida-box');
+                tr.setAttribute('onclick', `toggleDescricao(this)`);
+
+                tr.innerHTML = `
+                    <td>${duvida.titulo}</td>
+                    <td>${duvida.nome}</td>
+                    <td>${duvida.data}</td>
+                    <td>${
+                        destino === 'Envios' 
+                        ? `<button class="btn-apagar" onclick="apagarDuvida(event, ${duvida.id})">Cancelar</button>` 
+                        : ''
+                    }</td>
+                `;
+
+                const descricaoTr = document.createElement('tr');
+                descricaoTr.classList.add('descricao');
+                descricaoTr.style.display = 'none';
+                descricaoTr.innerHTML = `
+                    <td colspan="4">Descrição da dúvida: ${duvida.titulo} - mais detalhes simulados.</td>
+                `;
+
+                duvidasLista.appendChild(tr);
+                duvidasLista.appendChild(descricaoTr);
+            });
         }
 
         function selecionarDestino(destino) {
             const buttons = document.querySelectorAll('.menu-button');
-            buttons.forEach(btn => {
-                // Remove a classe 'selected' de todos os botões
-                btn.classList.remove('selected');
-            });
-            // Encontra o botão clicado e adiciona a classe 'selected'
+            buttons.forEach(btn => btn.classList.remove('selected'));
             const button = Array.from(buttons).find(btn => btn.textContent === destino);
-            if (button) {
-                button.classList.add('selected');
-            }
+            if (button) button.classList.add('selected');
 
             const form = document.getElementById('form-envio');
-            if (destino === 'Envios') {
-                form.style.display = 'flex';
-            } else {
-                form.style.display = 'none';
-            }
+            form.style.display = destino === 'Envios' ? 'flex' : 'none';
 
-            // CHAMA A FUNÇÃO PARA BUSCAR E ATUALIZAR AS DÚVIDAS
             fetchDuvidas(destino);
         }
 
@@ -304,64 +305,19 @@
         }
 
         function apagarDuvida(event, duvidaId) {
-            event.stopPropagation(); // evita abrir a descrição ao clicar no botão
-
+            event.stopPropagation();
             if (!confirm('Tem certeza que deseja cancelar essa dúvida?')) return;
-
-            fetch(`/duvidas/apagar/${duvidaId}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Remove a linha da dúvida e sua descrição (se visível) do DOM
-                    const btn = event.target;
-                    const tr = btn.closest('tr');
-                    const descricaoTr = tr.nextElementSibling;
-                    tr.remove();
-                    if (descricaoTr && descricaoTr.classList.contains('descricao')) {
-                        descricaoTr.remove();
-                    }
-                    // Após apagar, recarregue a lista para garantir que esteja atualizada
-                    // Pega a aba que estava selecionada atualmente para recarregar o conteúdo correto
-                    const currentSelectedButton = document.querySelector('.menu-button.selected');
-                    const currentAba = currentSelectedButton ? currentSelectedButton.textContent : 'Geral';
-                    fetchDuvidas(currentAba);
-
-                } else {
-                    // Tenta ler a mensagem de erro do backend, se houver
-                    response.json().then(data => {
-                        alert(`Falha ao apagar dúvida: ${data.message || data.status || 'Erro desconhecido.'}`);
-                    }).catch(() => {
-                        alert('Falha ao apagar dúvida.'); // Fallback se a resposta não for JSON
-                    });
-                }
-            })
-            .catch(() => alert('Erro na requisição para apagar dúvida.'));
-        }
-
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
+            const btn = event.target;
+            const tr = btn.closest('tr');
+            const descricaoTr = tr.nextElementSibling;
+            tr.remove();
+            if (descricaoTr && descricaoTr.classList.contains('descricao')) {
+                descricaoTr.remove();
             }
-            return cookieValue;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const initialAba = '{{ aba_selecionada|default:"Geral" }}';
-            selecionarDestino(initialAba);
+            selecionarDestino('Geral');
         });
     </script>
 </body>
