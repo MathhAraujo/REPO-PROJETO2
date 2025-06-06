@@ -4,8 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import json
 
-
-# MODELOS DE USUÁRIO (Abstrato e Derivados)
+# MODELOS DE USUÁRIO
 class User(models.Model):
     userId = models.AutoField(primary_key=True)
     userName = models.CharField(max_length=100, default="John Doe") 
@@ -62,7 +61,6 @@ class Teacher(User):
 
 class Sponsor(User):
     sponsorDescription = models.TextField()
-
 
 
 class Profile(models.Model):
@@ -185,14 +183,7 @@ class DesempenhoMateria(models.Model):
         return f"{self.aluno.username} - {self.materia.nome}: {self.get_nota_qualitativa_display()}"
 
 
-
-   #---------------------
-    #ADICIONANDO DUVIDAS
-    #--------------------
-
-    #duvidas
-
-from django.conf import settings 
+# ADICIONANDO DUVIDAS
 
 class Duvida(models.Model):
     titulo = models.CharField(max_length=200)
