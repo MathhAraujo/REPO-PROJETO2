@@ -110,9 +110,9 @@
             padding-top: 70px; box-sizing: border-box;
             transition: right 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
             z-index: 1005;
-            display: flex; /* Mantido para flexbox */
-            flex-direction: column; /* Mantido para flexbox */
-            overflow-y: auto; /* Adicionado para permitir scroll se o conteúdo for grande */
+            display: flex; 
+            flex-direction: column; 
+            overflow-y: auto; 
         }
         .user-side-menu.open { right: 0; }
         .user-side-menu a {
@@ -126,14 +126,14 @@
             margin: 0;
             padding: 0;
             width: 100%;
-            border-bottom: 1px solid #f0f0f0; /* Consistência com outros itens de menu */
+            border-bottom: 1px solid #f0f0f0; 
         }
         .user-side-menu .logout-button {
             display: block;
             width: 110%;
             padding: 14px 20px;
             color: white;
-            background-color: #d9534f; /* Vermelho */
+            background-color: #d9534f; 
             border: none;
             font-size: 1em;
             text-align: left;
@@ -353,7 +353,6 @@
             <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
         {% endif %}
 
-        {# Imagem adicionada no canto inferior direito do menu lateral #}
         <div class="user-side-menu-image-bottom-right">
             <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
         </div>

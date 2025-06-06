@@ -6,7 +6,7 @@
     <title>Minha Presença e Eventos - Plataforma de Sonhos</title>
     {% load static %}
     <style>
-        /* Seus estilos CSS completos aqui */
+  
         body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color:rgb(50, 75, 112); color: #333; line-height: 1.6; overflow-x: hidden; }
 
         header { display: flex; justify-content: space-between; align-items: center; padding: 8px 25px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; width: calc(100% - 50px); z-index: 1010; height: 50px; }
@@ -34,7 +34,6 @@
 
         .user-menu-trigger.logged-in svg { fill: #00796b; }
 
-        /* Estilos do Menu Lateral */
         .user-side-menu {
             position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
             background-color: #fff; box-shadow: -3px 0 8px rgba(0,0,0,0.15);
@@ -216,7 +215,7 @@
             <a href="{% url 'pagina_cadastro' %}">Cadastre-se</a>
         {% endif %}
 
-        {# Imagem adicionada no canto inferior direito do menu lateral #}
+
         <div class="user-side-menu-image-bottom-right">
             <img src="https://i.ibb.co/XxF1X37H/Chat-GPT-Image-5-de-jun-de-2025-19-05-38.png" alt="Chat-GPT-Image-5-de-jun-de-2025-19-05-38" border="0">
         </div>
@@ -275,15 +274,12 @@
     </div>
 
     <script>
-    /* --------------------------------------------------
-        Eventos vindos do backend (json) – chave YEAR-MM-DD
-        Ex.: { "2025-06-05": ["Prova", "Reunião"] }
-    -------------------------------------------------- */
+
     const eventosPorDia = JSON.parse('{{ eventos_json|default:"{}"|escapejs }}');
 
     document.addEventListener('DOMContentLoaded', function () {
 
-        /* ========= MENU LATERAL ========= */
+
         const userMenuTriggerBtn = document.getElementById('userMenuTriggerBtn');
         const userSideMenu      = document.getElementById('userSideMenu');
         const overlayMenu        = document.getElementById('overlayMenu');
@@ -305,7 +301,7 @@
             });
         }
 
-        /* ========= CALENDÁRIO ========= */
+
         const mesSelect = document.getElementById("mes");
         const calendarioDiv = document.getElementById("calendarioDisplay");
         const dadosCalendarioJustificadoInput = document.getElementById("dados_calendario_justificado_input");
@@ -337,7 +333,7 @@
             const mesSelecionado = mesSelect.value;
             const totalDias = diasNoMes[mesSelecionado] || 30;
             const anoAtual = new Date().getFullYear();
-            const indiceMes = nomesMeses.indexOf(mesSelecionado); // 0-based
+            const indiceMes = nomesMeses.indexOf(mesSelecionado);
 
             if (!dadosCalendarioAluno[mesSelecionado]) dadosCalendarioAluno[mesSelecionado] = {};
 
@@ -350,7 +346,7 @@
                 botao.classList.add('dia-calendario');
                 botao.textContent = diaStr;
 
-                /* === status presença/falta === */
+             
                 const diaData  = dadosCalendarioAluno[mesSelecionado][diaStr];
                 let statusDia  = (typeof diaData === 'object') ? diaData.status : diaData || "indefinido";
 
@@ -360,17 +356,17 @@
                 } else if (statusDia === "falta") {
                     botao.classList.add('dia-falta');     botao.title="Falta registrada - Clique para justificar";
                 } else if (statusDia === "falta_justificada") {
-                    botao.innerHTML = `${diaStr} <span class="marcador-justificativa">!</span>`; /* Ajuste para manter o número do dia */
+                    botao.innerHTML = `${diaStr} <span class="marcador-justificativa">!</span>`; 
                     botao.classList.add('dia-falta','marcado-falta'); botao.title="Falta justificada - Clique para remover";
                 } else {
                     botao.classList.add('dia-indefinido');
                 }
 
-                /* === salvar/retirar justificativa === */
+              
                 if (statusDia === "falta" || statusDia === "falta_justificada") {
                     botao.addEventListener("click", () => {
-                        const atual = dadosCalendarioAluno[mesSelecionado]?.[diaStr]; // Use optional chaining
-                        const statusAtual = (typeof atual === 'object') ? atual.status : atual; // Extrai o status
+                        const atual = dadosCalendarioAluno[mesSelecionado]?.[diaStr]; 
+                        const statusAtual = (typeof atual === 'object') ? atual.status : atual; 
                         dadosCalendarioAluno[mesSelecionado][diaStr] =
                             (statusAtual === "falta_justificada") ? "falta"
                             : { status:"falta_justificada", motivo:"Justificado pelo aluno", por:"aluno" };
@@ -379,9 +375,9 @@
                     });
                 }
 
-                /* === clique para abrir popup de eventos === */
+          
                 botao.dataset.dia = diaStr;
-                // Só adiciona o listener de eventos se o dia não for uma falta clicável
+            
                 if (statusDia !== "falta" && statusDia !== "falta_justificada") {
                     botao.addEventListener("click", () => {
                         const dataKey = `${anoAtual}-${String(indiceMes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
@@ -396,10 +392,10 @@
         }
 
         mesSelect.addEventListener('change', atualizarCalendario);
-        atualizarCalendario();  // render inicial
+        atualizarCalendario();  
     });
 
-    /* ===== POP-UP helpers ===== */
+   
     function abrirPopup(dia, eventos) {
         document.getElementById("modal-dia").textContent = dia;
 

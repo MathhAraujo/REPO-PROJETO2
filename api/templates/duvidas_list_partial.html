@@ -1,7 +1,4 @@
-{% comment %}
-    Este arquivo é apenas um "partial" para ser renderizado via AJAX.
-    Ele contém apenas as linhas da tabela (<tr>)
-{% endcomment %}
+
 {% for duvida in duvidas %}
 <tr class="duvida-box" onclick="toggleDescricao(this)">
     <td>{{ duvida.titulo }}</td>

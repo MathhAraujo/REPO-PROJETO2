@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Plataforma de Sonhos</title>
     <style>
-        /* Estilos Globais e do Header (mesmos do cadastro.html e home.html) */
+       
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -129,7 +129,6 @@
         }
         .overlay-menu.open { opacity: 1; visibility: visible; transition-delay: 0s; }
 
-        /* Estilos Específicos da Página de Autenticação (Login/Cadastro) */
         .page-container-auth { 
             padding: 2rem;
             padding-top: calc(50px + 3rem); 
@@ -144,7 +143,7 @@
             background: white;
             padding: 2.5rem; 
             border-radius: 10px; 
-            max-width: 450px; /* Ligeiramente mais estreito para login */
+            max-width: 450px; 
             width: 100%;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
         }
@@ -191,7 +190,7 @@
             font-size: 0.95em;
         }
 
-        input[type="text"], /* Usado para username/email no login */
+        input[type="text"], 
         input[type="email"],
         input[type="password"] {
             width: 100%;
@@ -213,7 +212,7 @@
 
         button[type="submit"] {
             width: 100%; 
-            margin-top: 1.5rem; /* Reduzido um pouco o espaço antes do botão */
+            margin-top: 1.5rem; 
             padding: 0.9rem 1.5rem; 
             background-color: #00796b; 
             color: white;
@@ -235,7 +234,7 @@
         
         .form-options { 
             text-align: right;
-            margin-top: 0.8rem; /* Menor espaço */
+            margin-top: 0.8rem; 
             margin-bottom: 1.5rem; /* Espaço antes do botão de submit */
             font-size: 0.9em;
         }
@@ -408,8 +407,7 @@
                         if (this.getAttribute('href') === '#') {
                             event.preventDefault();
                         }
-                        // Para links reais (com href que não é '#'), a navegação ocorrerá.
-                        // Apenas fechamos o menu.
+                       
                         userSideMenu.classList.remove('open');
                         overlayMenu.classList.remove('open');
                     });
