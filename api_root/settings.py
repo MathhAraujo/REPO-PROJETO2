@@ -117,10 +117,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CORS_ALLOW_ORIGINS = [
-    "http://localhost:8080", "solidare-g11-solution-h0e9caakasfnc9da.brazilsouth-01.azurewebsites.net"
+    "http://localhost:8080", "https://solidare-g11-solution-h0e9caakasfnc9da.brazilsouth-01.azurewebsites.net"
 ]
 
-CSRF_TRUSTED_ORIGINS = ["solidare-g11-solution-h0e9caakasfnc9da.brazilsouth-01.azurewebsites.net"]
+CSRF_TRUSTED_ORIGINS = ["https://solidare-g11-solution-h0e9caakasfnc9da.brazilsouth-01.azurewebsites.net"]
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
